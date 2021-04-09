@@ -8,7 +8,7 @@ html {
     height: 100%;
     width: 100%;
     font-family: "Lato", sans-serif;
-    font-size: 20px; 
+    font-size: 20px;
     color: #5a5a5a;
     background-color: #ffffff;
     text-rendering: optimizeLegibility;
@@ -22,9 +22,12 @@ body {
 }
 
 #right {
-    flex: 0 0 auto;
     background-color: white;
     margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin: 4%;
 }
 
 #sign-in-form {
@@ -81,7 +84,7 @@ body {
     border-radius: 20px;
     outline: none;
     border: none;
-    background-color:#265077;
+    background-color: #265077;
     transition: all .3s;
     cursor: pointer;
 }
@@ -140,15 +143,4 @@ body {
 #sign-in-form h5 a:hover,
 #sign-in-form h5 a:active {
     text-decoration: underline;
-}
-
-@media (min-width: 1025px) {}
-
-@media (max-width: 1024px) {
-    #right {
-        width: 100%;
-        text-align: center;
-        padding: 20px;
-        margin: 4%;
-    }
 }
