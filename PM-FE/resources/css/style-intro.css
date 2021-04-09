@@ -23,7 +23,7 @@ html {
   background-color: #e67e22;
   padding: 15px 30px;
   border-radius: 20px;
-  margin: 0 5px;
+  margin: 0 30px;
   display: inline-block;
   width: 180px;
   text-align: center;
@@ -142,9 +142,9 @@ header {
 .heading-main-box {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 45%;
   transform: translate(-40%, -35%); /* chinh vi tri */
-  width: 1140px;
+  width: 100%;
 }
 
 /*--------------------------------------------------*/
