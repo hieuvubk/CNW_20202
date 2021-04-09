@@ -21,17 +21,10 @@ body {
     flex-direction: column;
 }
 
-main {
-    height: auto;
-    width: 100%;
-    background-color: antiquewhite;
-    display: flex;
-    margin: 2%;
-}
-
 #right {
     flex: 0 0 auto;
     background-color: white;
+    margin: 0 auto;
 }
 
 #sign-in-form {
@@ -156,5 +149,6 @@ main {
         width: 100%;
         text-align: center;
         padding: 20px;
+        margin: 4%;
     }
 }
