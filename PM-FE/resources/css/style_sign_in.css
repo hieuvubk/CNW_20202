@@ -80,7 +80,7 @@ body {
 #btn {
     margin-bottom: 20px;
     width: 50%;
-    height: 30px;
+    height: 40px;
     border-radius: 20px;
     outline: none;
     border: none;
@@ -96,6 +96,7 @@ body {
 
 #btn a {
     text-decoration: none;
+    font-size: 120%;
     font-weight: bold;
     color: white;
 }
