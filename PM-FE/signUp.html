@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobsGo Login</title>
+    <title>JobsGo Sign Up</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet" />
     <link rel="icon" href="resources/images/j.svg">
-    <link rel="stylesheet" href="resources/css/style_sign_in.css">
+    <link rel="stylesheet" href="resources/css/style_sign_up.css">
     <link rel="stylesheet" href="resources/css/style-general.css" />
     <link rel="stylesheet" href="vendors/css/grid.css">
     <script src="https://kit.fontawesome.com/9b7bd019f1.js" crossorigin="anonymous"></script>
@@ -21,11 +21,161 @@
         <li><a href="#">Sign Up</a></li>
         <li><a href="#">Sign In</a></li>
     </ul>
-    </div>
 </header>
 
 <body>
+    <div class="form">
+        <form action="/action_page.php" id="sign-up-form" method="POST">
+            <h1>SIGN UP</h1>
+            <div>
+                <input class="input" type="text" id="name" name="name" placeholder="Full name">
+            </div>
+            <div>
+                <input class="input" type="text" id="number" name="number" placeholder="Phone number">
+            </div>
+            <div>
+                <input class="input" type="text" id="email" name="email" placeholder="Email">
+            </div>
+            <div>
+                <input class="input" type="text" id="email" name="email" placeholder="Username">
+            </div>
+            <div>
+                <input class="input" type="password" id="pass" name="pass" placeholder="Password">
+            </div>
+            <div>
+                <input class="input" type="password" id="pass" name="pass" placeholder="Confirm Password">
+            </div>
+            <div class="dob_line">
+                <div class="dob desc3">Date of birth</div>
+                <div class="block">
+                    <span class="dob" data-="selectors">
+                        <select class="selector" aria-label="Day" name="birthday_day" id="day">
+                            <option value="0">Day</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                        <select class="selector" aria-label="Month" name="birthday_month" id="month">
+                            <option value="0">Month</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <select class="selector" aria-label="Year" name="birthday_year" id="year">
+                            <option value="0">Year</option>
+                            <option value="2005">2005</option>
+                            <option value="2004">2004</option>
+                            <option value="2003">2003</option>
+                            <option value="2002">2002</option>
+                            <option value="2001">2001</option>
+                            <option value="2000">2000</option>
+                            <option value="1999">1999</option>
+                            <option value="1998">1998</option>
+                            <option value="1997">1997</option>
+                            <option value="1996">1996</option>
+                            <option value="1995">1995</option>
+                            <option value="1994">1994</option>
+                            <option value="1993">1993</option>
+                            <option value="1992">1992</option>
+                            <option value="1991">1991</option>
+                            <option value="1990">1990</option>
+                            <option value="1989">1989</option>
+                            <option value="1988">1988</option>
+                            <option value="1987">1987</option>
+                            <option value="1986">1986</option>
+                            <option value="1985">1985</option>
+                            <option value="1984">1984</option>
+                            <option value="1983">1983</option>
+                            <option value="1982">1982</option>
+                        </select>
+                    </span>
+                </div>
 
+            </div>
+            <div class="gender_line">
+                <div class="gender desc3">Gender</div>
+                <span class="gender" data-="radio">
+                    <span class="select">
+                        <input type="radio" name="gender" id="fmale">
+                        <label class="choose" for="fmale">Female</label>
+                    </span>
+                    <span class="select">
+                        <input type="radio" name="gender" id="male">
+                        <label class="choose" for="male">Male</label>
+                    </span>
+                    <span class="select">
+                        <input type="radio" name="gender" id="other">
+                        <label class="choose" for="other">Other</label>
+                    </span>
+                </span>
+            </div>
+            <div class="notes">
+                <p class="notes">
+                    By clicking Agree & Join, you agree to the JobsGo
+                    <a href="/legal/terms/update" id="link">User Agreement</a>
+                    ,
+                    <a href="/about/privacy/update" id="link">Privacy Policy</a>
+                    and
+                    <a href="/policies/cookies/" id="link">Cookie Policy.</a>
+                </p>
+            </div>
+            <div><button type="submit" form="sign-in-form" value="Submit" id="btn"><a href="#">Agree & Join</a></button>
+            </div>
+            <div class="connect-socials">
+                <div class="connect-btn">
+                    <a href="">
+                        <i class="fab fa-facebook"></i>
+                        <span class="connect-fb-title">Join with Facebook</span>
+                    </a>
+                </div>
+                <div class="connect-btn">
+                    <a href="">
+                        <i class="fab fa-google"></i>
+                        <span class="connect-fb-title">Join with Google</span>
+                    </a>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
 </body>
 
 <footer>
