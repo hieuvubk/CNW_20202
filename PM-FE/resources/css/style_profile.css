@@ -1,0 +1,441 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    height: 100%;
+    width: 100%;
+}
+
+body{
+    height: 100%;
+    width: 100%;
+}
+
+header{
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    display: flex;
+    border-bottom: 0.5px solid gray;
+    z-index: 10;
+}
+
+#left-header{
+    flex: 1 0  350px;
+    background-color: white;
+    position: relative;
+    display: flex;
+}
+
+#right-header{
+    flex: 0 0  auto;
+    background-color: white;
+    display: flex;
+}
+
+#nav-menu{
+    height: 100%;
+    background-color: burlywood white;
+    justify-content:flex-end;
+    align-items: center;
+    display: flex;
+    padding: 0 20px;
+}
+
+
+#search-div{
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    transform: translateY(-50%);
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 20px;
+    background-color: white;
+    display: flex;
+    width: 300px;
+}
+#search-div img{
+    display: block;
+    height: 20px;
+    width:20px;
+    margin: 8px;
+}
+
+#search-div input{
+    display: block;
+    border: none;
+    outline: none;
+    width: 150px;
+    font-size: 14pt;
+}
+
+.menu-icons{
+    border: 0.1px solid black;
+    position: relative;
+    background-color: white;
+    width: 70px;
+    height: 50px;
+}
+
+.material-icons{
+  background-color: white;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 25px;
+  width: 25px;
+}
+
+.menu-icons h6{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: white;
+}
+
+.menu-icons img{
+    display: block;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+}
+
+#personal-dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 160px;
+    height: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 0;
+    margin-top: 50px;
+    left: 10%;
+    transform: translateX(-50%);
+  }
+#personal-icon:hover #personal-dropdown{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+#small-avatar{
+    flex: 0 0 auto;
+    position: relative;
+    height: 50px;
+    width: 30%;
+    background-color: white;
+}
+
+#small-avatar img{
+    position: absolute;
+    top: 50%;
+    background-color: white;
+    border: 0.5px solid gray;
+    border-radius: 50%;
+}
+
+#short-info{
+    flex: 0 0 auto;
+    height: 50px;
+    width:70%;
+    background-color: white;
+}
+
+#view-profile-btn{
+    height: 30px;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    position: relative;
+}
+
+#view-profile-btn a{
+    display: block;
+    position: absolute;
+    text-decoration: none;
+    color: black;
+    border: 0.1px solid black;
+    border-radius: 10px;
+    width: 70%;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#view-profile-btn a:hover{
+    background-color: rgb(190, 190, 190);
+}
+
+/*MAIN---------------------------*/
+
+main{
+    display: flex;
+    justify-content: white;
+}
+
+#main-content{
+    margin-top: 100px;
+    width: 800px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 10px;
+    margin-left: 50px;
+}
+
+.main-content-div{
+    width: 768px;
+    border:0.5px solid gray;
+    border-radius: 30px;
+    border-collapse: separate; 
+    padding: 1px;
+}
+#basic-info-div{
+    width: 100%;
+    height: auto;
+    background-color: white;
+}
+
+#background-avatar{
+    position: relative;
+    width: 100%;
+    height: 210px;
+    background-color: white;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+#background-avatar img{
+    display: block;
+    width: 100%;
+    height: 200px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+#background-avatar a{
+    color: black;
+    position: absolute;
+    top:30px;
+    right: 30px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: white;
+    padding: 20px;
+    cursor: pointer;
+}
+
+#background-avatar a div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+#main-avatar{
+    margin-top: -50px;
+    background-color:transparent;
+    position: relative;
+}
+
+#main-avatar img{
+    display: block;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 50%;
+    margin-left: 20px;
+}
+
+#main-avatar a{
+    color: black;
+    position: absolute;
+    cursor: pointer;
+    top: 60px;
+    right: 30px;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 50%;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+#main-avatar a div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+}
+
+
+#info{
+    width: 100%;
+    height: auto;
+    background-color: white;
+    display: flex;
+    margin-top: 10px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+#info div{
+    width: 50%;
+    padding: 0 20px;
+}
+
+#workplace a{
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+#workplace a:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+#contact-info{
+    cursor: pointer;
+    color:blue;
+}
+
+#contact-info:hover{
+    text-decoration:underline;
+}
+
+#contact-info-div{
+    height: 250px;
+    width: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    z-index: 10;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: none;
+}
+
+#contact-info-header{
+    margin: 0;
+    height: 50px;
+    width: 500px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+#contact-info-header button{
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#contact-info-header button:hover{
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    background-color: gray;
+}
+
+#overlay{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    pointer-events: none;
+    display: none;
+}
+
+#contact-info-main{
+    margin: 20px;
+}
+
+#contact-info-main div{
+    margin: 20px;
+    background-color: white;
+    position: relative;
+}
+
+#contact-info-main div .material-icons{
+    background-color: white;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+}
+#contact-info-main div h3{
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    background-color: white;
+}
+
+#contact-info-main div a{
+    display: block;
+    background-color: white;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: blue;
+}
+
+/*-------------------------------------------------*/
+aside{
+    height: 500px;
+    width: 300px;
+    background-color: white;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+aside > div{
+    width: 90%;
+    background-color: white;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 0.5px solid gray;
+}
+
+.suggest{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: white;
+    align-items: center;
+}
+
+.suggest__info{
+    background-color: white;
+    height: 30px;
+    width: 90%;
+    margin: 20px;
+}
+

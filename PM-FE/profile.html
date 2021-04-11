@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="./resources/css/style_profile.css">
+    
+</head>
+<body>
+    <header id="header">
+        <div id="left-header">
+             <div id="logo-div">
+                Logo
+             </div>
+             <div id="search-div">
+                <img src="./resources/images/search.svg">
+                <input type="text">
+             </div>
+             <div id="search-icon-div">
+                <img src="./resources/images/search.svg">
+             </div>
+        </div>
+       
+        <div id="right-header">
+            <nav id="nav-menu">
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                            home
+                    </div>
+                    <h6>Home</h6>
+                </div>
+                <div class="menu-icons">
+                        <div class="material-icons md-24">
+                            people
+                        </div>
+                        <h6>My Network</h6>
+                </div>
+                <div class="menu-icons">
+                        <div class="material-icons md-24">
+                            work
+                        </div>
+                        <h6>Jobs</h6>
+                </div>
+                <div class="menu-icons">
+                        <div class="material-icons md-24">
+                            message
+                        </div>
+                        <h6>Messaging</h6>
+                </div>
+                <div class="menu-icons">
+                        <div class="material-icons md-24">
+                            notifications
+                        </div>
+                        <h6>Notifications</h6>
+                </div>
+                <div class="menu-icons" id="personal-icon">
+                        <div class="material-icons md-24 "  >
+                            &#xe853
+                        </div>
+                        
+                        <div id="personal-dropdown">
+                                <div id="small-avatar">
+                                    <img src="./resources/images/user.svg" style="height: 40px;width: 40px;">
+                                </div>
+
+                                <div id="short-info">
+                                    <h5>Name</h5>
+                                    <h5>Jobs</h5>
+                                </div>
+                                
+                                <div id="view-profile-btn">
+                                    <a href="#">View profile</a>
+                                </div>
+                        </div>
+                        <h6>Me</h6>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="main-content">
+            <div class="main-content-div" id="basic-info-div">
+                <div id="background-avatar">
+                    <img src="./resources/images/4853433.jpg" >
+                    <a class="link-icon" href="#">
+                        <div class="material-icons md-24">
+                            photo_camera
+                        </div>
+                    </a>
+                </div>
+
+                <div id="main-avatar">
+                    <img src="./resources/images/user.svg" style="height: 100px;width: 100px;">
+                    <a class="link-icon" href="#">
+                        <div class="material-icons md-24">
+                            edit
+                        </div>
+                    </a>
+                </div>
+
+                <div id="info">
+                    <div id="personal-info">
+                        <h1>Name</h1>
+                        <h2>Jobs</h2>
+                        <h4>Address</h4>
+                        <h4 id="contact-info">Contact info</h4>
+                    </div>
+                        
+                    <div id="workplace">
+                        <a href="#">
+                            Name of school of company,etc.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact-info-div">
+                <div id="contact-info-header">
+                    <h1>Name</h1>
+                    <button id="contact-info-close">&times;</button>
+                </div>
+                        
+                <div id="contact-info-main">
+                    <div id="contact-info-profile">
+                        <div class="material-icons md-24">
+                            contacts
+                        </div>
+                        <h3>Link profile</h3>
+                        <a href="#">Link to profile in linkedIn</a> 
+                        
+                    </div>
+                    
+                    <div id="contact-info-email">
+                            <div class="material-icons md-24">
+                                email
+                            </div>
+                            <h3>Link email</h3>
+                            <a href="mailto: abc@example.com">abc@example.com</a>
+
+                        </div>
+                    </div>
+                </div>
+            <div id="overlay"></div>
+            
+            <div class="main-content-div" id="rating">
+                <h2>Profile Strength:</h2>
+            </div>
+
+            <div class="main-content-div" id="activity">
+                <h2>Activity</h2>
+            </div>
+
+            <div class="main-content-div" id="education">
+                <h2>Education</h2>
+            </div>
+
+            <div class="main-content-div" id="interest">
+                <h2>Interest</h2>
+            </div>
+        </div>
+
+        <aside>
+            <div class="quote">
+                <img src="./resources/images/20943749.jpg" style="height: 200px;width: 200px;">
+            </div>
+            <div class="suggest">
+                    <h2 class="suggest__title">People you may know</h2>
+                    <div class="suggest__info">
+                        <h3>Name 1</h3>
+                    </div>
+                    <div class="suggest__info">
+                        <h3>Name 2</h3>
+                    </div>
+                    <div class="suggest__info">
+                        <h3>Name 3</h3>
+                    </div>
+            </div>
+        </aside>
+    </main>
+    <footer>
+    </footer>
+    <script type="text/javascript" src="./resources/js/main_profile.js"></script>
+</body>
+</html>

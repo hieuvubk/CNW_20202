@@ -26,7 +26,7 @@ header {
     background-size: cover;
     background-position: center;
     /* can giua */
-    height: 22vh;
+    height: 20vh;
     /* view height */
     margin-top: -2%;
     background-attachment: fixed;
@@ -236,12 +236,6 @@ footer {
 .row {
     max-width: 1140px;
     margin: 0 auto;
-}
-
-h1,
-h2 {
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .p-long {
