@@ -1,4 +1,4 @@
-package com.company.pm.userservice.domain.dto;
+package com.company.pm.userservice.domain.services.dto;
 
 import com.company.pm.common.config.Constants;
 import lombok.AccessLevel;

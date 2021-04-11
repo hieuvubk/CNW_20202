@@ -142,8 +142,8 @@ jhipster:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: pmapp API
-    description: pmapp API documentation
+    title: PMApp API
+    description: PMApp API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:

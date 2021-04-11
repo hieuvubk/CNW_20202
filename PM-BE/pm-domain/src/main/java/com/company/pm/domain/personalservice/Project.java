@@ -1,40 +1,57 @@
 package com.company.pm.domain.personalservice;
 
-import com.company.pm.common.Interval;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Embedded;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
 @Builder
 @Table("projects")
-public class Project {
-    
+public class Project implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
-    private Integer id;
-    
-    @Column
+    private Long id;
+
+    @Column("name")
     private String name;
-    
-    @Column
+
+    @Column("description")
     private String description;
-    
-    private List<String> creators = new ArrayList<>();
-    
-    @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL)
-    private Interval interval;
-    
-    @Column
+
+    @Column("start_date")
+    private Instant startDate;
+
+    @Column("end_date")
+    private Instant endDate;
+
+    @Column("url")
     private String url;
-    
+
     @Transient
-    private PersonalProfile profile;
+    @JsonIgnoreProperties(value = { "project" }, allowSetters = true)
+    private Set<Creator> creators = new HashSet<>();
+
+    @JsonIgnoreProperties(
+        value = { "workExperience", "education", "certifications", "skills", "projects", "publications" },
+        allowSetters = true
+    )
+    @Transient
+    private PersonalProfile personalProfile;
+
+    @Column("personal_profile_id")
+    private Long personalProfileId;
 }

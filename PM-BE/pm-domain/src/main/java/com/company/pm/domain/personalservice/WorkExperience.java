@@ -1,38 +1,47 @@
 package com.company.pm.domain.personalservice;
 
 import com.company.pm.common.EmploymentType;
-import com.company.pm.common.Interval;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Embedded;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @AllArgsConstructor
 @Builder
 @Table("work_experiences")
-public class WorkExperience {
-    
+public class WorkExperience implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
-    private Integer id;
-    
-    @Column
+    private Long id;
+
+    @Column("title")
     private String title;
-    
+
+    @Column("employment_type")
     private EmploymentType employmentType;
-    
-    @Column
+
+    @Column("location")
     private String location;
-    
-    @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL)
-    private Interval interval;
-    
-    @Column
+
+    @Column("start_date")
+    private Instant startDate;
+
+    @Column("end_date")
+    private Instant endDate;
+
+    @Column("industry")
     private String industry;
-    
+
     @Transient
-    private PersonalProfile profile;
+    private PersonalProfile personalProfile;
 }

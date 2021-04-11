@@ -1,9 +1,9 @@
-package com.company.pm.userservice.domain.mapper;
+package com.company.pm.userservice.domain.services.mapper;
 
 import com.company.pm.domain.userservice.Authority;
 import com.company.pm.domain.userservice.User;
-import com.company.pm.userservice.domain.dto.AdminUserDTO;
-import com.company.pm.userservice.domain.dto.UserDTO;
+import com.company.pm.userservice.domain.services.dto.AdminUserDTO;
+import com.company.pm.userservice.domain.services.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EntityScan(basePackages = {"com.company.pm.domain"})
 @Import({
-    LiquibaseConfiguration.class,
     WebConfigurer.class,
     CommonConfiguration.class,
     SecurityConfiguration.class,

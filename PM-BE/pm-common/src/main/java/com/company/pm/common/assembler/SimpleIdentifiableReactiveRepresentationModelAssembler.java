@@ -1,5 +1,6 @@
 package com.company.pm.common.assembler;
 
+import com.company.pm.common.utils.PageableUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.core.GenericTypeResolver;
@@ -86,19 +87,10 @@ public class SimpleIdentifiableReactiveRepresentationModelAssembler<T>
         Flux<? extends T> entities,
         ServerWebExchange exchange
     ) {
-        MultiValueMap<String, String> queryParams = exchange.getRequest().getQueryParams();
-        String pageStr = queryParams.getFirst("page");
-        String limitStr = queryParams.getFirst("limit");
+        List<Integer> pageableList = PageableUtils.extractPageLimit(exchange);
         
-        if (pageStr == null) {
-            pageStr = "1";
-        }
-        if (limitStr == null) {
-            limitStr = "10";
-        }
-        
-        int limit = Integer.parseInt(limitStr);
-        int page = Integer.parseInt(pageStr);
+        int limit = pageableList.get(1);
+        int page = pageableList.get(0);
         
         Mono<Long> totalElements = entities.count();
     

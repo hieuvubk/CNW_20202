@@ -1,6 +1,6 @@
 package com.company.pm.userservice.web;
 
-import com.company.pm.userservice.domain.dto.AdminUserDTO;
+import com.company.pm.userservice.domain.services.dto.AdminUserDTO;
 import com.company.pm.userservice.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serial;
 
@@ -24,7 +25,7 @@ public class AccountController {
     private final UserService userService;
 
     @GetMapping
-    public Mono<AdminUserDTO> getAccount(ServerWebExchange exchange) {
+    public Mono<AdminUserDTO> getAccount(@ApiIgnore ServerWebExchange exchange) {
         return exchange.getPrincipal()
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {

@@ -4,9 +4,9 @@ import com.company.pm.common.config.Constants;
 import com.company.pm.domain.userservice.Authority;
 import com.company.pm.domain.userservice.User;
 import com.company.pm.security.utils.SecurityUtils;
-import com.company.pm.userservice.domain.dto.AdminUserDTO;
-import com.company.pm.userservice.domain.dto.UserDTO;
-import com.company.pm.userservice.domain.mapper.UserMapper;
+import com.company.pm.userservice.domain.services.dto.AdminUserDTO;
+import com.company.pm.userservice.domain.services.dto.UserDTO;
+import com.company.pm.userservice.domain.services.mapper.UserMapper;
 import com.company.pm.userservice.domain.repositories.AuthorityRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,6 @@ public class UserService {
     private final UserMapper userMapper;
     
     private final UserRepository userRepository;
-    
     private final AuthorityRepository authorityRepository;
     
     @Transactional

@@ -23,6 +23,7 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
 @Import({
     DatabaseConfiguration.class,
     AsyncConfiguration.class,
+    LiquibaseConfiguration.class,
     LocaleConfiguration.class,
     DateTimeFormatConfiguration.class,
     LoggingConfiguration.class,
