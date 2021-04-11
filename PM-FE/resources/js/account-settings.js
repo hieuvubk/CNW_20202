@@ -9,6 +9,4 @@ function tabs(panelIndex) {
 }
 tabs(0);
 
-$(".tab").click(function () {
-    $(this).addClass("active").siblings().removeClass("active");
-})
+

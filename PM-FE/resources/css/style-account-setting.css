@@ -82,6 +82,7 @@ nav a:active {
     transform: scale(1.2);
     cursor: pointer;
     color: #2d6187;
+    background-color: #d8e3e7;
 }
 
 .setting-title {
@@ -109,13 +110,6 @@ nav a:active {
     border: 1px solid #2d6187;
     border-radius: 50%;
     margin-bottom: 7%;
-    
-}
-
-nav .active {
-    font-weight: bold;
-    color: #1597bb;
-    font-size: 1.2rem;
 }
 
 .tab-show {
@@ -123,3 +117,20 @@ nav .active {
     display: none;
 }
 
+.btn-add {
+    text-decoration: none;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    background-color: hsl(203, 49%, 23%, 0.95);
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s;
+    font-weight: bold;
+    transform: translate(15%, 0);
+}
+
+.btn-add:hover,
+.btn-add:active {
+    background-color: #1597bb;
+}
