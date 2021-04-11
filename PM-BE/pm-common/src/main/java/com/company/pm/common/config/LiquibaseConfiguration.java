@@ -1,4 +1,4 @@
-package com.company.pm.application.config;
+package com.company.pm.common.config;
 
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;

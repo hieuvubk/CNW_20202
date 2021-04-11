@@ -1,7 +1,7 @@
 package com.company.pm.userservice.web;
 
 import com.company.pm.userservice.domain.assembler.PublicUserRepresentationModelAssembler;
-import com.company.pm.userservice.domain.dto.UserDTO;
+import com.company.pm.userservice.domain.services.dto.UserDTO;
 import com.company.pm.userservice.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class PublicUserController {
     private final UserService userService;
 
     @GetMapping(path = "/users")
-    public Mono<CollectionModel<EntityModel<UserDTO>>> getAllUsers(ServerWebExchange exchange) {
+    public Mono<CollectionModel<EntityModel<UserDTO>>> getAllUsers(@ApiIgnore ServerWebExchange exchange) {
         Flux<UserDTO> userDtoFlux = userService.getAllPublicUsers();
 
         return assembler.toCollectionModel(userDtoFlux, exchange);

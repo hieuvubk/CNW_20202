@@ -2,11 +2,10 @@ package com.company.pm.userservice.web;
 
 import com.company.pm.common.AuthoritiesConstants;
 import com.company.pm.userservice.domain.assembler.UserRepresentationModelAssembler;
-import com.company.pm.userservice.domain.dto.AdminUserDTO;
-import com.company.pm.userservice.domain.mapper.UserMapper;
+import com.company.pm.userservice.domain.services.dto.AdminUserDTO;
+import com.company.pm.userservice.domain.services.mapper.UserMapper;
 import com.company.pm.userservice.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
@@ -20,11 +19,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import springfox.documentation.annotations.ApiIgnore;
 
-@Slf4j
 @RestController
 @RequestMapping(
-    path = "/api/v1/admin/users",
+    path = "/api/admin/v1/users",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
@@ -38,8 +37,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public Mono<CollectionModel<EntityModel<AdminUserDTO>>> getAllUsers(ServerWebExchange exchange) {
-        log.debug("REST request to get users for an admin");
+    public Mono<CollectionModel<EntityModel<AdminUserDTO>>> getAllUsers(@ApiIgnore ServerWebExchange exchange) {
         Flux<AdminUserDTO> userDtoFlux = userService.getAllManagedUsers();
 
         return assembler.toCollectionModel(userDtoFlux, exchange);
@@ -49,10 +47,8 @@ public class UserController {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public Mono<EntityModel<AdminUserDTO>> getUser(
         @PathVariable("login") String login,
-        ServerWebExchange exchange
+        @ApiIgnore ServerWebExchange exchange
     ) {
-        log.debug("REST request to get user: {}", login);
-
         return userService.getUserWithAuthoritiesByLogin(login)
             .map(userMapper::userToAdminUserDto)
             .flatMap(adminUserDto -> assembler.toModel(adminUserDto, exchange))

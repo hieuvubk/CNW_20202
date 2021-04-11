@@ -1,7 +1,7 @@
 package com.company.pm.userservice.domain.assembler;
 
 import com.company.pm.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
-import com.company.pm.userservice.domain.dto.AdminUserDTO;
+import com.company.pm.userservice.domain.services.dto.AdminUserDTO;
 import com.company.pm.userservice.web.UserController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ServerWebExchange;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -27,7 +28,7 @@ public class OpenApiConfiguration {
 
     @Bean
     public SpringfoxCustomizer noApiFirstCustomizer() {
-        return docket -> docket.select().apis(RequestHandlerSelectors.basePackage("com.company.app.web.api").negate());
+        return docket -> docket.select().apis(RequestHandlerSelectors.basePackage("com.company.pm").negate());
     }
 
     @Bean
@@ -55,9 +56,9 @@ public class OpenApiConfiguration {
             .forCodeGeneration(true)
             .directModelSubstitute(ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
-            .ignoredParameterTypes(Pageable.class)
+            .ignoredParameterTypes(Pageable.class, ServerWebExchange.class)
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.company.app.web.api"))
+            .apis(RequestHandlerSelectors.basePackage("com.company.pm"))
             .paths(regex(properties.getDefaultIncludePattern()))
             .build();
     }

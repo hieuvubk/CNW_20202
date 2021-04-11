@@ -1,4 +1,4 @@
-package com.company.pm.userservice.domain.dto;
+package com.company.pm.userservice.domain.services.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
