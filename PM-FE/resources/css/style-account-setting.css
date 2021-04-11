@@ -120,14 +120,14 @@ nav a:active {
 .btn-add {
     text-decoration: none;
     color: white;
-    padding: 5px 15px;
+    padding: 5px 5px;
     border-radius: 5px;
     background-color: hsl(203, 49%, 23%, 0.95);
     display: inline-block;
     text-align: center;
     transition: all 0.3s;
     font-weight: bold;
-    margin-left: 15%;
+    margin-left: 20%;
     font-size: smaller;
 }
 
