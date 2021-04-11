@@ -127,7 +127,8 @@ nav a:active {
     text-align: center;
     transition: all 0.3s;
     font-weight: bold;
-    transform: translate(15%, 0);
+    margin-left: 15%;
+    font-size: smaller;
 }
 
 .btn-add:hover,
