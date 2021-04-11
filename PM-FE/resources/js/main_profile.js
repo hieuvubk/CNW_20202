@@ -1,3 +1,4 @@
+
 let openContactInfo = document.getElementById("contact-info");
 let closeContactInfo = document.getElementById("contact-info-close");
 let overlay = document.getElementById("overlay");
