@@ -1,4 +1,4 @@
-import AbstractComponent from '../AbstractComponent';
+import AbstractComponent from '../../components/AbstractComponent';
 import { importCss } from '../../utils/css-utils';
 
 export default class Profile extends AbstractComponent {

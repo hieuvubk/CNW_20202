@@ -1,4 +1,4 @@
-import AbstractComponent from '../AbstractComponent';
+import AbstractComponent from '../../components/AbstractComponent';
 import { importStyle } from '../../utils/css-utils';
 
 const style = `
