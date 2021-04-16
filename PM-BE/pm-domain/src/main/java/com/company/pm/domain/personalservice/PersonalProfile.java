@@ -1,5 +1,6 @@
 package com.company.pm.domain.personalservice;
 
+import com.company.pm.common.config.Constants;
 import com.company.pm.domain.userservice.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -37,7 +38,7 @@ public class PersonalProfile implements Serializable {
     @Column("location")
     private String location;
 
-    @Pattern(regexp = "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$")
+    @Pattern(regexp = Constants.PHONE_REGEX)
     @Column("phone_number")
     private String phoneNumber;
 
