@@ -1,5 +1,5 @@
 import AbstractComponent from '../../components/AbstractComponent';
-import { importCss } from '../../utils/css-utils';
+import { importCss } from '../../shared/utils/css-utils';
 
 export default class Home extends AbstractComponent {
     constructor() {
@@ -12,6 +12,10 @@ export default class Home extends AbstractComponent {
     
     connectedCallback() {
         console.log('connected');
+        window.onload = () => {
+            document.querySelector('#login-link')
+                .setAttribute('href', `${location.origin}/oauth2/authorization/oidc`);
+        };
     }
 }
 

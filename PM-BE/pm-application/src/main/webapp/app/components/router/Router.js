@@ -1,4 +1,4 @@
-import { match } from './router-utils';
+import { match } from '../../shared/utils/router-utils';
 
 class Router extends HTMLElement {
     constructor() {
@@ -85,7 +85,7 @@ class Router extends HTMLElement {
     }
     
     _handlePopstate = () => {
-        this.navigate(window.location.pathname);
+        this.back();
     }
     
     go(url) {

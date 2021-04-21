@@ -1,5 +1,5 @@
 import AbstractComponent from '../../components/AbstractComponent';
-import { importStyle } from '../../utils/css-utils';
+import { importStyle } from '../../shared/utils/css-utils';
 
 const style = `
     * {

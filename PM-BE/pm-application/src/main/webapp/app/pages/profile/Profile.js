@@ -1,5 +1,5 @@
 import AbstractComponent from '../../components/AbstractComponent';
-import { importCss } from '../../utils/css-utils';
+import { importCss } from '../../shared/utils/css-utils';
 
 export default class Profile extends AbstractComponent {
     constructor() {
@@ -19,7 +19,7 @@ export default class Profile extends AbstractComponent {
             let closeContactInfo = document.getElementById('contact-info-close');
             let overlay = document.getElementById('overlay');
             let contactInfoDiv = document.getElementById('contact-info-div');
-            let body = Array.from(document.getElementsByTagName('BODY'));
+            let body = Array.from(document.getElementsByTagName('body'));
     
             openContactInfo.addEventListener('click', () => {
                 contactInfoDiv.style.display = 'block';
@@ -33,7 +33,7 @@ export default class Profile extends AbstractComponent {
                 contactInfoDiv.style.display = 'none';
                 Array.prototype.forEach.call(body, ele => {
                     ele.style.overflow = 'auto';
-                })
+                });
                 overlay.style.display = 'none';
             });
         };

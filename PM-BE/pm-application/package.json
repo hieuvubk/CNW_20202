@@ -11,7 +11,15 @@
     "webapp:build:prod": "npm run webpack -- --config webpack/webpack.prod.js --progress=profile",
     "webapp:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --port=9060 --env stats=minimal",
     "webpack-dev-server": "npm run webpack -- serve",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "backend:info": "./gradlew -v",
+    "backend:start": "./gradlew -x webapp",
+    "java:jar": "./gradlew bootJar -x test -x integrationTest",
+    "java:war": "./gradlew bootWar -Pwar -x test -x integrationTest",
+    "java:jar:dev": "npm run java:jar -- -Pdev,webapp",
+    "java:jar:prod": "npm run java:jar -- -Pprod",
+    "java:war:dev": "npm run java:war -- -Pdev,webapp",
+    "java:war:prod": "npm run java:war -- -Pprod"
   },
   "author": "HT",
   "license": "ISC",

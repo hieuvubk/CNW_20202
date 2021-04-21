@@ -42,7 +42,17 @@ module.exports = options =>
             contentBase: './build/resources/main/static/',
             proxy: [
                 {
-                    context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/v3/api-docs'],
+                    context: [
+                        '/api',
+                        '/services',
+                        '/management',
+                        '/swagger-resources',
+                        '/v2/api-docs',
+                        '/v3/api-docs',
+                        '/oauth2',
+                        '/login',
+                        '/auth'
+                    ],
                     target: `http${options.tls ? 's' : ''}://localhost:8080`,
                     secure: false,
                     changeOrigin: options.tls,
@@ -92,7 +102,7 @@ module.exports = options =>
             ),
             new webpack.HotModuleReplacementPlugin(),
             new WebpackNotifierPlugin({
-                title: 'PM App',
+                title: 'JobsGo',
                 contentImage: path.join(__dirname, 'logo-jhipster.png'),
             }),
         ].filter(Boolean),
