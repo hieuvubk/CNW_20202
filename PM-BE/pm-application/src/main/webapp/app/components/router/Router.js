@@ -85,7 +85,7 @@ class Router extends HTMLElement {
     }
     
     _handlePopstate = () => {
-        this.back();
+        this.navigate(window.location.pathname);
     }
     
     go(url) {

@@ -50,9 +50,7 @@ export default class NotFound extends AbstractComponent {
     constructor() {
         super();
         importStyle(style);
-        this.render('not-found.html').then(page => {
-            this.innerHTML = page;
-        });
+        this.loadPage('not-found.html');
     }
 }
 

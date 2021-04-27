@@ -1,6 +1,6 @@
 {
-  "name": "Personal Management App",
-  "short_name": "PMApp",
+  "name": "JobsGo",
+  "short_name": "Jobs",
   "icons": [
     {
       "src": "./content/images/Logo_official.png",

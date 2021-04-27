@@ -3,9 +3,7 @@ import AbstractComponent from '../../AbstractComponent';
 export default class Footer extends AbstractComponent {
     constructor() {
         super();
-        this.render('footer.html').then(page => {
-            this.innerHTML = page;
-        });
+        this.loadPage('footer.html');
     }
 }
 
