@@ -52,7 +52,7 @@ body {
     position: relative;
     text-align: left;
     margin: 40px 40px;
-    border-bottom: 2px solid darkgrey;
+    border-bottom: 1px solid darkgrey;
 }
 
 #sign-in-form div h5 {
@@ -111,3 +111,4 @@ body {
 #sign-in-form h5 a:active {
     text-decoration: underline;
 }
+

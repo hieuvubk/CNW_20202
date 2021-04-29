@@ -35,8 +35,8 @@ header {
 .logo {
     width: 250px;
     float: left;
-    margin-top: 28px;
-    margin-left: 40px;
+    margin-top: 2.5%;
+    margin-left: 2%;
 }
 
 .main-nav {
@@ -198,27 +198,25 @@ footer {
 }
 
 #btn {
+    background-color: #265077;
     margin-bottom: 20px;
     width: 70%;
     height: 40px;
     border-radius: 20px;
     outline: none;
     border: none;
-    background-color: #265077;
+    
     transition: all .3s;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 100%;
+    font-weight: bold;
+    color: white;
 }
 
 #btn:hover {
     background-color: #022140;
     transform: scale(1.2);
-}
-
-#btn a {
-    text-decoration: none;
-    font-size: 120%;
-    font-weight: bold;
-    color: white;
 }
 
 /*--------------------------------------------------*/
@@ -257,6 +255,8 @@ section {
     display: table;
     clear: both;
 }
+
+
 
 
 
