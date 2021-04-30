@@ -11,13 +11,16 @@
 html {
     height: 100%;
     width: 100%;
+    text-decoration: none;
     font-family: "Lato", sans-serif;
     text-rendering: optimizeLegibility;
+    
 }
 
 body {
     height: 100%;
     width: 100%;
+    background-color: #F0F2EF;
 }
 
 section {
@@ -25,7 +28,6 @@ section {
 }
 
 .row {
-    /* max-width: 1140px; */
     margin: 0 auto;
 }
 
@@ -52,9 +54,10 @@ header {
 }
 
 .logo {
-    width: 180px;
+    width: 200px;
     float: left;
-    margin-top: 5%;
+    margin-top: 2%;
+    margin-left: 2%;
 }
 
 #left-header {
@@ -97,7 +100,7 @@ header {
     display: block;
     height: 20px;
     width: 20px;
-    margin: 8px;
+    margin: 7px;
 }
 
 #search-div input {

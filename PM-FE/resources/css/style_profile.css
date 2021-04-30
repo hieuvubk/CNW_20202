@@ -28,7 +28,7 @@ header{
     position: fixed;
     height: 50px;
     width: 100vw;
-    background-color: white;
+    background-color: hsl(203, 49%, 23%, 0.95);
     top: 0;
     display: flex;
     border-bottom: 0.5px solid gray;

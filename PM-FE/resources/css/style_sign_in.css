@@ -112,3 +112,9 @@ body {
     text-decoration: underline;
 }
 
+.input i {
+    position: absolute;
+    color: #ccc;
+    right: 1%;
+    cursor: pointer;
+}
