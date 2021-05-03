@@ -164,8 +164,12 @@ header {
   position: absolute;
   top: 50%;
   left: 45%;
-  transform: translate(-40%, -35%); /* chinh vi tri */
+  transform: translate(-40%, -35%);
   width: 100%;
+}
+
+.heading-main-box .hot-tags {
+    margin-left: -2.5%;
 }
 
 /*--------------------------------------------------*/
