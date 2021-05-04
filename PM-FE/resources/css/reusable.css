@@ -50,7 +50,7 @@ header {
     height: 12vh;
     border-bottom: 0.5px solid gray;
     z-index: 10;
-    background-color: hsl(203, 49%, 23%, 0.95);
+    background: linear-gradient(to right, #1e4157f2, #2d6187);
 }
 
 .logo {
@@ -133,19 +133,38 @@ header {
 /*------------------FOOTER--------------------------*/
 /*--------------------------------------------------*/
 
-footer {
+.big-footer {
     background-image: linear-gradient(45deg,
             rgba(2, 33, 64, 0.8) 55%,
-            rgba(45, 95, 93, 0.85)),
+            hsl(205, 50%, 35%)),
         url(../images/background_footer.jpeg);
     background-size: cover;
     background-position: center;
     /* can giua */
     background-attachment: fixed;
     color: #c5bebe;
-    padding-left: 8%;
-    padding-bottom: 4%;
+    padding: 2% 5%;
     font-size: 1.3rem;
+}
+
+.small-footer {
+    background: linear-gradient(to right, #1e4157f2, hsl(205, 50%, 35%));
+    color: #f4f4f4;
+    font-size: 1.3rem;
+    padding: 2%;
+}
+
+.small-footer-text a {
+    color: #f4f4f4;
+    font-weight: lighter;
+    text-decoration: none;
+    font-size: 70%;
+    padding: 0 1%;
+    border-right: 1px solid rgb(139, 135, 135);
+}
+
+.small-footer-text a:hover {
+    text-decoration: underline;
 }
 
 .col-footer {
@@ -153,7 +172,7 @@ footer {
 }
 
 .col-footer p {
-    font-size: larger;
+    font-size: 1.2rem;
 }
 
 .text-footer {
@@ -218,7 +237,7 @@ footer {
     color: white;
     padding: 5px 15px;
     border-radius: 5px;
-    background: linear-gradient(135deg,#1e4157f2 0%,#1597bb 100%);
+    background: linear-gradient(135deg, #1e4157f2 0%, #1597bb 100%);
     display: inline-block;
     text-align: center;
     transition: all 0.3s;
@@ -227,7 +246,7 @@ footer {
 
 .btn-post:hover,
 .btn-post:active {
-    background: linear-gradient(135deg,#1597bb 0%,#94afc9 100%);
+    background: linear-gradient(135deg, #1597bb 0%, #94afc9 100%);
 }
 
 /*----------------POP UP CSS-----------------*/
@@ -304,12 +323,12 @@ footer {
     bottom: 0;
     background-color: rgba(0, 0, 0, .5);
     pointer-events: none;
-  }
-  
+}
+
 #overlay.active {
     opacity: 1;
     pointer-events: all;
-  }
+}
 
 .active {
     transform: scale(1);
@@ -356,9 +375,9 @@ footer {
 }
 
 .dropdown-menu .profile {
-   display: flex;
-   margin: 5%;
-   background: none;
+    display: flex;
+    margin: 5%;
+    background: none;
 }
 
 .dropdown-menu .profile h3 {
@@ -384,7 +403,7 @@ footer {
 .dropdown-menu ul li {
     list-style: none;
     padding: 10px 0;
-    border-top: 1px solid rgba(0,0,0,0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     color: #265077;

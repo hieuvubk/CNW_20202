@@ -238,6 +238,7 @@ footer {
   background-position: center; /* can giua */
   background-attachment: fixed;
   color: #c5bebe;
+  padding: 3%;
 }
 
 .col-footer {
