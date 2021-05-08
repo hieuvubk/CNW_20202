@@ -1,16 +1,10 @@
-import AbstractComponent from '../../components/AbstractComponent';
-import { importCss } from '../../shared/utils/css-utils';
 import store from '../../store/store';
 import { getAccount } from '../../store/actions/auth';
+import MaleficComponent from '../../core/components/MaleficComponent';
 
-export default class Profile extends AbstractComponent {
+class Profile extends MaleficComponent {
     constructor() {
         super();
-        importCss([
-            'https://fonts.googleapis.com/icon?family=Material+Icons',
-            'content/css/style_profile.css'
-        ]);
-        this.loadPage('profile.html');
     }
     
     componentDidMount() {

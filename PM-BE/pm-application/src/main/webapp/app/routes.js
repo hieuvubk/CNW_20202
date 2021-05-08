@@ -1,10 +1,40 @@
-import './components/router/Router';
+import { authenticated, authorized } from './shared/guard/auth';
+import { ADMIN, USER } from './config/authority';
 
-document.querySelector('#root').innerHTML = `
-    <wc-router>
-        <wc-route path="/" component="app-home"></wc-route>
-        <wc-route path="/profile" title="Profile" component="app-profile"></wc-route>
-        <wc-route path="*" title="Not Found" component="app-not-found"></wc-route>
-        <wc-outlet></wc-outlet>
-    </wc-router>
-`;
+const notAuthenticated = {
+    name: 'Not authenticated',
+    component: 'app-not-authenticated',
+    resolve: () => import('./pages/auth/NotAuthenticated')
+};
+const notAuthorized = {
+    name: 'Not authorized',
+    component: 'app-not-authorized',
+    resolve: () => import('./pages/auth/NotAuthorized')
+};
+
+const routes = [
+    {
+        name: 'intro',
+        pattern: '',
+        data: {},
+        component: 'app-intro',
+        resolve: () => import('./pages/intro/Intro'),
+        /*authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        },
+        authorization: {
+            authorize: () => authorized(USER),
+            unauthorized: notAuthorized
+        }*/
+    },
+    {
+        name: 'not-found',
+        pattern: '*',
+        data: {},
+        component: 'app-not-found',
+        resolve: () => import('./pages/not-found/NotFound')
+    }
+];
+
+export default routes;
