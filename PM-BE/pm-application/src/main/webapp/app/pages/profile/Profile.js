@@ -6,14 +6,39 @@ import { profileStyle } from './profile-style';
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
+import '../../components/Modal/ContactInfo/ContactInfo';
 
 class Profile extends MaleficComponent {
+    static get properties() {
+        return {
+            showModal: {type: Boolean}
+        };
+    }
+    
     static get styles() {
         return [profileStyle];
     }
     
     constructor() {
         super();
+        window.addEventListener('beforeunload', () => {
+            window.scrollTo(0, 0);
+        });
+    }
+    
+    handleOpenContactModal() {
+        this.showModal = true;
+    }
+    
+    handleCloseContactModal() {
+        this.showModal = false;
+    }
+    
+    scrollIntoEducation(e) {
+        e.preventDefault();
+        this.shadowRoot.querySelector('#education').scrollIntoView({
+            block: 'center'
+        });
     }
     
     render() {
@@ -26,7 +51,7 @@ class Profile extends MaleficComponent {
                 <div id="main-content">
                     <div class="main-content-div" id="basic-info-div">
                         <div id="background-avatar">
-                            <img src="content/images/4853433.jpg">
+                            <img src="content/images/4853433.jpg" alt="">
                             <a class="link-icon" href="#">
                                 <div class="material-icons md-24">
                                     photo_camera
@@ -35,7 +60,7 @@ class Profile extends MaleficComponent {
                         </div>
             
                         <div id="main-avatar">
-                            <img src="content/images/user.svg" style="height: 100px;width: 100px;">
+                            <img src="content/images/user.svg" style="height: 100px;width: 100px;" alt="">
                             <a class="link-icon" href="#">
                                 <div class="material-icons md-24">
                                     edit
@@ -48,43 +73,18 @@ class Profile extends MaleficComponent {
                                 <h1 id="personal-name">Name</h1>
                                 <h3 id="personal-jobs">Jobs</h3>
                                 <h4 id="personal-address">Address</h4>
-                                <h4 id="contact-info">Contact info</h4>
+                                <h4 id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
                             </div>
                 
                             <div id="workplace">
-                                <a href="#">
+                                <a style="cursor: pointer" @click="${this.scrollIntoEducation}">
                                     <p>Name of school of company,etc.</p>
                                 </a>
                             </div>
                         </div>
                     </div>
         
-                    <div id="contact-info-div">
-                        <div id="contact-info-header">
-                            <h1>Name</h1>
-                            <button id="contact-info-close">&times;</button>
-                        </div>
-            
-                        <div id="contact-info-main">
-                            <div id="contact-info-profile">
-                                <div class="material-icons md-24">
-                                    contacts
-                                </div>
-                                <h3>Link profile</h3>
-                                <a href="#">Link to profile in linkedIn</a>
-                
-                            </div>
-                
-                            <div id="contact-info-email">
-                                <div class="material-icons md-24">
-                                    email
-                                </div>
-                                <h3>Link email</h3>
-                                <a href="mailto: abc@example.com">abc@example.com</a>
-                
-                            </div>
-                        </div>
-                    </div>
+                    <app-contact-info .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
         
                     <div class="main-content-div" id="experience">
                         <h2>Experience</h2>

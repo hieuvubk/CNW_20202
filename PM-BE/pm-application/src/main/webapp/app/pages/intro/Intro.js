@@ -1,7 +1,5 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
-import store from '../../store/store';
-import { getAccount, logout } from '../../store/actions/auth';
 import { introStyle } from './intro-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
@@ -11,26 +9,13 @@ import '../../components/Button/Button';
 
 class Intro extends MaleficComponent {
     static get styles() {
-        return [
-            introStyle
-        ];
+        return [introStyle];
     }
     
-    logout() {
-        store.dispatch(logout()).then(() => {
-            const logout = store.getState().auth.logout;
-            let logoutUrl = logout.logoutUrl;
-            const redirectUri = `${location.origin}/`;
-            
-            // if Keycloak, uri has protocol/openid-connect/token
-            if (logoutUrl.includes('/protocol')) {
-                logoutUrl = logoutUrl + '?redirect_uri=' + redirectUri;
-            } else {
-                // Okta
-                logoutUrl = logoutUrl + '?id_token_hint=' + logout.idToken + '&post_logout_redirect_uri=' + redirectUri;
-            }
-            
-            location.href = logoutUrl;
+    constructor() {
+        super();
+        window.addEventListener('beforeunload', () => {
+            window.scrollTo(0, 0);
         });
     }
     

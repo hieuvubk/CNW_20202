@@ -13,9 +13,7 @@ class SearchBar extends MaleficComponent {
     }
     
     static get styles() {
-        return [
-            searchbarStyle
-        ];
+        return [searchbarStyle];
     }
     
     handleCloseModal() {
@@ -33,9 +31,11 @@ class SearchBar extends MaleficComponent {
             ${commonStyles}
             
             <app-modal .show="${this.show}">
-                <button class="close-button" @click="${this.handleCloseModal}"><i class="fas fa-long-arrow-alt-left"></i></button>
-                <input class="search-input" type="text" placeholder="Search">
-                <i class="fas fa-search"></i>
+                <div class="modal-header">
+                    <button class="close-button" @click="${this.handleCloseModal}"><i class="fas fa-long-arrow-alt-left"></i></button>
+                    <input class="search-input" type="text" placeholder="Search">
+                    <i class="fas fa-search"></i>
+                </div>
             </app-modal>
         `;
     }

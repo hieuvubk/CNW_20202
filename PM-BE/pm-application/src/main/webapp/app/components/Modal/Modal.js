@@ -1,6 +1,7 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { modalStyle } from './modal-style';
+import { commonStyles } from '../../shared/styles/common-styles';
 
 class Modal extends MaleficComponent {
     static get properties() {
@@ -15,10 +16,10 @@ class Modal extends MaleficComponent {
     
     render() {
         return html`
+            ${commonStyles}
+            
             <div id="modal" class="modal ${this.show ? 'active' : ''}">
-                <div class="modal-header">
-                    <slot></slot>
-                </div>
+                <slot></slot>
             </div>
             <div id="overlay" class="${this.show ? 'active' : ''}"></div>
         `;

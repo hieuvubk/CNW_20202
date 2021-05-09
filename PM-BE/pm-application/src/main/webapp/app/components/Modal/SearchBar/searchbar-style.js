@@ -1,6 +1,10 @@
 import { css } from '../../../core/components/css-tag';
 
 export const searchbarStyle = css`
+    .modal-header {
+        display: flex;
+    }
+
     .close-button {
         cursor: pointer;
         font-size: 2rem;

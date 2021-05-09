@@ -39,6 +39,10 @@ class App extends router(MaleficComponent) {
         this.data = data;
         this.component = component;
         this.resolve = resolve;
+    
+        if (data.title) {
+            document.getElementsByTagName('title')[0].innerHTML = data.title;
+        }
     }
     
     render() {

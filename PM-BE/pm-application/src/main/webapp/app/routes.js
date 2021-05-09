@@ -23,14 +23,18 @@ const routes = [
     {
         name: 'profile',
         pattern: 'profile',
-        data: {},
+        data: {
+            title: 'Profile'
+        },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile')
     },
     {
         name: 'not-found',
         pattern: '*',
-        data: {},
+        data: {
+            title: 'Not Found'
+        },
         component: 'app-not-found',
         resolve: () => import('./pages/not-found/NotFound')
     }
