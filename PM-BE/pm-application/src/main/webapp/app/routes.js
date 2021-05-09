@@ -18,15 +18,14 @@ const routes = [
         pattern: '',
         data: {},
         component: 'app-intro',
-        resolve: () => import('./pages/intro/Intro'),
-        /*authentication: {
-            authenticate: authenticated,
-            unauthenticated: notAuthenticated
-        },
-        authorization: {
-            authorize: () => authorized(USER),
-            unauthorized: notAuthorized
-        }*/
+        resolve: () => import('./pages/intro/Intro')
+    },
+    {
+        name: 'profile',
+        pattern: 'profile',
+        data: {},
+        component: 'app-profile',
+        resolve: () => import('./pages/profile/Profile')
     },
     {
         name: 'not-found',

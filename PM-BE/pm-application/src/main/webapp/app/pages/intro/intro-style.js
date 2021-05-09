@@ -1,6 +1,10 @@
 import { css } from '../../core/components/css-tag';
 
 export const introStyle = css`
+    :host {
+        font-size: 20px;
+    }
+
     .p-long {
         text-align: center;
         color: #265077;

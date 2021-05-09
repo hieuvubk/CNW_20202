@@ -2,21 +2,21 @@ import MaleficComponent from '../../../../core/components/MaleficComponent';
 import { html } from '../../../../core/components/malefic-html';
 import { getLoginUrl } from '../../../../shared/utils/url-utils';
 import { createRegisterUrl } from '../../../../core/keycloak/keycloak';
-import { headerStyle } from './header-style';
+import { introHeaderStyle } from './intro-header-style';
 
 import '../../../Button/Button';
 import { commonStyles } from '../../../../shared/styles/common-styles';
 
 class IntroHeader extends MaleficComponent {
     static get styles() {
-        return [headerStyle];
+        return [introHeaderStyle];
     }
     
     render() {
         const registerUrl = createRegisterUrl({
             realm: 'personal-management',
-            url: `${location.origin}/auth`,
-            clientId: 'pm-app',
+            url: `http://localhost:8090/auth`,
+            clientId: 'pm_app',
             redirectUrl: getLoginUrl()
         });
         
@@ -37,12 +37,14 @@ class IntroHeader extends MaleficComponent {
                 <div class="row">
                     <div class="heading-main-box">
                         <h1>
-                            Open jobs.<br/>
-                            People hiring.
+                            Open jobs<br/>
+                            People hiring
                         </h1>
-                        <app-button btnclass="btn">Search Jobs</app-button>
-                        <app-button btnclass="btn">Find People</app-button>
-                        <app-button btnclass="btn">Make CV</app-button>
+                        <div class="hot-tags">
+                            <app-button btnclass="btn">Search Jobs</app-button>
+                            <app-button btnclass="btn">Find People</app-button>
+                            <app-button btnclass="btn">Make CV</app-button>
+                        </div>
                     </div>
                 </div>
             </header>

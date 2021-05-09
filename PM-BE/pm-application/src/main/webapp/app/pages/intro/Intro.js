@@ -4,18 +4,14 @@ import store from '../../store/store';
 import { getAccount, logout } from '../../store/actions/auth';
 import { introStyle } from './intro-style';
 import { commonStyles } from '../../shared/styles/common-styles';
-import { headerStyle } from '../../components/layouts/Header/intro/header-style';
-import { footerStyle } from '../../components/layouts/Footer/footer-style';
 
-import '../../components/layouts/Header/intro/IntroHeader';
+import '../../components/layouts/Header/Intro/IntroHeader';
 import '../../components/layouts/Footer/Footer';
 import '../../components/Button/Button';
 
 class Intro extends MaleficComponent {
     static get styles() {
         return [
-            headerStyle,
-            footerStyle,
             introStyle
         ];
     }

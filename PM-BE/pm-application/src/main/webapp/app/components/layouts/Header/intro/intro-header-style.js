@@ -1,6 +1,10 @@
 import { css } from '../../../../core/components/css-tag';
 
-export const headerStyle = css`
+export const introHeaderStyle = css`
+    :host {
+        font-size: 20px;
+    }
+
     header {
         background-image: linear-gradient(
           45deg,
@@ -49,10 +53,13 @@ export const headerStyle = css`
 
     .heading-main-box {
         position: absolute;
-        top: 50%;
-        left: 45%;
-        transform: translate(-40%, -35%); /* chinh vi tri */
-        width: 100%;
+        top: 30%;
+        left: 4.5%;
+        width: 95%;
+    }
+    
+    .heading-main-box .hot-tags {
+        margin-left: -2.5%;
     }
     
     .row {

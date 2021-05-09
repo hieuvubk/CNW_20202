@@ -1,6 +1,10 @@
 import { css } from '../../../core/components/css-tag';
 
 export const footerStyle = css`
+    :host {
+        font-size: 20px;
+    }
+
     footer {
         background-image: linear-gradient(
           45deg,
@@ -12,6 +16,7 @@ export const footerStyle = css`
         background-position: center; /* can giua */
         background-attachment: fixed;
         color: #c5bebe;
+        padding: 3%;
     }
     
     .col-footer {
