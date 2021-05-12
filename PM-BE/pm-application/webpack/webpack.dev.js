@@ -103,7 +103,7 @@ module.exports = options =>
             new webpack.HotModuleReplacementPlugin(),
             new WebpackNotifierPlugin({
                 title: 'JobsGo',
-                contentImage: path.join(__dirname, 'logo-jhipster.png'),
+                contentImage: path.join(__dirname, 'Logo_official.png'),
             }),
         ].filter(Boolean),
     });

@@ -25,12 +25,16 @@
     <include file="config/liquibase/changelog/20210409181930_added_entity_Publication.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181931_added_entity_Author.xml" relativeToChangelogFile="false"/>
 
-    <include file="config/liquibase/changelog/20210409181923_added_entity_constraints_PersonalProfile.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181924_added_entity_constraints_Certification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181925_added_entity_constraints_Skill.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181928_added_entity_constraints_Project.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181929_added_entity_constraints_Creator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181930_added_entity_constraints_Publication.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181931_added_entity_constraints_Author.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210409181926_added_entity_constraints_WorkExperience.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210409181927_added_entity_constraints_Education.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409205620_added_entity_constraints_PersonalProfile.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210509170340_added_entity_columns_PersonalProfile.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210510203215_added_entity_columns_Skill.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210510214620_added_entity_columns_WorkExperience.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

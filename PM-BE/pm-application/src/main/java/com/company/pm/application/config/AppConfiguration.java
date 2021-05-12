@@ -1,5 +1,6 @@
 package com.company.pm.application.config;
 
+import com.company.pm.common.config.ApplicationProperties;
 import com.company.pm.common.config.CommonConfiguration;
 import com.company.pm.common.config.WebConfigurer;
 import com.company.pm.personalservice.main.config.PersonalServiceConfiguration;
@@ -20,6 +21,6 @@ import org.springframework.context.annotation.Import;
     UserServiceConfiguration.class,
     PersonalServiceConfiguration.class,
 })
-@EnableConfigurationProperties({LiquibaseProperties.class})
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class AppConfiguration {
 }

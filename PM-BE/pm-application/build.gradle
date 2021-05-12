@@ -1,3 +1,17 @@
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$projectDir/src/main/resources/swagger/api.yml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "com.company.pm.web.api"
+    modelPackage = "com.company.pm.web.api.model"
+    configOptions = [
+        dateLibrary: "java8",
+        useTags: "true",
+        delegatePattern: "true",
+        supportingFilesToGenerate: "ApiUtil.java"
+    ]
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
