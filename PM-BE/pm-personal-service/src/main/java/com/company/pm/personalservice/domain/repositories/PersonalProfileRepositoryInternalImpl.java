@@ -139,6 +139,7 @@ class PersonalProfileSqlHelper {
         columns.add(Column.aliased("headline", table, columnPrefix + "_headline"));
         columns.add(Column.aliased("bg_image_url", table, columnPrefix + "_bg_image_url"));
         columns.add(Column.aliased("industry", table, columnPrefix + "_industry"));
+        columns.add(Column.aliased("user_id", table, columnPrefix + "_user_id"));
         return columns;
     }
 }

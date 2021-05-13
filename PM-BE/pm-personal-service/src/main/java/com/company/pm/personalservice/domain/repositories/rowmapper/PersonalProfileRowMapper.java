@@ -36,6 +36,7 @@ public class PersonalProfileRowMapper implements BiFunction<Row, String, Persona
         entity.setHeadline(converter.fromRow(row, prefix + "_headline", String.class));
         entity.setBgImageUrl(converter.fromRow(row, prefix + "_bg_image_url", String.class));
         entity.setIndustry(converter.fromRow(row, prefix + "_industry", String.class));
+        entity.setUserId(converter.fromRow(row, prefix + "_user_id", String.class));
         return entity;
     }
 }
