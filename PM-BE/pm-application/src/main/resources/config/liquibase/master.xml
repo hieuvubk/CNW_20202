@@ -24,6 +24,8 @@
     <include file="config/liquibase/changelog/20210409181929_added_entity_Creator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181930_added_entity_Publication.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181931_added_entity_Author.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210512162738_added_entity_Relationship.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210514011917_added_entity_Follow.xml" relativeToChangelogFile="false"/>
 
     <include file="config/liquibase/changelog/20210409181924_added_entity_constraints_Certification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210409181925_added_entity_constraints_Skill.xml" relativeToChangelogFile="false"/>

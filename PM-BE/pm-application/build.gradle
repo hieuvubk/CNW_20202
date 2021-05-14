@@ -22,6 +22,7 @@ dependencies {
     implementation project(':pm-security')
     implementation project(':pm-personal-service')
     implementation project(':pm-user-service')
+    implementation project(':pm-social-service')
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

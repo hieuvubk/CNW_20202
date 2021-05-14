@@ -9,3 +9,4 @@ include 'pm-security'
 
 include 'pm-user-service'
 include 'pm-personal-service'
+include 'pm-social-service'
