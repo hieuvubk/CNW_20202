@@ -46,9 +46,10 @@ public class SkillService {
     public Mono<Skill> createSkillByProfile(String userId, SkillDTO skillDTO) {
         return profileRepository.findByUser(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "personal_profile", "idnotfound")))
-            .flatMap(profile -> skillRepository.count()
-                .flatMap(count -> {
-                    if (count >= 50) {
+            .flatMap(profile -> skillRepository.findByPersonalProfile(profile.getId())
+                .collectList()
+                .flatMap(skills -> {
+                    if (skills.size() >= 50) {
                         return Mono.error(new BadRequestAlertException("Exceeded 50 entities", ENTITY_NAME, "limitexceeded"));
                     } else {
                         Skill skill = mapper.skillDTOToSkill(skillDTO);
