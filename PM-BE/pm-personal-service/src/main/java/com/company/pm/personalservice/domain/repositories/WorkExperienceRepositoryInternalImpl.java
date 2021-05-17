@@ -153,7 +153,6 @@ class WorkExperienceSqlHelper {
         columns.add(Column.aliased("location", table, columnPrefix + "_location"));
         columns.add(Column.aliased("start_date", table, columnPrefix + "_start_date"));
         columns.add(Column.aliased("end_date", table, columnPrefix + "_end_date"));
-        columns.add(Column.aliased("industry", table, columnPrefix + "_industry"));
         columns.add(Column.aliased("personal_profile_id", table, columnPrefix + "_personal_profile_id"));
         return columns;
     }
