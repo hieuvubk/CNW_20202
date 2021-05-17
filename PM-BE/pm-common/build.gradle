@@ -30,6 +30,7 @@ dependencies {
     api 'org.liquibase:liquibase-core:4.3.2'
     api 'com.zaxxer:HikariCP'
     api 'org.hibernate:hibernate-core'
+    api 'com.cloudinary:cloudinary-http44:1.29.0'
 
     runtimeOnly 'mysql:mysql-connector-java'
 

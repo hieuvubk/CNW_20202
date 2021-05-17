@@ -30,7 +30,8 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
     LoggingConfiguration.class,
     ReactorConfiguration.class,
     OpenApiConfiguration.class,
-    ElasticsearchConfiguration.class
+    ElasticsearchConfiguration.class,
+    CloudinaryConfiguration.class
 })
 public class CommonConfiguration {
     
