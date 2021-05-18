@@ -5,9 +5,12 @@ import com.company.pm.companyservice.domain.repositories.CompanyRepository;
 import com.company.pm.companyservice.domain.services.dto.CompanyDTO;
 import com.company.pm.companyservice.domain.services.mapper.CompanyMapper;
 import com.company.pm.domain.companyservice.Company;
+import com.company.pm.domain.searchservice.CompanySearch;
+import com.company.pm.searchservice.domain.repositories.CompanySearchRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +26,8 @@ public class CompanyService {
     private final CompanyMapper mapper;
     
     private final CompanyRepository companyRepository;
+    
+    private final CompanySearchRepository companySearchRepository;
     
     private final UserRepository userRepository;
     
@@ -57,7 +62,10 @@ public class CompanyService {
                     company.setAdmin(user);
                     company.setAdminId(user.getId());
     
-                    return companyRepository.save(company);
+                    return companyRepository.save(company)
+                        .flatMap(saved -> companySearchRepository.save(new CompanySearch(saved.getId(), saved.getName()))
+                            .thenReturn(saved)
+                        );
                 } catch (NumberFormatException e) {
                     return Mono.error(new BadRequestAlertException("Invalid field", ENTITY_NAME, "fieldinvalid"));
                 }
@@ -93,7 +101,10 @@ public class CompanyService {
                         company.setTagline(update.getTagline());
                     }
                     
-                    return companyRepository.save(company);
+                    return companyRepository.save(company)
+                        .flatMap(saved -> companySearchRepository.save(new CompanySearch(saved.getId(), saved.getName()))
+                            .thenReturn(saved)
+                        );
                 } catch (NumberFormatException e) {
                     return Mono.error(new BadRequestAlertException("Invalid field", ENTITY_NAME, "fieldinvalid"));
                 }
@@ -103,6 +114,32 @@ public class CompanyService {
     @Transactional
     public Mono<Void> deleteCompanyByUser(String userId, Long companyId) {
         return getCompanyByUser(userId, companyId)
-            .flatMap(companyRepository::delete);
+            .flatMap(companyRepository::delete)
+            .then(companySearchRepository.deleteById(companyId));
+    }
+    
+    /**
+     * Sync with Elasticsearch
+     * <p>
+     * This is scheduled to get fired everyday, at 02:00 (am).
+     */
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void syncCompanySearch() {
+        syncCompanySearchReactively().blockLast();
+    }
+    
+    @Transactional
+    public Flux<CompanySearch> syncCompanySearchReactively() {
+        return companyRepository.findAll()
+            .flatMap(company -> companySearchRepository.findById(company.getId())
+                .flatMap(companySearch -> {
+                    companySearch.setName(company.getName());
+                    
+                    return companySearchRepository.save(companySearch);
+                })
+                .switchIfEmpty(companySearchRepository.save(
+                    new CompanySearch(company.getId(), company.getName()))
+                )
+            );
     }
 }

@@ -6,9 +6,12 @@ import com.company.pm.companyservice.domain.repositories.JobRepository;
 import com.company.pm.companyservice.domain.services.dto.JobDTO;
 import com.company.pm.companyservice.domain.services.mapper.JobMapper;
 import com.company.pm.domain.companyservice.Job;
+import com.company.pm.domain.searchservice.JobSearch;
+import com.company.pm.searchservice.domain.repositories.JobSearchRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +29,8 @@ public class JobService {
     private final JobMapper mapper;
     
     private final JobRepository jobRepository;
+    
+    private final JobSearchRepository jobSearchRepository;
     
     private final CompanyRepository companyRepository;
     
@@ -67,7 +72,8 @@ public class JobService {
                     job.setActivated(true);
                     job.setCreatedAt(new Date().toInstant());
                     
-                    return jobRepository.save(job);
+                    return jobRepository.save(job)
+                        .flatMap(saved -> saveJobSearch(saved).thenReturn(saved));
                 })
             );
     }
@@ -102,13 +108,53 @@ public class JobService {
                     }
                 }
                 
-                return jobRepository.save(job);
+                return jobRepository.save(job)
+                    .flatMap(saved -> saveJobSearch(saved).thenReturn(saved));
             });
     }
     
     @Transactional
     public Mono<Void> deleteJobByUser(String userId, Long jobId) {
         return getJobByUser(userId, jobId)
-            .flatMap(jobRepository::delete);
+            .flatMap(jobRepository::delete)
+            .then(jobSearchRepository.deleteById(jobId));
+    }
+    
+    /**
+     * Sync with Elasticsearch
+     * <p>
+     * This is scheduled to get fired everyday, at 02:00 (am).
+     */
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void syncJobSearch() {
+        syncJobSearchReactively().blockLast();
+    }
+    
+    @Transactional
+    public Flux<JobSearch> syncJobSearchReactively() {
+        return jobRepository.findAll()
+            .flatMap(this::saveJobSearch);
+    }
+    
+    @Transactional
+    public Mono<JobSearch> saveJobSearch(Job job) {
+        return jobSearchRepository.findById(job.getId())
+            .flatMap(jobSearch -> {
+                jobSearch.setTitle(job.getTitle());
+                jobSearch.setCompany(job.getCompany().getName());
+                jobSearch.setLocation(job.getLocation());
+                jobSearch.setJobType(job.getJobType());
+                jobSearch.setCreatedAt(job.getCreatedAt());
+                
+                return jobSearchRepository.save(jobSearch);
+            })
+            .switchIfEmpty(jobSearchRepository.save(jobToJobSearch(job)));
+    }
+    
+    private JobSearch jobToJobSearch(Job job) {
+        return new JobSearch(
+            job.getId(), job.getTitle(), job.getCompany().getName(),
+            job.getLocation(), job.getJobType(), job.getCreatedAt()
+        );
     }
 }
