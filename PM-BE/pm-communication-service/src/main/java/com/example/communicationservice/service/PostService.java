@@ -5,6 +5,7 @@ import com.company.pm.socialservice.domain.repositories.FollowRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import com.company.pm.userservice.domain.services.dto.UserDTO;
 import com.example.communicationservice.model.Post;
+import com.example.communicationservice.model.PostVisionable;
 import com.example.communicationservice.repositories.CommentRepository;
 import com.example.communicationservice.repositories.LikesRepository;
 import com.example.communicationservice.repositories.PostRepository;
@@ -39,7 +40,12 @@ public class PostService {
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
                 .flatMapMany(user -> followRepository.findAllByFollowerId(user.getId()))
                 .flatMap(follow -> postRepository.findAllByCreatorId(follow.getFollowedId()))
-                .map(post -> new PostDTO(post.getId(), post.getCreatorId(), post.getVisionable()));
+                .flatMap(post -> {
+                    if(!post.getVisionable().equals(PostVisionable.PRIVATE.toString()))
+                        return postRepository.findById(Long.parseLong(post.getId()))
+                        .map(post1 -> new PostDTO(post1.getId(), post1.getCreatorId(), post1.getVisionable()));
+                    else return Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound"));
+                });
     }
 
     public Flux<PostDTO> getAllPostByUser(String userId) {
