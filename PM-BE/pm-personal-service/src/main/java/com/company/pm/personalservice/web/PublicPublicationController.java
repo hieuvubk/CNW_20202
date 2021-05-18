@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.Publication;
-import com.company.pm.personalservice.domain.assembler.PublicationRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicPublicationRepresentationModelAssembler;
 import com.company.pm.personalservice.domain.services.PublicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicPublicationController {
     
-    private final PublicationRepresentationModelAssembler assembler;
+    private final PublicPublicationRepresentationModelAssembler assembler;
     
     private final PublicationService publicationService;
     

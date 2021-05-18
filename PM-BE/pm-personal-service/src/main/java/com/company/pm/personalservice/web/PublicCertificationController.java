@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.Certification;
-import com.company.pm.personalservice.domain.assembler.CertificationRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicCertificationRepresentationAssembler;
 import com.company.pm.personalservice.domain.services.CertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicCertificationController {
     
-    private final CertificationRepresentationModelAssembler assembler;
+    private final PublicCertificationRepresentationAssembler assembler;
     
     private final CertificationService certificationService;
     
