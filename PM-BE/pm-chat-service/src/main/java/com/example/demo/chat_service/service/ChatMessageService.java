@@ -2,7 +2,6 @@ package com.example.demo.chat_service.service;
 
 import com.example.demo.chat_service.exception.ResourceNotFoundException;
 import com.example.demo.chat_service.model.ChatMessage;
-import com.example.demo.chat_service.model.ChatMessage;
 import com.example.demo.chat_service.model.MessageStatus;
 import com.example.demo.chat_service.repo.ChatMessageRepository;
 
