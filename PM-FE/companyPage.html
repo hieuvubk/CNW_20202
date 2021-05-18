@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company</title>
+    <link rel="icon" href="resources/images/j.svg">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="./resources/css/reusable.css">
+    <link rel="stylesheet" href="./resources/css/style_company_page.css">
+    <link rel="stylesheet" href="./vendors/css/grid.css">
+    <script src="https://kit.fontawesome.com/9b7bd019f1.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header id="header">
+        <div id="left-header">
+            <a href="#"><img class="logo" src="./resources/images/Logo_official.png" alt="" /></a>
+        </div>
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <button data-close-button class="close-button"><i class="fas fa-long-arrow-alt-left"></i></button>
+                <input class="search-input" type="text" placeholder="Search">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        <div id="overlay"></div>
+        <div id="right-header">
+            <nav id="nav-menu">
+                <div data-modal-target="#modal" class="menu-icons">
+                    <div class="material-icons md-24">
+                        search
+                    </div>
+                    <h6>Search</h6>
+                </div>
+
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                        home
+                    </div>
+                    <h6>Home</h6>
+                </div>
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                        people
+                    </div>
+                    <h6>My Network</h6>
+                </div>
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                        work
+                    </div>
+                    <h6>Jobs</h6>
+                </div>
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                        message
+                    </div>
+                    <h6>Messaging</h6>
+                </div>
+                <div class="menu-icons">
+                    <div class="material-icons md-24">
+                        notifications
+                    </div>
+                    <h6>Notifications</h6>
+                </div>
+
+                <div class=" menu-icons dropbtn" onclick="menuToggle()" id="personal-icon">
+                    <div class="profile">
+                        <img src="./resources//images//avatar.png" alt="">
+                    </div>
+                    <div>
+                        <h6>Me <i class="fas fa-caret-down"></i></h6>
+                    </div>
+                </div>
+                
+                <!-- user account dropdown menu -->
+                <div class="dropdown-menu">
+                    <div class="profile">
+                        <img src="./resources//images//avatar.png" alt="">
+                        <h3>Hieu Vu Minh <br> <span>Student at Hanoi University of Science and Technology</span></h3>
+                    </div>
+                    <div class="setting-list">
+                        <ul>
+                            <li><i class="fas fa-user-circle"></i><a href="#">View Profile</a></li>
+                            <li><i class="fas fa-edit"></i><a href="#">Edit Profile</a></li>
+                            <li><i class="fas fa-users-cog"></i><a href="#">Account Settings</a></li>
+                            <li><i class="fas fa-sign-out-alt"></i><a href="#">Sign Out</a></li>                        
+                        </ul>
+                    </div>     
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="main-content">
+            <div class="main-content-div" id="basic-info-div">
+                <div id="background-avatar">
+                    <img src="./resources/images/4853433.jpg">
+                </div>
+
+                <div id="main-avatar">
+                    <img src="./resources/images/user.svg" style="height: 90px;width: 90px;">
+                </div>
+
+                <div id="info">
+                    <div id="company-info">
+                        <h1>Name</h1>
+                        <p>Slogan</p>
+                        <span>Address</span>
+                        <span>Followers</span>
+                        <a href="#">Employees</a>
+                    </div>
+                </div>
+
+                <div id="basic-info-follow">
+                    <i class="fas fa-plus"></i>Follow
+                </div>
+
+                <div id="basic-info-nav">
+                    <div>Home</div>
+                    <div>About</div>
+                    <div>Posts</div>
+                </div>
+            </div>
+
+            <div class="main-content-div" id="about">
+                <h2>About</h2>
+                <div id="about-short">
+                    <p>Some brief info</p>
+                </div>
+                <div class="main-content-div-expand">
+                    <a href="#">See all details</a>
+                </div>
+            </div>
+
+            <div class="main-content-div" id="post">
+                <h2>Page posts</h2>
+                <div id="page-post">
+                    
+                </div>
+                <div class="main-content-div-expand">
+                    <a href="#">See all posts</a>
+                </div>
+            </div>
+        </div>
+
+        <aside>
+            <div class="quote">
+                <img src="./resources/images/20943749.jpg" style="height: 195px;width: 195px;">
+            </div>
+            <!--div class="suggest">
+                <h2 class="suggest__title">People you may know</h2>
+                <a class="suggest__link" href="#">
+                    <div class="suggest__info">
+                        <img class="suggest__info__avatar" src="./resources/images/user.svg">
+                        <h3 class="suggest__info__name">Name 1</h3>
+                    </div>
+                </a>
+
+                <a class="suggest__link" href="#">
+                    <div class="suggest__info">
+                        <img class="suggest__info__avatar" src="./resources/images/user.svg">
+                        <h3 class="suggest__info__name">Name 2</h3>
+                    </div>
+                </a>
+
+                <a class="suggest__link" href="#">
+                    <div class="suggest__info">
+                        <img class="suggest__info__avatar" src="./resources/images/user.svg">
+                        <h3 class="suggest__info__name">Name 3</h3>
+                    </div>
+                </a>
+
+
+            </div-->
+        </aside>
+    </main>
+
+    <footer class="big-footer">
+        <div class="footer-text">
+            <div class="row">
+                <div class="col span-1-of-3 col-footer row__info">
+                    <p>About Us</p>
+                    <ul class="text-footer">
+                        <li>
+                            <a href="#">Home</a>
+                        </li>
+                        <li>
+                            <a href="#">About Us</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col span-1-of-3 col-footer row__policy">
+                    <p>Terms & Conditions</p>
+                    <ul class="text-footer">
+                        <li>
+                            <a href="#">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a href="#">Complaint Handling</a>
+                        </li>
+                        <li>
+                            <a href="#">Term & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col span-1-of-3 col-footer row__contact">
+                    <p>Copyright &copy JobsGo</p>
+                    <p>Tax code: 0312192258</p>
+                    <div class="contact-detail">
+                        <ul class="information">
+                            <li><i class="fas fa-map-marker-alt small-icon"></i>Address: 21 Le Duan, Ha Noi</li>
+                            <li><i class="fas fa-envelope small-icon"></i>Email: jobsgo@gmail.com</li>
+                            <li><i class="fas fa-phone small-icon"></i>SĐT: (+084 )099-923-232-322</li>
+                        </ul>
+                    </div>
+                    <div class="social-contact">
+                        <ul class="social-icons">
+                            <li><i class="fab fa-facebook"></i></li>
+                            <li><i class="fab fa-twitter-square"></i></li>
+                            <li><i class="fab fa-instagram"></i></li>
+                            <li><i class="fab fa-google-plus-square"></i></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="./resources/js/reusable.js"></script>
+    <script type="text/javascript" src="./resources/js/main_profile.js"></script>
+</body>
+
+</html>
