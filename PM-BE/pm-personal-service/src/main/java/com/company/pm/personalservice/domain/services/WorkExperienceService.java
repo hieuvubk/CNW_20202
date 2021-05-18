@@ -69,8 +69,6 @@ public class WorkExperienceService {
                         });
                 } catch (ParseException e) {
                     return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "dateinvalid"));
-                } catch (IllegalArgumentException e) {
-                    return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "arginvalid"));
                 }
             });
     }
@@ -118,8 +116,6 @@ public class WorkExperienceService {
                         });
                 } catch (ParseException e) {
                     return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "dateinvalid"));
-                } catch (IllegalArgumentException e) {
-                    return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "arginvalid"));
                 }
             });
     }

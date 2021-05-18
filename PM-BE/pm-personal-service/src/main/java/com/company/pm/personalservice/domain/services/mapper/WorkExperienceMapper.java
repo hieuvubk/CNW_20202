@@ -25,7 +25,7 @@ public class WorkExperienceMapper {
         df.setTimeZone(TimeZone.getTimeZone(Constants.TIMEZONE));
     }
     
-    public WorkExperience workExpDTOToWorkExp(WorkExperienceDTO workExperienceDTO) throws ParseException, IllegalArgumentException {
+    public WorkExperience workExpDTOToWorkExp(WorkExperienceDTO workExperienceDTO) throws ParseException {
         WorkExperience workExperience = mapper.map(workExperienceDTO, WorkExperience.class);
         String startDate = workExperienceDTO.getStartYear() + "-" + workExperienceDTO.getStartMonth();
         

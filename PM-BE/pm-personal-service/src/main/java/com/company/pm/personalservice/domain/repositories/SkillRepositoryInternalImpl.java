@@ -148,6 +148,7 @@ class SkillSqlHelper {
         List<Expression> columns = new ArrayList<>();
         columns.add(Column.aliased("id", table, columnPrefix + "_id"));
         columns.add(Column.aliased("name", table, columnPrefix + "_name"));
+        columns.add(Column.aliased("category", table, columnPrefix + "_category"));
 
         columns.add(Column.aliased("personal_profile_id", table, columnPrefix + "_personal_profile_id"));
         return columns;

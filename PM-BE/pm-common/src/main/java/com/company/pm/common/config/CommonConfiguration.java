@@ -29,7 +29,9 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
     DateTimeFormatConfiguration.class,
     LoggingConfiguration.class,
     ReactorConfiguration.class,
-    OpenApiConfiguration.class
+    OpenApiConfiguration.class,
+    ElasticsearchConfiguration.class,
+    CloudinaryConfiguration.class
 })
 public class CommonConfiguration {
     

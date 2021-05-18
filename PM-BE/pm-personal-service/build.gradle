@@ -1,6 +1,5 @@
 dependencies {
-    api 'com.cloudinary:cloudinary-http44:1.29.0'
-
+    api project(':pm-upload-service')
     api project(':pm-domain')
     api project(':pm-user-service')
 

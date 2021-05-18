@@ -1,6 +1,7 @@
 package com.company.pm.personalservice.domain.services.dto;
 
 import com.company.pm.common.config.Constants;
+import com.company.pm.personalservice.domain.services.validators.ValidEmploymentType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,7 @@ public class WorkExperienceDTO {
     @Size(min = 1)
     private final String title;
     
+    @ValidEmploymentType
     private final String employmentType;
     
     @NotNull

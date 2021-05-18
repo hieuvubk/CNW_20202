@@ -36,7 +36,10 @@ public class FollowService {
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
             .flatMapMany(user -> followRepository.findAllByFollowedId(user.getId())
                 .flatMap(follow -> userRepository.findById(follow.getFollowerId())
-                    .map(follower -> new UserDTO(follower.getId(), follower.getLogin()))
+                    .map(follower -> new UserDTO(
+                        follower.getId(), follower.getLogin(),
+                        follower.getFirstName(), follower.getLastName())
+                    )
                 )
             );
     }
@@ -47,7 +50,10 @@ public class FollowService {
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
             .flatMapMany(user -> followRepository.findAllByFollowerId(user.getId())
                 .flatMap(follow -> userRepository.findById(follow.getFollowedId()))
-                    .map(following -> new UserDTO(following.getId(), following.getLogin()))
+                    .map(following -> new UserDTO(
+                        following.getId(), following.getLogin(),
+                        following.getFirstName(), following.getLastName())
+                    )
             );
     }
     

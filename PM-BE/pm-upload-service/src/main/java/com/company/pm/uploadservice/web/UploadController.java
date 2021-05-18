@@ -1,8 +1,8 @@
-package com.company.pm.personalservice.web;
+package com.company.pm.uploadservice.web;
 
 import com.company.pm.common.utils.FileUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
-import com.company.pm.personalservice.domain.services.CloudinaryService;
+import com.company.pm.uploadservice.domain.services.CloudinaryService;
 import com.company.pm.userservice.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

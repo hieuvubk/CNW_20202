@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.Education;
-import com.company.pm.personalservice.domain.assembler.EducationRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicEducationRepresentationModelAssembler;
 import com.company.pm.personalservice.domain.services.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicEducationController {
     
-    private final EducationRepresentationModelAssembler assembler;
+    private final PublicEducationRepresentationModelAssembler assembler;
     
     private final EducationService educationService;
     

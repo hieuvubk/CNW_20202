@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.WorkExperience;
-import com.company.pm.personalservice.domain.assembler.WorkExperienceRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicWorkExperienceRepresentationModelAssembler;
 import com.company.pm.personalservice.domain.services.WorkExperienceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicWorkExperienceController {
     
-    private final WorkExperienceRepresentationModelAssembler assembler;
+    private final PublicWorkExperienceRepresentationModelAssembler assembler;
     
     private final WorkExperienceService experienceService;
     

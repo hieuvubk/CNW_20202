@@ -20,9 +20,12 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
     implementation project(':pm-security')
+    implementation project(':pm-upload-service')
     implementation project(':pm-personal-service')
     implementation project(':pm-user-service')
     implementation project(':pm-social-service')
+    implementation project(':pm-company-service')
+    implementation project(':pm-search-service')
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 

@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.Skill;
-import com.company.pm.personalservice.domain.assembler.SkillRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicSkillRepresentationModelAssembler;
 import com.company.pm.personalservice.domain.services.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicSkillController {
     
-    private final SkillRepresentationModelAssembler assembler;
+    private final PublicSkillRepresentationModelAssembler assembler;
     
     private final SkillService skillService;
     

@@ -1,4 +1,4 @@
-package com.company.pm.personalservice.domain.services;
+package com.company.pm.uploadservice.domain.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

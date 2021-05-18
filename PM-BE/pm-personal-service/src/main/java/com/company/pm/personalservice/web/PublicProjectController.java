@@ -1,7 +1,7 @@
 package com.company.pm.personalservice.web;
 
 import com.company.pm.domain.personalservice.Project;
-import com.company.pm.personalservice.domain.assembler.ProjectRepresentationModelAssembler;
+import com.company.pm.personalservice.domain.assembler.PublicProjectRepresentationModelAssembler;
 import com.company.pm.personalservice.domain.services.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -24,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 public class PublicProjectController {
     
-    private final ProjectRepresentationModelAssembler assembler;
+    private final PublicProjectRepresentationModelAssembler assembler;
     
     private final ProjectService projectService;
     

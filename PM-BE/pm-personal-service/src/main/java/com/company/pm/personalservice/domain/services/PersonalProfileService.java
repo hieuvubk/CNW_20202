@@ -2,16 +2,21 @@ package com.company.pm.personalservice.domain.services;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.personalservice.PersonalProfile;
+import com.company.pm.domain.searchservice.PersonalProfileSearch;
+import com.company.pm.domain.searchservice.UserSearch;
 import com.company.pm.personalservice.domain.repositories.PersonalProfileRepository;
 import com.company.pm.personalservice.domain.services.dto.PersonalProfileDTO;
 import com.company.pm.personalservice.domain.services.mapper.PersonalProfileMapper;
+import com.company.pm.searchservice.domain.repositories.PersonalProfileSearchRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
@@ -26,6 +31,8 @@ public class PersonalProfileService {
     private final PersonalProfileMapper mapper;
     
     private final PersonalProfileRepository profileRepository;
+    
+    private final PersonalProfileSearchRepository profileSearchRepository;
     
     private final UserRepository userRepository;
     
@@ -47,9 +54,7 @@ public class PersonalProfileService {
     
                      return profileRepository.findByUser(userId)
                          .switchIfEmpty(profileRepository.save(profile))
-                         .flatMap(found ->
-                            Mono.error(new BadRequestAlertException("Entity exists", ENTITY_NAME, "idexists"))
-                         );
+                         .flatMap(this::saveProfileSearch);
                  } catch (ParseException e) {
                      return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "dateinvalid"));
                  }
@@ -91,10 +96,51 @@ public class PersonalProfileService {
                         profile.setBgImageUrl(update.getBgImageUrl());
                     }
     
-                    return profileRepository.save(profile);
+                    return profileRepository.save(profile)
+                        .flatMap(this::saveProfileSearch);
                 } catch (ParseException e) {
                     return Mono.error(new BadRequestAlertException(e.getMessage(), ENTITY_NAME, "dateinvalid"));
                 }
             });
+    }
+    
+    private Mono<PersonalProfile> saveProfileSearch(PersonalProfile p) {
+        return profileSearchRepository.save(new PersonalProfileSearch(
+            p.getId(), p.getHeadline(), p.getUser().getFirstName(), p.getUser().getLastName()
+        )).thenReturn(p);
+    }
+    
+    /**
+     * Sync with Elasticsearch
+     * <p>
+     * This is scheduled to get fired everyday, at 02:00 (am).
+     */
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void syncProfileSearch() {
+        syncProfileSearchReactively().blockLast();
+    }
+    
+    @Transactional
+    public Flux<PersonalProfileSearch> syncProfileSearchReactively() {
+        return profileRepository.findAll()
+            .flatMap(this::updateProfileSearch);
+    }
+    
+    private Mono<PersonalProfileSearch> updateProfileSearch(PersonalProfile profile) {
+        return profileSearchRepository.findById(profile.getId())
+            .flatMap(profileSearch -> {
+                profileSearch.setHeadline(profile.getHeadline());
+                profileSearch.setFirstName(profile.getUser().getFirstName());
+                profileSearch.setLastName(profile.getUser().getLastName());
+                
+                return profileSearchRepository.save(profileSearch);
+            })
+            .switchIfEmpty(profileSearchRepository.save(new PersonalProfileSearch(
+                profile.getId(),
+                profile.getHeadline(),
+                profile.getUser().getFirstName(),
+                profile.getUser().getLastName()
+            )))
+            .doOnNext(saved -> log.debug("Saved profile to elasticsearch: {}", saved));
     }
 }
