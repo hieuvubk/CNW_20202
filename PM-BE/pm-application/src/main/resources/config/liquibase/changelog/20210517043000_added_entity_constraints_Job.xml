@@ -18,6 +18,6 @@
                                  baseTableName="jobs"
                                  constraintName="fk_jobs__poster_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>

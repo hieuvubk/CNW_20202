@@ -12,6 +12,6 @@
                                  baseTableName="companies"
                                  constraintName="fk_companies__admin_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="users"/>
     </changeSet>
 </databaseChangeLog>
