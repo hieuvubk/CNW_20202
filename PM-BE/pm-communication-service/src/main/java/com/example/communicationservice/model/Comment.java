@@ -16,19 +16,19 @@ import javax.persistence.Entity;
 @javax.persistence.Table(name="message")
 public class Comment {
     @Id
-    private String id;
-    private String postId;
+    private Long id;
+    private Long postId;
     private String userId;
-    private String rootCommentId;
+    private Long rootCommentId;
     private String content;
     private String time;
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @javax.persistence.Id
-    public String getId() {
+    public Long getId() {
         return id;
     }
 }

@@ -16,17 +16,17 @@ import javax.persistence.Entity;
 @javax.persistence.Table(name="likes")
 public class Likes {
     @Id
-    private String id;
+    private Long id;
     private String userId;
-    private String postId;
+    private Long postId;
 
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @javax.persistence.Id
-    public String getId() {
+    public Long getId() {
         return id;
     }
 }

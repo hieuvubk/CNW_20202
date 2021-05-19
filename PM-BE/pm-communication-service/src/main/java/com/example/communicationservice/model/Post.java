@@ -16,7 +16,7 @@ import javax.persistence.Entity;
 @javax.persistence.Table(name="post")
 public class Post {
     @Id
-    private String id;
+    private Long id;
     private String creatorId;
     private String content;
     private String time;
@@ -31,12 +31,12 @@ public class Post {
         this.visionable = visionable;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @javax.persistence.Id
-    public String getId() {
+    public Long getId() {
         return id;
     }
 }

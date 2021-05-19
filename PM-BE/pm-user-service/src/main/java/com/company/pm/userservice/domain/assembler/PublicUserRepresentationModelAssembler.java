@@ -22,7 +22,7 @@ public class PublicUserRepresentationModelAssembler
     }
 
     @Override
-    protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
+        protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
         return linkTo(methodOn(PublicUserController.class).getAllUsers(exchange), exchange);
     }
 }

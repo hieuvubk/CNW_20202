@@ -1,16 +1,16 @@
-package com.example.communicationservice.service;
+package com.example.communicationservice.domain.service;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.socialservice.domain.repositories.FollowRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import com.company.pm.userservice.domain.services.dto.UserDTO;
+import com.example.communicationservice.domain.repositories.CommentRepository;
+import com.example.communicationservice.domain.repositories.LikesRepository;
+import com.example.communicationservice.domain.repositories.PostRepository;
+import com.example.communicationservice.domain.service.dto.PostDTO;
+import com.example.communicationservice.model.Comment;
 import com.example.communicationservice.model.Post;
 import com.example.communicationservice.model.PostVisionable;
-import com.example.communicationservice.repositories.CommentRepository;
-import com.example.communicationservice.repositories.LikesRepository;
-import com.example.communicationservice.repositories.PostRepository;
-import com.example.communicationservice.service.dto.CommentDTO;
-import com.example.communicationservice.service.dto.PostDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,12 @@ public class PostService {
 
     private final LikesRepository likesRepository;
 
+
+    public Mono<Post> getPost(Long postId) {
+        return postRepository.findById(postId)
+        .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")));
+    }
+
     //find all posts from users whom u follow
     public Flux<PostDTO> getAllPostByFollowingUser(String userId) {
         return userRepository.findById(userId)
@@ -42,17 +48,17 @@ public class PostService {
                 .flatMap(follow -> postRepository.findAllByCreatorId(follow.getFollowedId()))
                 .flatMap(post -> {
                     if(!post.getVisionable().equals(PostVisionable.PRIVATE.toString()))
-                        return postRepository.findById(Long.parseLong(post.getId()))
+                        return postRepository.findById(post.getId())
                         .map(post1 -> new PostDTO(post1.getId(), post1.getCreatorId(), post1.getVisionable()));
                     else return Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound"));
                 });
     }
 
-    public Flux<PostDTO> getAllPostByUser(String userId) {
+    public Flux<Post> getAllPostByUser(String userId) {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
-                .flatMapMany(user -> postRepository.findAllByCreatorId(user.getId()))
-                .map(post -> new PostDTO(post.getId(), post.getCreatorId(), post.getVisionable()));
+                .flatMapMany(user -> postRepository.findAllByCreatorId(user.getId()));
+
     }
 
     public Mono<Long> countPostByUser(String userId) {
@@ -61,29 +67,28 @@ public class PostService {
                 .flatMap(user -> postRepository.countAllByCreatorId(user.getId()));
     }
 
-    public Flux<CommentDTO> getAllCommentOfPost(String postId) {
-        return postRepository.findById(Long.parseLong(postId))
+    public Flux<Comment> getAllCommentOfPost(Long postId) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
-                .flatMapMany(post -> commentRepository.findAllByPostId(post.getId()))
-                .map(comment -> new CommentDTO(comment.getId()));
+                .flatMapMany(post -> commentRepository.findAllByPostId(post.getId()));
     }
 
-    public Mono<Long> countCommentOfPost(String postId) {
-        return postRepository.findById(Long.parseLong(postId))
+    public Mono<Long> countCommentOfPost(Long postId) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
                 .flatMap(post -> commentRepository.countAllByPostId(post.getId()));
     }
 
-    public Flux<UserDTO> getUserLikePost(String postId) {
-        return postRepository.findById(Long.parseLong(postId))
+    public Flux<UserDTO> getUserLikePost(Long postId) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
                 .flatMapMany(post -> likesRepository.findAllByPostId(post.getId()))
                 .flatMap(likes -> userRepository.findById(likes.getUserId()))
                 .map(user -> new UserDTO(user.getId(), user.getLogin()));
     }
 
-    public Mono<Long> countUserLikePost(String postId) {
-        return postRepository.findById(Long.parseLong(postId))
+    public Mono<Long> countUserLikePost(Long postId) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
                 .flatMap(post -> likesRepository.countAllByPostId(post.getId()));
     }
@@ -91,23 +96,23 @@ public class PostService {
 
 
     //
-    public Mono<Post> createPost(String userId, String content, String time, String jobType, String visionable) {
+    public Mono<Post> createPost(String userId, Post newPost) {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
                 .flatMap(user -> {
                     Post post = new Post();
                     post.setCreatorId(userId);
-                    post.setContent(content);
-                    post.setTime(time);
-                    post.setJobType(jobType);
-                    post.setVisionable(visionable);
+                    post.setContent(newPost.getContent());
+                    post.setTime(newPost.getTime());
+                    post.setJobType(newPost.getJobType());
+                    post.setVisionable(newPost.getVisionable());
 
                     return postRepository.save(post);
                 });
     }
 
-    public Mono<Void> updatePost(Post newPost) {
-        return postRepository.findById(Long.parseLong(newPost.getId()))
+    public Mono<Post> updatePost(String userId, Long postId, Post newPost) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
                 .flatMap(post -> {
                     post.setContent(newPost.getContent());
@@ -115,13 +120,11 @@ public class PostService {
                     post.setVisionable(newPost.getVisionable());
 
                     return postRepository.save(post);
-                })
-                .doOnNext(post -> log.debug("Changed post: {}", post))
-                .then();
+                });
     }
 
-    public Mono<Void> deletePost(String postId) {
-        return postRepository.findById(Long.parseLong(postId))
+    public Mono<Void> deletePost(String userId, Long postId) {
+        return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
                 .flatMap(postRepository::delete);
     }

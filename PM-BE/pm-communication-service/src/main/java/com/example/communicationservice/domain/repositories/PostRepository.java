@@ -1,4 +1,4 @@
-package com.example.communicationservice.repositories;
+package com.example.communicationservice.domain.repositories;
 
 import com.example.communicationservice.model.Post;
 import org.springframework.data.r2dbc.repository.Query;

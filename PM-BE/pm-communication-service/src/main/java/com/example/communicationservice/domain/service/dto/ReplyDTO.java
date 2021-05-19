@@ -1,4 +1,4 @@
-package com.example.communicationservice.service.dto;
+package com.example.communicationservice.domain.service.dto;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +8,11 @@ import javax.validation.constraints.Size;
 
 @Data
 @RequiredArgsConstructor
-public class CommentDTO {
+public class ReplyDTO {
 
     @NotNull
     @Size(min = 1)
-    private final String commentId;
+    private final Long replyId;
+
+    private final Long rootCommentId;
 }

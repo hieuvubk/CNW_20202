@@ -2,8 +2,9 @@ dependencies {
 	api project(':pm-domain')
 	api project(':pm-user-service')
 	api project(':pm-social-service')
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

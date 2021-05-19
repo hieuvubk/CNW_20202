@@ -64,4 +64,6 @@ public class PublicFollowController {
     public Mono<Long> countPublicFollowings(@PathVariable("id") String userId) {
         return followService.countFollowingsByUser(userId);
     }
+
+
 }
