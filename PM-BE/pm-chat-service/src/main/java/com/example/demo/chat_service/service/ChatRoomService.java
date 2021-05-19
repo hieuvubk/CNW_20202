@@ -1,53 +1,37 @@
 package com.example.demo.chat_service.service;
 
-import com.example.demo.chat_service.model.ChatMessage;
-import com.example.demo.chat_service.model.ChatRoom;
+import com.example.demo.chat_service.model.Room;
 import com.example.demo.chat_service.repo.ChatMessageRepository;
 import com.example.demo.chat_service.repo.ChatRoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class ChatRoomService {
 
-    @Autowired
-    private ChatRoomRepository chatRoomRepository;
 
-    @Autowired
-    private ChatMessageRepository chatMessageRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
-    public Optional<String> getChatId(String senderId, String recipientId, boolean createIfNotExist) {
-        return chatRoomRepository
-                .findBySenderIdAndRecipientId(senderId, recipientId)
-                .map(ChatRoom::getChatId)
-                .or(() -> {
-                    if(!createIfNotExist) {
-                        return Optional.empty();
-                    }
-                    var chatId = String.format("%s_%s", senderId, recipientId);
+    private final ChatMessageRepository chatMessageRepository;
 
-                    ChatRoom senderRecipient = ChatRoom
-                                        .builder()
-                                        .chatId(chatId)
-                                        .senderId(senderId)
-                                        .recipientId(recipientId)
-                                        .build();
 
-                    ChatRoom recipientSender = ChatRoom
-                            .builder()
-                            .chatId(chatId)
-                            .senderId(recipientId)
-                            .recipientId(senderId)
-                            .build();
+    public Mono<Room> getRoom(String senderId, String recipientId, boolean createIfNotExist) {
+        if(!createIfNotExist) {
+            return chatRoomRepository.findBySenderIdAndRecipientId(senderId, recipientId);
+        }
+        Room room1 = new Room();
+        Room room2 = new Room();
 
-                    chatRoomRepository.save(senderRecipient);
-                    chatRoomRepository.save(recipientSender);
+        room1.setSenderId(senderId);
+        room1.setRecipientId(recipientId);
 
-                    return Optional.of(chatId);
-                });
+        room2.setSenderId(recipientId);
+        room2.setRecipientId(senderId);
+
+        Mono<Room> roomMono = chatRoomRepository.save(room2);
+        return chatRoomRepository.save(room1);
     }
 
 }

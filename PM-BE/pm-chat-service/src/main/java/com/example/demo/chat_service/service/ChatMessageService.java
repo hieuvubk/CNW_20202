@@ -1,62 +1,75 @@
 package com.example.demo.chat_service.service;
 
-import com.example.demo.chat_service.exception.ResourceNotFoundException;
+import com.company.pm.common.web.errors.BadRequestAlertException;
+import com.company.pm.userservice.domain.repositories.UserRepository;
 import com.example.demo.chat_service.model.ChatMessage;
 import com.example.demo.chat_service.model.MessageStatus;
 import com.example.demo.chat_service.repo.ChatMessageRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class ChatMessageService {
 
-    @Autowired
-    private ChatMessageRepository repository;
+    private final ChatMessageRepository chatMessageRepository;
 
-    @Autowired
-    private ChatRoomService chatRoomService;
+    private final UserRepository userRepository;
 
-    public ChatMessage save(ChatMessage chatMessage) {
+    private final ChatRoomService chatRoomService;
+
+//    public ChatMessage save(ChatMessage chatMessage) {
+//        chatMessage.setStatus(MessageStatus.RECEIVED);
+//        repository.save(chatMessage);
+//        return chatMessage;
+//    }
+//
+//    public long countNewMessages(String senderId, String recipientId) {
+//        return userRepository.countBySenderIdAndRecipientIdAndStatus(
+//                senderId, recipientId, MessageStatus.RECEIVED);
+//    }
+
+    public Mono<Long> countNewMessges(String senderId, String recipientId) {
+        return userRepository.findById(recipientId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
+                .flatMap(user -> chatMessageRepository.countAllBySenderIdAndRecipientIdAndStatus(senderId, user.getId(), MessageStatus.RECEIVED));
+    }
+
+    public Flux<ChatMessage> findChatMessages(String senderId, String recipientId) {
+        return userRepository.findById(recipientId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
+                .flatMapMany(user -> chatMessageRepository.findChatMessageBySenderIdAndRecipientId(senderId, user.getId()));
+    }
+
+    public Mono<ChatMessage> findMessage(Long id) {
+        return chatMessageRepository.findChatMessageById(id);
+    }
+
+    public Mono<ChatMessage> save(ChatMessage chatMessage) {
         chatMessage.setStatus(MessageStatus.RECEIVED);
-        repository.save(chatMessage);
-        return chatMessage;
+        return chatMessageRepository.save(chatMessage);
     }
 
-    public long countNewMessages(String senderId, String recipientId) {
-        return repository.countBySenderIdAndRecipientIdAndStatus(
-                senderId, recipientId, MessageStatus.RECEIVED);
+
+//    public ChatMessage findById(String id) {
+//        return repository
+//                .findById(id)
+//                .map(chatMessage -> {
+//                    chatMessage.setStatus(MessageStatus.DELIVERED);
+//                    return repository.save(chatMessage);
+//                })
+//                .orElseThrow(() ->
+//                        new ResourceNotFoundException("can't find message (" + id + ")"));
+//    }
+
+    public Mono<ChatMessage> updateStatuses(Long id, MessageStatus status) {
+        return chatMessageRepository.findById(id)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "message", "idnotfound")))
+                .flatMap(chatMessage -> {
+                    chatMessage.setStatus(status);
+                    return chatMessageRepository.save(chatMessage);
+                });
     }
-
-    public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
-        var chatId = chatRoomService.getChatId(senderId, recipientId, false);
-        var message = chatId.map(cId -> repository.findByChatId(cId)).orElse(new ArrayList<>());
-
-        if(message.size() > 0) {
-            updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
-        }
-        return message;
-    }
-
-    public ChatMessage findById(String id) {
-        return repository
-                .findById(id)
-                .map(chatMessage -> {
-                    chatMessage.setStatus(MessageStatus.DELIVERED);
-                    return repository.save(chatMessage);
-                })
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("can't find message (" + id + ")"));
-    }
-
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
-        List<ChatMessage> list = findChatMessages(senderId, recipientId);
-        for(ChatMessage m : list) {
-            m.setStatus(status);
-        }
-    }
-
 }

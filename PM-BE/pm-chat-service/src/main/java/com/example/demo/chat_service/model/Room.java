@@ -15,10 +15,9 @@ import javax.persistence.Table;
 @Builder
 @Entity
 @Table(name="room")
-public class ChatRoom {
+public class Room {
     @Id
     private String id;
-    private String chatId;
     private String senderId;
     private String recipientId;
 

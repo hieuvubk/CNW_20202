@@ -1,21 +1,29 @@
 package com.example.demo.chat_service.controller;
 
+import com.company.pm.userservice.domain.services.UserService;
 import com.example.demo.chat_service.model.ChatMessage;
 import com.example.demo.chat_service.model.ChatNotification;
 import com.example.demo.chat_service.service.ChatMessageService;
 import com.example.demo.chat_service.service.ChatRoomService;
-import com.example.demo.chat_service.model.ChatMessage;
-import com.example.demo.chat_service.model.ChatNotification;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-@Controller
+@RestController
+@RequestMapping(
+        path = "/api/v1/chat",
+        produces = MediaType.APPLICATION_JSON_VALUE
+)
+@RequiredArgsConstructor
 public class ChatController {
 
     @Autowired
@@ -27,34 +35,31 @@ public class ChatController {
     @Autowired
     private ChatRoomService chatRoomService;
 
-    @MessageMapping("/chat")
-    public void processMessage(@Payload ChatMessage chatMessage) {
-
-        var chatId = chatRoomService.getChatId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true);
-        chatMessage.setChatId(chatId.get());
-
-        ChatMessage saved = chatMessageService.save(chatMessage);
+    private final UserService userService;
+    
+    @MessageMapping()
+    public Mono<ChatMessage> processMessage(@Payload ChatMessage chatMessage) {
+        Mono<ChatMessage> saved = chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSendToUser(
                 chatMessage.getRecipientId(),"queue/messages",
-                new ChatNotification(saved.getId(), saved.getSenderId(), saved.getSenderName())
+                new ChatNotification(chatMessage.getSenderId(), chatMessage.getSenderName())
         );
+        return saved;
     }
 
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
-    public ResponseEntity<Long> countNewMessage(@PathVariable String senderId, @PathVariable String recipientId) {
 
-        return ResponseEntity.ok(chatMessageService.countNewMessages(senderId, recipientId));
+    @GetMapping("/messages/{senderId}/{recipientId}/count")
+    public Mono<Long> countNewMessage(@PathVariable String senderId, @PathVariable String recipientId) {
+        return chatMessageService.countNewMessges(senderId, recipientId);
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<?> findChatMessage(@PathVariable String senderId, @PathVariable String recipientId) {
-        return ResponseEntity
-                .ok(chatMessageService.findChatMessages(senderId, recipientId));
+    public Flux<ChatMessage> findChatMessage(@PathVariable String senderId, @PathVariable String recipientId) {
+        return chatMessageService.findChatMessages(senderId, recipientId);
     }
 
     @GetMapping("/messages/{id}")
-    public ResponseEntity<?> findMessage ( @PathVariable String id) {
-        return ResponseEntity
-                .ok(chatMessageService.findById(id));
+    public Mono<ChatMessage> findMessage ( @PathVariable Long id) {
+        return chatMessageService.findMessage(id);
     }
 }
