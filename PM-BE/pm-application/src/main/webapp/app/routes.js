@@ -14,12 +14,19 @@ const notAuthorized = {
 
 const routes = [
     {
-        name: 'intro',
+        name: 'cv-template',
         pattern: '',
         data: {},
-        component: 'app-intro',
-        resolve: () => import('./pages/intro/Intro')
+        component: 'cv-template',
+        resolve: () => import('./pages/cv/CVTemplate')
     },
+    // {
+    //     name: 'intro',
+    //     pattern: '',
+    //     data: {},
+    //     component: 'app-intro',
+    //     resolve: () => import('./pages/intro/Intro')
+    // },
     {
         name: 'profile',
         pattern: 'profile',
