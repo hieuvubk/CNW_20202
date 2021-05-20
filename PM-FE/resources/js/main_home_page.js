@@ -142,106 +142,16 @@ class newsCard extends HTMLElement{
             this.shadowRoot.querySelector('iframe').remove();
         }
     }
+    connectedCallback(){
+        console.log('connectedcallback');
+//this.greeting ='sfdcAmplified';
+    }
 }
 
 window.customElements.define('news-card', newsCard);
-/*-----------------------------------------------------------*/
-let popup = Array.from(document.getElementsByClassName('post__edit__container'));
+/*-------------------------------------------------- */
+let followBtn = document.getElementById("basic-info-follow");
 
-let showPopupEdit = () =>{
-    popup.forEach((ele)=>{
-        ele.style.display="block";
-    })
-}
-
-let closePopupEdit = ()=>{
-    popup.forEach((ele)=>{
-        ele.style.display="none";
-    })
-}
-
-/*-----------------------------------------------------------*/
-
-let showScopeOption = ()=>{
-    let scopeOption = Array.from(document.getElementsByClassName('post__edit__scope__option'));
-    scopeOption.forEach((ele)=>{
-        ele.classList.toggle("option__toggle");
-    })
-
-    let text = document.querySelectorAll(".post__edit__scope__option input[type='radio']");
-    console.log(text.length);
-}
-
-let scopeOption = document.querySelectorAll(".post__edit__scope__option input[type='radio']");
-
-scopeOption.forEach((ele)=>{
-    ele.addEventListener("click",()=>{
-        console.log(ele);
-        let scope = document.querySelector(".post__edit__scope span");
-        let text ="";
-        if(ele.value=="anyone") text = "Anyone";
-        else if(ele.value=="onlyme") text = "Only me";
-        else text = "Friends";
-        scope.textContent = text;
-    })
+followBtn.addEventListener("click", ()=>{
+    followBtn.innerHTML="<i class='fas fa-check'></i>Following";
 })
-
-
-/*PROFILE DROPDOWN */
-const toggleMenu = document.querySelector('.dropdown-menu');
-var dropdownBtn = document.querySelector('.dropbtn');
-
-window.addEventListener("click", function () {
-    if (toggleMenu.classList.contains('active')) {
-        toggleMenu.classList.remove('active');
-    }
-}, false);
-dropdownBtn.addEventListener("click", function (ev) {
-    toggleMenu.classList.toggle('active');
-    ev.stopPropagation(); 
-}, false);
-
-
-/*SEARCH BOX */
-const openModalButtons = document.querySelectorAll('[data-modal-target]')
-const closeModalButtons = document.querySelectorAll('[data-close-button]')
-const overlay = document.getElementById('overlay')
-
-openModalButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const modal = document.querySelector(button.dataset.modalTarget)
-    openModal(modal)
-  })
-})
-
-overlay.addEventListener('click', () => {
-  const modals = document.querySelectorAll('.modal.active');
-  modals.forEach(modal => {
-    closeModal(modal);
-  })
-  const avtModals = document.querySelectorAll('.avt-modal.active');
-  avtModals.forEach(modal => {
-    closeModal(modal);
-  });
-});
-
-closeModalButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const modal = button.closest('.modal')
-    closeModal(modal)
-    const avtModal = button.closest('.avt-modal')
-    closeModal(avtModal)
-  })
-})
-
-function openModal(modal) {
-  if (modal == null) return
-  modal.classList.add('active')
-  overlay.classList.add('active')
-}
-
-function closeModal(modal) {
-  if (modal == null) return
-  modal.classList.remove('active')
-  overlay.classList.remove('active')
-}

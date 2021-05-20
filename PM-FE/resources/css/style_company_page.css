@@ -214,14 +214,19 @@ aside > div{
     border-top: 1px solid rgb(179, 179, 179);
 }
 
+#basic-info-nav a{
+    text-decoration: none;
+    color: black;
+}
+
 #basic-info-nav div{
     margin: 10px 20px 10px 20px;
     font-weight: bold;
 }
 
-#basic-info-nav div:hover{
+#basic-info-nav a:hover{
     color:royalblue;
-    border-bottom: 1px solid royalblue;
+    border-bottom: 2px solid royalblue;
     cursor: pointer;
 }
 
@@ -246,9 +251,57 @@ aside > div{
     padding: 10px;
     text-align: center;
     border-top: 0.2px solid gray;
+}
 
+.main-content-div-expand a{
+    text-decoration: none;
+    color: black;
+}
+
+.main-content-div-expand a:hover{
+    text-decoration: underline;
 }
 
 #about-short{
+    margin: 10px;
+}
+
+#about__detail{
+    margin: 10px;
+}
+
+#about__detail__overview{
+    margin-bottom: 20px;
+}
+
+#about__detail__overview h3{
+    margin: 10px;
+}
+
+#about__detail__overview p{
+    text-indent: 20px;
+}
+
+#about__detail__specified{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    gap: 10px;
+}
+
+.about__detail__specified__tag {
+    font-weight: bold;
+    font-size: 15px;;
+}
+
+.about__detail__specified__content{
+    padding: 5px;
+    font-size: 15px;
+}
+
+#about__location{
+    margin: 10px;
+}
+
+#about__location h3{
     margin: 10px;
 }
