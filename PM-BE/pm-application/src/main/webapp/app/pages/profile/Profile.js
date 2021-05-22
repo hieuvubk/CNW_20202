@@ -98,7 +98,6 @@ class Profile extends MaleficComponent {
                         <div class="skill">
                             <h3 class="skill__title">Skill</h3>
                             <div class="skill__list">
-                
                             </div>
                         </div>
             
@@ -112,14 +111,12 @@ class Profile extends MaleficComponent {
                         <div class="project">
                             <h3 class="project__title">Project</h3>
                             <div class="project__list">
-                
                             </div>
                         </div>
             
                         <div class="publication">
                             <h3 class="publication__title">Publication</h3>
                             <div class="publication__div">
-                
                             </div>
                         </div>
                     </div>
@@ -155,7 +152,6 @@ class Profile extends MaleficComponent {
     
                 <app-people-sidebar></app-people-sidebar>
             </main>
-
             <app-footer></app-footer>
         `;
     }

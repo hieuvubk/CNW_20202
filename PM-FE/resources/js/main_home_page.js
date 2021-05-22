@@ -144,7 +144,6 @@ class newsCard extends HTMLElement{
     }
     connectedCallback(){
         console.log('connectedcallback');
-//this.greeting ='sfdcAmplified';
     }
 }
 
