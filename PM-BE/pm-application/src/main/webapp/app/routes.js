@@ -13,6 +13,28 @@ const notAuthorized = {
 };
 
 const routes = [
+    // {
+    //     name: 'cv-template',
+    //     pattern: '',
+    //     data: {},
+    //     component: 'cv-template',
+    //     resolve: () => import('./pages/cv/CVTemplate')
+    // },
+    // {
+    //     name: 'small-footer',
+    //     pattern: '',
+    //     data: {},
+    //     component: 'app-small-footer',
+    //     resolve: () => import('./components/layouts/footer/SmallFooter')
+    // },
+    {
+        name: 'account-setting',
+        pattern: '',
+        data: {},
+        component: 'app-account-setting',
+        resolve: () => import('./pages/account-setting/AccountSetting')
+    },
+
     {
         name: 'intro',
         pattern: '',

@@ -2,10 +2,6 @@ const editor = grapesjs.init({
   container: "#editor",
   fromElement: true, // Get the content for the canvas directly from the element
   storageManager: false,
-  canvas: {
-    scripts: ['https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'],
-    styles: ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css']
-  },
   blockManager: {
     appendTo: "#blocks"
   },
