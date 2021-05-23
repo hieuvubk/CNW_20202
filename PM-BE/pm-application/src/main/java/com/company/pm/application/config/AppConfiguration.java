@@ -1,5 +1,6 @@
 package com.company.pm.application.config;
 
+import com.company.pm.chatservice.main.config.ChatServiceConfiguration;
 import com.company.pm.common.config.ApplicationProperties;
 import com.company.pm.common.config.CommonConfiguration;
 import com.company.pm.common.config.WebConfigurer;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Import;
     UserServiceConfiguration.class,
     PersonalServiceConfiguration.class,
     SocialServiceConfiguration.class,
+    ChatServiceConfiguration.class,
     CompanyServiceConfiguration.class,
     SearchServiceConfiguration.class
 })

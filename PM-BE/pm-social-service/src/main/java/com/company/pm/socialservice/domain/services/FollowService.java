@@ -38,7 +38,8 @@ public class FollowService {
                 .flatMap(follow -> userRepository.findById(follow.getFollowerId())
                     .map(follower -> new UserDTO(
                         follower.getId(), follower.getLogin(),
-                        follower.getFirstName(), follower.getLastName())
+                        follower.getFirstName(), follower.getLastName(),
+                        follower.getImageUrl())
                     )
                 )
             );
@@ -52,7 +53,8 @@ public class FollowService {
                 .flatMap(follow -> userRepository.findById(follow.getFollowedId()))
                     .map(following -> new UserDTO(
                         following.getId(), following.getLogin(),
-                        following.getFirstName(), following.getLastName())
+                        following.getFirstName(), following.getLastName(),
+                        following.getImageUrl())
                     )
             );
     }

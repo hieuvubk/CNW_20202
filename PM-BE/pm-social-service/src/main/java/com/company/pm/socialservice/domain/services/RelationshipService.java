@@ -57,10 +57,18 @@ public class RelationshipService {
     private Mono<UserDTO> relToUserDTO(String userId, Relationship relationship) {
         if (relationship.getRequesterId().equals(userId)) {
             return userRepository.findById(relationship.getAddresseeId())
-                .map(friend -> new UserDTO(friend.getId(), friend.getLogin(), friend.getFirstName(), friend.getLastName()));
+                .map(friend -> new UserDTO(
+                    friend.getId(), friend.getLogin(),
+                    friend.getFirstName(), friend.getLastName(),
+                    friend.getImageUrl())
+                );
         } else if (relationship.getAddresseeId().equals(userId)) {
             return userRepository.findById(relationship.getRequesterId())
-                .map(friend -> new UserDTO(friend.getId(), friend.getLogin(), friend.getFirstName(), friend.getLastName()));
+                .map(friend -> new UserDTO(
+                    friend.getId(), friend.getLogin(),
+                    friend.getFirstName(), friend.getLastName(),
+                    friend.getImageUrl())
+                );
         } else {
             return Mono.error(new BadRequestAlertException("Invalid request", ENTITY_NAME, "requestinvalid"));
         }
