@@ -92,6 +92,11 @@ newsTemplate.innerHTML=`
         padding: 10px;
         margin-top: 0 !important;
         border-top: 0.5px solid rgb(201, 201, 201);
+        display: none;
+    }
+
+    .display-comment{
+        display: block;
     }
 
     .comment__card{
@@ -166,7 +171,7 @@ newsTemplate.innerHTML=`
             <div class="react-icon" id="react-icon-like"><slot name="react-like"/></div>
         </div>
         <div>
-            <div class="react-icon"><slot name="react-comment"/></div>
+            <div class="react-icon" id="react-icon-comment"><slot name="react-comment"/></div>
         </div>
         <div>
             <div class="react-icon"><slot name="react-share"/></div>
@@ -174,7 +179,7 @@ newsTemplate.innerHTML=`
     </div>
 </div>
 
-<div class="comment">
+<div class="comment" id="comment">
     <div class="comment__card">
         <div class="comment__card__avatar">
             <img id="comment__card__avatar" src="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">
@@ -228,7 +233,13 @@ class newsCard extends HTMLElement{
     connectedCallback(){
         let likeIcon = this.shadowRoot.getElementById("react-icon-like");
         let likeComment = this.shadowRoot.getElementById("comment__card__react__like");
+        let comment = this.shadowRoot.getElementById("comment");
+        let commentIcon = this.shadowRoot.getElementById("react-icon-comment");
 
+        commentIcon.addEventListener("click",()=>{
+            comment.classList.toggle("display-comment");
+            console.log("test");
+        })
 
         likeIcon.addEventListener("click", ()=>{
             likeIcon.classList.toggle("like-post");
