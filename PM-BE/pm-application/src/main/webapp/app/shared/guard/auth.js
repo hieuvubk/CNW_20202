@@ -1,7 +1,12 @@
+import store from '../../store/store';
+import { getAccount } from '../../store/actions/auth';
+
 export const authenticated = () => {
-    const isAuth = true;
-    
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
+        await store.dispatch(getAccount());
+        const state = await store.getState();
+        const isAuth = state.auth.authenticated;
+        
         resolve(isAuth);
     });
 };

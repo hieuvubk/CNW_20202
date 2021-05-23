@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.TimeZone;
 
 @Service
@@ -29,6 +30,8 @@ public class PersonalProfileMapper {
         
         if (profileDTO.getBirthday() != null) {
             profile.setBirthday(df.parse(profileDTO.getBirthday()).toInstant());
+        } else {
+            profile.setBirthday(Instant.EPOCH);
         }
         
         return profile;
