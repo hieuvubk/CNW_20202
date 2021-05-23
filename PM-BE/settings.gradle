@@ -13,6 +13,8 @@ include 'pm-user-service'
 include 'pm-personal-service'
 include 'pm-social-service'
 
+include 'pm-chat-service'
+
 include 'pm-company-service'
 
 include 'pm-search-service'

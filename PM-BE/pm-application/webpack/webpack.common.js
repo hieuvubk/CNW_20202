@@ -83,6 +83,7 @@ module.exports = (options) => {
                             globOptions: {ignore: ['**/index.html']},
                         },
                         {from: './src/main/webapp/swagger-ui/', to: 'swagger-ui/'},
+                        {from: './src/main/webapp/ws-test/', to: 'ws/'},
                         {from: './src/main/webapp/content/', to: 'content/'},
                         {from: './src/main/webapp/favicon.ico', to: 'favicon.ico'},
                         {from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp'},

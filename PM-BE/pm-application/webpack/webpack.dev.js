@@ -57,6 +57,11 @@ module.exports = options =>
                     secure: false,
                     changeOrigin: options.tls,
                 },
+                {
+                    context: ['/websocket'],
+                    target: `ws${options.tls ? 's' : ''}://127.0.0.1:8080`,
+                    ws: true
+                }
             ],
             watchOptions: {
                 ignore: [/node_modules/, utils.root('src/test')],

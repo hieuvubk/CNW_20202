@@ -29,10 +29,14 @@ const routes = [
     // },
     {
         name: 'account-setting',
-        pattern: '',
+        pattern: 'account',
         data: {},
         component: 'app-account-setting',
-        resolve: () => import('./pages/account-setting/AccountSetting')
+        resolve: () => import('./pages/account-setting/AccountSetting'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
 
     {
@@ -49,7 +53,11 @@ const routes = [
             title: 'Profile'
         },
         component: 'app-profile',
-        resolve: () => import('./pages/profile/Profile')
+        resolve: () => import('./pages/profile/Profile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'not-found',
