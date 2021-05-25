@@ -3,14 +3,103 @@
 <html>
 <head>
     <title>Chat</title>
+
+    <link rel="icon" href="resources/images/j.svg">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./resources/css/chat.css">
     <script type="text/javascript" src="./resources/js/chat.js"></script>
+
+    <link rel="stylesheet" href="./resources/css/reusable.css">
+    <link rel="stylesheet" href="./resources/css/style_company_page.css">
+    <link rel="stylesheet" href="./vendors/css/grid.css">
 </head>
 <!--Coded With Love By Mutiullah Samim-->
 <body>
+<header id="header">
+    <div id="left-header">
+        <a href="#"><img class="logo" src="./resources/images/Logo_official.png" alt="" /></a>
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <button data-close-button class="close-button"><i class="fas fa-long-arrow-alt-left"></i></button>
+            <input class="search-input" type="text" placeholder="Search">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+    <div id="overlay"></div>
+    <div id="right-header">
+        <nav id="nav-menu">
+            <div data-modal-target="#modal" class="menu-icons">
+                <div class="material-icons md-24">
+                    search
+                </div>
+                <h6>Search</h6>
+            </div>
+
+            <div class="menu-icons">
+                <div class="material-icons md-24">
+                    home
+                </div>
+                <h6>Home</h6>
+            </div>
+            <div class="menu-icons">
+                <div class="material-icons md-24">
+                    people
+                </div>
+                <h6>My Network</h6>
+            </div>
+            <div class="menu-icons">
+                <div class="material-icons md-24">
+                    work
+                </div>
+                <h6>Jobs</h6>
+            </div>
+            <div class="menu-icons">
+                <div class="material-icons md-24">
+                    message
+                </div>
+                <h6>Messaging</h6>
+            </div>
+            <div class="menu-icons">
+                <div class="material-icons md-24">
+                    notifications
+                </div>
+                <h6>Notifications</h6>
+            </div>
+
+            <div class=" menu-icons dropbtn" onclick="menuToggle()" id="personal-icon">
+                <div class="profile">
+                    <img src="./resources//images//avatar.png" alt="">
+                </div>
+                <div>
+                    <h6>Me <i class="fas fa-caret-down"></i></h6>
+                </div>
+            </div>
+
+            <!-- user account dropdown menu -->
+            <div class="dropdown-menu">
+                <div class="profile">
+                    <img src="./resources//images//avatar.png" alt="">
+                    <h3>Hieu Vu Minh <br> <span>Student at Hanoi University of Science and Technology</span></h3>
+                </div>
+                <div class="setting-list">
+                    <ul>
+                        <li><i class="fas fa-user-circle"></i><a href="#">View Profile</a></li>
+                        <li><i class="fas fa-edit"></i><a href="#">Edit Profile</a></li>
+                        <li><i class="fas fa-users-cog"></i><a href="#">Account Settings</a></li>
+                        <li><i class="fas fa-sign-out-alt"></i><a href="#">Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
 <div class="container-fluid h-100">
     <div class="row justify-content-center h-100">
         <div class="col-md-4 col-xl-3 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
