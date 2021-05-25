@@ -28,6 +28,17 @@ const routes = [
     //     resolve: () => import('./components/layouts/footer/SmallFooter')
     // },
     {
+        name: 'company-page',
+        pattern: 'company',
+        data:{},
+        component:'app-company-page',
+        resolve: ()=> import('./pages/company-page/CompanyPage'),
+        authentication:{
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
         name: 'account-setting',
         pattern: 'account',
         data: {},
