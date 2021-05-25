@@ -25,7 +25,7 @@ main{
 
 .main-content-div{
     width: 780px;
-    border:0.5px solid gray;
+    border:0.2px solid gray;
     border-radius: 10px;
     border-collapse: separate; 
     padding: 1px;
@@ -62,7 +62,6 @@ main{
 #main-avatar img{
     display: block;
     background-color: white;
-    border: 1px solid black;
     margin-left: 20px;
 }
 
@@ -123,7 +122,7 @@ aside > div{
 @media (max-width: 1024px){
     aside{
         display: none;
-    }
+}
 
     main{
         display: block;
@@ -195,7 +194,9 @@ aside > div{
 }
 
 #basic-info-follow{
-    background-color: rgb(18, 115, 243);
+    background: linear-gradient(
+        135deg
+        , #1e4157f2 0%, #1597bb 100%);
     width: max-content;
     padding: 8px;
     font-size: 18px;

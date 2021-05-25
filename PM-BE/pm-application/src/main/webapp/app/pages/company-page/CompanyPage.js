@@ -6,11 +6,14 @@ import { companyPageStyle } from './company-Page-style';
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
+import '../../components/PostCard/PostCard';
 
 class CompanyPage extends MaleficComponent {
     static get properties() {
         return {
-            
+            background: {type:String},
+            avatar: {type:String},
+            showIcon: {type: String}
         };
     }
     
@@ -23,8 +26,16 @@ class CompanyPage extends MaleficComponent {
         window.addEventListener('beforeunload', () => {
             window.scrollTo(0, 0);
         });
+        this.background = "content/images/4853433.jpg";
+        this.avatar ="content/images/avatar.png";
+        this.showIcon = "plus";
     }
     
+    handleToggleFollow(){
+        if(this.showIcon=="plus") this.showIcon = "check";
+        else this.showIcon = "plus";
+    }
+
     render() {
         return html`
             ${commonStyles}
@@ -35,11 +46,11 @@ class CompanyPage extends MaleficComponent {
         <div id="main-content">
             <div class="main-content-div" id="basic-info-div">
                 <div id="background-avatar">
-                    <img src="./resources/images/4853433.jpg">
+                    <img src="${this.background}">
                 </div>
 
                 <div id="main-avatar">
-                    <img src="./resources/images/user.svg" style="height: 90px;width: 90px;">
+                    <img src="${this.avatar}" style="height: 90px;width: 90px;">
                 </div>
 
                 <div id="info">
@@ -52,8 +63,8 @@ class CompanyPage extends MaleficComponent {
                     </div>
                 </div>
 
-                <div id="basic-info-follow">
-                    <i class="fas fa-plus"></i>Follow
+                <div id="basic-info-follow" @click="${this.handleToggleFollow}">
+                    <i class="fas fa-${this.showIcon}" ></i>Follow
                 </div>
 
                 <div id="basic-info-nav">
@@ -145,17 +156,13 @@ class CompanyPage extends MaleficComponent {
             <div class="main-content-div" id="post">
                 <h2>Page posts</h2>
                 <div id="page-post">
-                    <news-card
-                avatar="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
-                recruitImage="https://store-images.s-microsoft.com/image/apps.23032.13608622719434797.30372fd8-b4bd-41c0-beea-1c2a61e087c1.a8347bb5-9305-48e8-b668-08df54c5a91a?w=672&h=378&q=80&mode=letterbox&background=%23FFE4E4E4&format=jpg">
-                    <div slot="name">Travel</div>
-                    <div slot="followers">10000 followers</div>
-                    <div slot="time">2hr <i class="fas fa-globe"></i></div>
-                    <div slot="recruit-text">Example of recruitment announcement</div>
-                    <div slot="react-like"><i class="fas fa-thumbs-up"></i></div>
-                    <div slot="react-comment"><i class="far fa-comment-dots"></i></div>
-                    <div slot="react-share"><i class="fas fa-share"></i></div>
-                    </news-card>
+                   <post-card
+                        accountImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
+                        numFollowers=10
+                        time="5w"
+                        postText="This a test"
+                        postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
+                   </post-card>
                 </div>
         </aside>
     </main>
