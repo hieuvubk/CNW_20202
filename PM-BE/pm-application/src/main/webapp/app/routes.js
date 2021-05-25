@@ -20,13 +20,13 @@ const routes = [
     //     component: 'cv-template',
     //     resolve: () => import('./pages/cv/CVTemplate')
     // },
-    // {
-    //     name: 'small-footer',
-    //     pattern: '',
-    //     data: {},
-    //     component: 'app-small-footer',
-    //     resolve: () => import('./components/layouts/footer/SmallFooter')
-    // },
+    {
+        name: 'homepage',
+        pattern: 'home',
+        data: {},
+        component: 'app-homepage',
+        resolve: () => import('./pages/homepage/Homepage')
+    },
     {
         name: 'company-page',
         pattern: 'company',
@@ -65,6 +65,19 @@ const routes = [
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'edit-profile',
+        pattern: 'edit-profile',
+        data: {
+            title: 'Edit Profile'
+        },
+        component: 'app-edit-profile',
+        resolve: () => import('./pages/edit-profile/EditProfile'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

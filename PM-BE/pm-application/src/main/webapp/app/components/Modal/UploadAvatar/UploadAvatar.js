@@ -38,6 +38,7 @@ class UploadAvatar extends MaleficComponent {
                 reader.onload = function () {
                     const result = reader.result;
                     img.src = result;
+                    console.log(result);
                 }
                 reader.readAsDataURL(file);
             }
