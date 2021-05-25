@@ -21,7 +21,8 @@ newsTemplate.innerHTML=`
     }
 
     .news-react{
-        background-color: red white;
+        background-color: white;
+        margin-bottom: 0 !important;
     }
 
     #poster-avatar{
@@ -81,6 +82,69 @@ newsTemplate.innerHTML=`
         top: 50%;
         transform: translate(-50%,-50%);
     }
+
+    .like-post, .like-comment{
+        color:#FF3A83 !important;
+    }
+    /*Comment======================================*/
+    .comment{
+        background-color: whitesmoke;
+        padding: 10px;
+        margin-top: 0 !important;
+        border-top: 0.5px solid rgb(201, 201, 201);
+        display: none;
+    }
+
+    .display-comment{
+        display: block;
+    }
+
+    .comment__card{
+        background-color: white;
+        display: flex;
+        border-radius: 8px;
+    }
+
+    .comment__card__content{
+        display: flex;
+        flex-direction: column;
+        margin-left: 10px;
+    }
+
+    .comment__card__avatar{
+        padding: 5px;
+    }
+
+    #comment__card__avatar{
+        height: 30px;
+        width: 30px;
+    }
+
+    .comment__card__content__name a{
+        font-weight: bold;
+        color: blue;
+        text-decoration: none;
+    }
+
+    .comment__card__content__detail {
+        margin-left: 5px;
+    }
+
+    .comment__card__content__detail p{
+        margin: 0;
+    }
+
+    .comment__card__content__react{
+        display: flex;
+    }
+
+    .comment__card__content__react div{
+        font-size:12px;
+        margin-right: 10px;
+        font-weight: bold;
+        color: royalblue;
+        cursor: pointer;
+    }
 </style>
 
 <div class="news-card">
@@ -104,13 +168,36 @@ newsTemplate.innerHTML=`
 <div class="news-react">
     <div class="react">
         <div>
-            <div class="react-icon"><slot name="react-like"/></div>
+            <div class="react-icon" id="react-icon-like"><slot name="react-like"/></div>
         </div>
         <div>
-            <div class="react-icon"><slot name="react-comment"/></div>
+            <div class="react-icon" id="react-icon-comment"><slot name="react-comment"/></div>
         </div>
         <div>
             <div class="react-icon"><slot name="react-share"/></div>
+        </div>
+    </div>
+</div>
+
+<div class="comment" id="comment">
+    <div class="comment__card">
+        <div class="comment__card__avatar">
+            <img id="comment__card__avatar" src="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">
+        </div>
+
+        <div class="comment__card__content">
+            <div class="comment__card__content__name">
+                <a href="#">Some account</a>
+            </div>
+
+            <div class="comment__card__content__detail">
+                <p>This is a beautiful sight!</p>
+            </div>
+            
+            <div class="comment__card__content__react">
+                <div id="comment__card__react__like" > Like </div>
+                <div id="comment__card__react__reply"> Reply </div>
+            </div>
         </div>
     </div>
 </div>
@@ -141,6 +228,27 @@ class newsCard extends HTMLElement{
         } else{
             this.shadowRoot.querySelector('iframe').remove();
         }
+    }
+
+    connectedCallback(){
+        let likeIcon = this.shadowRoot.getElementById("react-icon-like");
+        let likeComment = this.shadowRoot.getElementById("comment__card__react__like");
+        let comment = this.shadowRoot.getElementById("comment");
+        let commentIcon = this.shadowRoot.getElementById("react-icon-comment");
+
+        commentIcon.addEventListener("click",()=>{
+            comment.classList.toggle("display-comment");
+            console.log("test");
+        })
+
+        likeIcon.addEventListener("click", ()=>{
+            likeIcon.classList.toggle("like-post");
+        })
+
+        likeComment.addEventListener("click", ()=>{
+            likeComment.classList.toggle("like-comment");
+            console.log("test");
+        })
     }
 }
 
