@@ -1,6 +1,7 @@
 package com.company.pm.interactionservice.domain.services;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
+import com.company.pm.companyservice.domain.repositories.CompanyRepository;
 import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.interactionservice.domain.repositories.CommentRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
@@ -8,8 +9,10 @@ import com.company.pm.interactionservice.domain.services.dto.CommentDTO;
 import com.company.pm.interactionservice.domain.services.mapper.CommentMapper;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,10 +32,7 @@ public class CommentService {
     
     private final UserRepository userRepository;
     
-    @Transactional(readOnly = true)
-    public Flux<Comment> getCommentsByUser(String userId) {
-        return commentRepository.findByAuthor(userId);
-    }
+    private final CompanyRepository companyRepository;
     
     @Transactional(readOnly = true)
     public Flux<Comment> getCommentsByPost(Long postId) {
@@ -63,7 +63,7 @@ public class CommentService {
     }
     
     @Transactional
-    public Mono<Comment> createCommentByPost(String userId, Long postId, CommentDTO commentDTO) {
+    public Mono<Comment> createCommentToPost(String userId, Long postId, CommentDTO commentDTO) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
             .flatMap(user -> postRepository.findById(postId)
@@ -76,13 +76,19 @@ public class CommentService {
                      comment.setCreatedAt(Instant.now());
                      comment.setUpdatedAt(Instant.now());
     
-                     return commentRepository.save(comment);
+                     return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
+                         .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
+                         .flatMap(company -> {
+                             comment.setCompany(company);
+                             
+                             return commentRepository.save(comment);
+                         });
                  })
             );
     }
     
     @Transactional
-    public Mono<Comment> createReplyByComment(String userId, Long commentId, CommentDTO commentDTO) {
+    public Mono<Comment> createReplyToComment(String userId, Long commentId, CommentDTO commentDTO) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
             .flatMap(user -> commentRepository.findById(commentId)
@@ -97,7 +103,13 @@ public class CommentService {
                     comment.setCreatedAt(Instant.now());
                     comment.setUpdatedAt(Instant.now());
     
-                    return commentRepository.save(comment);
+                    return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
+                        .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
+                        .flatMap(company -> {
+                            comment.setCompany(company);
+            
+                            return commentRepository.save(comment);
+                        });
                 })
             );
     }
@@ -112,6 +124,9 @@ public class CommentService {
                 if (update.getContent() != null) {
                     comment.setContent(update.getContent());
                     comment.setUpdatedAt(Instant.now());
+                }
+                if (update.getCompanyId() != null) {
+                    return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
                 }
                 
                 return commentRepository.save(comment);

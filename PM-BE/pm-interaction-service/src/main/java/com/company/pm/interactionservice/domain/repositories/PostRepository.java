@@ -30,6 +30,9 @@ public interface PostRepository extends R2dbcRepository<Post, Long>, PostReposit
     @Query("SELECT * FROM posts entity WHERE entity.id = :id AND entity.company_id = :companyId")
     Mono<Post> findByIdAndCompany(Long id, Long companyId);
     
+    @Query("SELECT * FROM posts entity WHERE entity.author_id = :authorId AND entity.company_id = :id")
+    Flux<Post> findByAuthorAndCompany(String authorId, Long companyId);
+    
     @Query("SELECT * FROM posts entity WHERE entity.id = :id " +
         "AND entity.author_id = :authorId AND entity.company_id = :companyId")
     Mono<Post> findByIdAndAuthorAndCompany(Long id, String authorId, Long companyId);

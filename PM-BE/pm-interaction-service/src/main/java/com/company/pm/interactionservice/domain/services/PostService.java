@@ -83,13 +83,13 @@ public class PostService {
     }
     
     @Transactional(readOnly = true)
-    public Flux<Post> getPostsOfCompany(Long companyId) {
-        return postRepository.findByCompany(companyId);
+    public Flux<Post> getPostsOfCompanyByAdmin(String userId, Long companyId) {
+        return postRepository.findByAuthorAndCompany(userId, companyId);
     }
     
     @Transactional(readOnly = true)
-    public Mono<Post> getPostOfCompany(Long postId, Long companyId) {
-        return postRepository.findByIdAndCompany(postId, companyId)
+    public Mono<Post> getPostOfCompanyByAdmin(String userId, Long postId, Long companyId) {
+        return postRepository.findByIdAndAuthorAndCompany(postId, userId, companyId)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
     
@@ -100,7 +100,8 @@ public class PostService {
     
     @Transactional(readOnly = true)
     public Mono<Post> getPublicPostOfCompany(Long companyId, Long postId) {
-        return postRepository.findPublicPostByIdOfCompany(companyId, postId);
+        return postRepository.findPublicPostByIdOfCompany(companyId, postId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
     
     @Transactional(readOnly = true)
@@ -159,8 +160,7 @@ public class PostService {
     
     @Transactional
     public Mono<Post> updateCompanyPostByUser(String userId, Long companyId, Long postId, PostDTO postDTO) {
-        return postRepository.findByIdAndAuthorAndCompany(postId, userId, companyId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+        return getPostOfCompanyByAdmin(userId, postId, companyId)
             .flatMap(post -> postRepository.save(updatePost(post, postDTO)));
     }
     
@@ -181,8 +181,7 @@ public class PostService {
     
     @Transactional
     public Mono<Void> deleteCompanyPostByUser(String userId, Long companyId, Long postId) {
-        return postRepository.findByIdAndAuthorAndCompany(postId, userId, companyId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+        return getPostOfCompanyByAdmin(userId, companyId, postId)
             .flatMap(postRepository::delete);
     }
 }
