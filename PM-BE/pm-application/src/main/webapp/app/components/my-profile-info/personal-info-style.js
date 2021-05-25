@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const myAccountStyle = css`
+export const personalInfoStyle = css`
     :host {
         font-size: 1rem;
     }
@@ -9,7 +9,7 @@ export const myAccountStyle = css`
         font-weight: lighter;
         line-height: 30px;
         color: #777;
-        padding-bottom: 15px;
+        padding-bottom: 13px;
         padding-top: 2px;
     }
     h1, h3 {
