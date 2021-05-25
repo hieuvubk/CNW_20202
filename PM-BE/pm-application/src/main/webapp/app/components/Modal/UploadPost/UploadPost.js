@@ -1,11 +1,12 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { UploadAvatarStyle } from './upload-avatar-style';
-
-import '../Modal';
+import { uploadPostStyle } from './upload-post-style';
 import { commonStyles } from '../../../shared/styles/common-styles';
 
-class UploadAvatar extends MaleficComponent {
+import '../Modal';
+import '../../Button/Button';
+
+class UploadPost extends MaleficComponent {
     static get properties() {
         return {
             show: { type: Boolean }
@@ -13,7 +14,7 @@ class UploadAvatar extends MaleficComponent {
     }
 
     static get styles() {
-        return [UploadAvatarStyle];
+        return [uploadPostStyle];
     }
 
     handleCloseModal() {
@@ -38,7 +39,6 @@ class UploadAvatar extends MaleficComponent {
                 reader.onload = function () {
                     const result = reader.result;
                     img.src = result;
-                    console.log(result);
                 }
                 reader.readAsDataURL(file);
             }
@@ -73,7 +73,13 @@ class UploadAvatar extends MaleficComponent {
             ${commonStyles}
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
-                    <div data-close-button id="close-button" @click="${this.handleCloseModal}"><i class="fas fa-times"></i></div>
+                    <div class="post__edit__header">
+                        <h3>Create your post</h3>
+                        <div class="post__edit__close" @click=${this.handleCloseModal}><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="post__edit__text">
+                        <textarea name="post_text" placeholder="Type something"></textarea>
+                    </div>
                     <div class="wrapper">
                         <div class="image"><img src="content/images/avatar.png" alt=""></div>
                         <div class="content">
@@ -82,12 +88,19 @@ class UploadAvatar extends MaleficComponent {
                         </div>
                     </div>
                     <input type="file" id="default-btn" hidden>
-                    <button @click="${this.clickDefaultUpload}" class="custom-btn">CHOOSE A FILE</button>
-                    <button class="cancel-btn" @click="${this.reloadImage}">CANCEL</button>
-                    <button @click="${() => {
-                this.saveImage();
-
-            }}" class="save-btn">SAVE</button>
+                    <div class="button">
+                        <button class="custom-btn" @click="${this.clickDefaultUpload}">
+                            <i class="fas fa-images"></i>
+                            Image
+                        </button>
+                        <button class="cancel-btn" @click="${this.reloadImage}">
+                            <i class="fas fa-undo"></i>Cancel
+                        </button>
+                        <button @click="${() => { this.saveImage(); }}" class="custom-btn">
+                            <i class="fas fa-forward"></i>Post
+                        </button>
+                    </div>
+                   
                     <div class="sk-chase">
                         <div class="sk-chase-dot"></div>
                         <div class="sk-chase-dot"></div>
@@ -102,6 +115,6 @@ class UploadAvatar extends MaleficComponent {
     }
 }
 
-customElements.define('app-upload-avt', UploadAvatar);
+customElements.define('app-upload-post', UploadPost);
 
 
