@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1/users/posts",
+    path = "/api/v1/me/posts",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
