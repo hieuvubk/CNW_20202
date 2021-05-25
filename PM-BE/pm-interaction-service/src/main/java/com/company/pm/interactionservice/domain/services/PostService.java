@@ -2,10 +2,13 @@ package com.company.pm.interactionservice.domain.services;
 
 import com.company.pm.common.enumeration.RelStatus;
 import com.company.pm.common.web.errors.BadRequestAlertException;
+import com.company.pm.companyservice.domain.repositories.CompanyRepository;
 import com.company.pm.domain.interactionservice.Post;
+import com.company.pm.domain.socialservice.Follow;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.interactionservice.domain.services.dto.PostDTO;
 import com.company.pm.interactionservice.domain.services.mapper.PostMapper;
+import com.company.pm.socialservice.domain.repositories.FollowRepository;
 import com.company.pm.socialservice.domain.repositories.RelationshipRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,26 +35,30 @@ public class PostService {
     
     private final RelationshipRepository relationshipRepository;
     
+    private final FollowRepository followRepository;
+    
+    private final CompanyRepository companyRepository;
+    
     @Transactional(readOnly = true)
-    public Flux<Post> getPostsByUser(String userId) {
-        return postRepository.findByAuthor(userId);
+    public Flux<Post> getPostsOfUser(String userId) {
+        return postRepository.findByAuthorAndCompanyIsNull(userId);
     }
     
     @Transactional(readOnly = true)
-    public Mono<Post> getPostByUser(String userId, Long postId) {
-        return postRepository.findByIdAndAuthor(postId, userId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")));
+    public Mono<Post> getPostOfUser(String userId, Long postId) {
+        return postRepository.findByIdAndAuthorAndCompanyIsNull(postId, userId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
     
     @Transactional(readOnly = true)
-    public Flux<Post> getPostsByAnotherUser(String userId, String anotherId) {
+    public Flux<Post> getPostsOfUserByAnotherUser(String userId, String anotherId) {
         return relationshipRepository.findByRequesterIdAndAddresseeId(userId, anotherId)
             .flatMapMany(relationship -> {
                 if (!relationship.getStatus().equals(RelStatus.BLOCKED)) {
                     if (relationship.getStatus().equals(RelStatus.ACCEPTED)) {
-                        return postRepository.findVisiblePosts(userId);
+                        return postRepository.findVisiblePostsOfUser(userId);
                     } else {
-                        return postRepository.findPublicPosts(userId);
+                        return postRepository.findPublicPostsOfUser(userId);
                     }
                 } else {
                     return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
@@ -60,19 +67,14 @@ public class PostService {
     }
     
     @Transactional(readOnly = true)
-    public Flux<Post> getPublicPosts(String userId) {
-        return postRepository.findPublicPosts(userId);
-    }
-    
-    @Transactional(readOnly = true)
-    public Mono<Post> getPostByAnotherUser(String userId, String anotherId, Long postId) {
+    public Mono<Post> getPostOfUserByAnotherUser(String userId, String anotherId, Long postId) {
         return relationshipRepository.findByRequesterIdAndAddresseeId(userId, anotherId)
             .flatMap(relationship -> {
                 if (!relationship.getStatus().equals(RelStatus.BLOCKED)) {
                     if (relationship.getStatus().equals(RelStatus.ACCEPTED)) {
-                        return postRepository.findVisiblePostById(userId, postId);
+                        return postRepository.findVisiblePostByIdOfUser(userId, postId);
                     } else {
-                        return postRepository.findPublicPostById(userId, postId);
+                        return postRepository.findPublicPostByIdOfUser(userId, postId);
                     }
                 } else {
                     return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
@@ -80,8 +82,35 @@ public class PostService {
             });
     }
     
+    @Transactional(readOnly = true)
+    public Flux<Post> getPostsOfCompany(Long companyId) {
+        return postRepository.findByCompany(companyId);
+    }
+    
+    @Transactional(readOnly = true)
+    public Mono<Post> getPostOfCompany(Long postId, Long companyId) {
+        return postRepository.findByIdAndCompany(postId, companyId)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    }
+    
+    @Transactional(readOnly = true)
+    public Flux<Post> getPublicPostsOfCompany(Long companyId) {
+        return postRepository.findPublicPostsOfCompany(companyId);
+    }
+    
+    @Transactional(readOnly = true)
+    public Mono<Post> getPublicPostOfCompany(Long companyId, Long postId) {
+        return postRepository.findPublicPostByIdOfCompany(companyId, postId);
+    }
+    
+    @Transactional(readOnly = true)
+    public Flux<Post> getPostsInNewsFeedByUser(String userId) {
+        return followRepository.findAllByFollowerId(userId)
+            .flatMap(follow -> postRepository.findPublicPostsOfUserOrCompany(follow.getFollowedId()));
+    }
+    
     @Transactional
-    public Mono<Post> createPostByUser(String userId, PostDTO postDTO) {
+    public Mono<Post> createUserPostByUser(String userId, PostDTO postDTO) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
             .flatMap(user -> {
@@ -96,32 +125,63 @@ public class PostService {
     }
     
     @Transactional
-    public Mono<Post> updatePostByUser(String userId, Long postId, PostDTO postDTO) {
-        return getPostByUser(userId, postId)
+    public Mono<Post> updateUserPostByUser(String userId, Long postId, PostDTO postDTO) {
+        return getPostOfUser(userId, postId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
-            .flatMap(post -> {
-                Post update = mapper.postDTOToPost(postDTO);
-    
-                if (update.getContent() != null) {
-                    post.setContent(update.getContent());
-                    post.setUpdatedAt(Instant.now());
-                }
-                if (update.getVisionable() != null) {
-                    post.setVisionable(update.getVisionable());
-                    post.setUpdatedAt(Instant.now());
-                }
-                if (update.getJobType() != null) {
-                    post.setJobType(update.getJobType());
-                    post.setUpdatedAt(Instant.now());
-                }
-                
-                return postRepository.save(post);
-            });
+            .flatMap(post -> postRepository.save(updatePost(post, postDTO)));
     }
     
     @Transactional
-    public Mono<Void> deletePostByUser(String userId, Long postId) {
-        return getPostByUser(userId, postId)
+    public Mono<Void> deleteUserPostByUser(String userId, Long postId) {
+        return getPostOfUser(userId, postId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+            .flatMap(postRepository::delete);
+    }
+    
+    @Transactional
+    public Mono<Post> createCompanyPostByUser(String userId, Long companyId, PostDTO postDTO) {
+        return userRepository.findById(userId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotofound")))
+            .flatMap(user -> companyRepository.findByAdminAndId(user.getId(), companyId)
+                .flatMap(company -> {
+                    Post post = mapper.postDTOToPost(postDTO);
+                    post.setCompany(company);
+                    post.setCompanyId(company.getId());
+                    post.setAuthor(user);
+                    post.setAuthorId(user.getId());
+                    post.setCreatedAt(Instant.now());
+                    post.setUpdatedAt(Instant.now());
+                    
+                    return postRepository.save(post);
+                })
+            );
+    }
+    
+    @Transactional
+    public Mono<Post> updateCompanyPostByUser(String userId, Long companyId, Long postId, PostDTO postDTO) {
+        return postRepository.findByIdAndAuthorAndCompany(postId, userId, companyId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+            .flatMap(post -> postRepository.save(updatePost(post, postDTO)));
+    }
+    
+    private Post updatePost(Post post, PostDTO postDTO) {
+        Post update = mapper.postDTOToPost(postDTO);
+    
+        if (update.getContent() != null) {
+            post.setContent(update.getContent());
+            post.setUpdatedAt(Instant.now());
+        }
+        if (update.getVisionable() != null) {
+            post.setVisionable(update.getVisionable());
+            post.setUpdatedAt(Instant.now());
+        }
+        
+        return post;
+    }
+    
+    @Transactional
+    public Mono<Void> deleteCompanyPostByUser(String userId, Long companyId, Long postId) {
+        return postRepository.findByIdAndAuthorAndCompany(postId, userId, companyId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
             .flatMap(postRepository::delete);
     }

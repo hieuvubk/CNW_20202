@@ -1,5 +1,6 @@
 package com.company.pm.domain.interactionservice;
 
+import com.company.pm.domain.companyservice.Company;
 import com.company.pm.domain.userservice.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -54,4 +55,11 @@ public class Comment implements Serializable {
     
     @Column("author_id")
     private String authorId;
+    
+    @JsonIgnoreProperties(value = { "admin", "posts", "comments" }, allowSetters = true)
+    @Transient
+    private Company company;
+    
+    @Column("company_id")
+    private Long companyId;
 }
