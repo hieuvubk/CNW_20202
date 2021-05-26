@@ -19,7 +19,17 @@ export const workExperienceStyle = css`
         padding-bottom: 3%;
     }
 
+    app-button {
+        margin-left: 23.5%;
+        margin-top: 2%;
+    }
+
     app-button i {
         margin-right: 10px;
+    }
+
+    .header-row {
+        display: flex;
+        flex-direction: row;
     }
 `;

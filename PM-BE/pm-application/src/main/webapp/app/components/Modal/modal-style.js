@@ -5,9 +5,9 @@ export const modalStyle = css`
         z-index: 10000;
         background-color: #fff;
         position: fixed;
-        top: 12vh;
-        left: 0;
-        width: 100%;
+        top: 15vh;
+        left: 25%;
+        width: 50%;
         max-width: 100%;
         transition: 200ms ease-in-out;
         transform: scale(0);

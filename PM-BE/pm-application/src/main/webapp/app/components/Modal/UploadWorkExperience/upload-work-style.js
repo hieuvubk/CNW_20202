@@ -76,7 +76,7 @@ export const uploadWorkStyle = css`
         padding-right: 5%;
         height: 30px;
         margin-bottom: 2%;
-        width: 25%;
+        width: 48.5%;
         color: #777;
         border: 1px solid #ccd0d5;
         border-radius: 4px;
@@ -105,5 +105,46 @@ export const uploadWorkStyle = css`
         margin: 10px 0;
         padding: 10px;
         border: 1px solid #ccd0d5;
+    }
+    .btn-save,
+    .btn-cancel {
+        border: none;
+        font-size: 16px;
+        letter-spacing: 1px;
+        padding: 7px 15px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s;
+        margin-top: 3%;
+        text-decoration: none;
+    }
+    
+    .btn-save {
+        border-radius: 7px 0 0 7px;
+        background: linear-gradient(135deg, #1e4157f2 0%, #1597bb 100%);
+        font-weight: 500;
+        color: #fff;
+        margin-right: 0.5%;
+    }
+    
+    .btn-cancel {
+        border-radius: 0 7px 7px 0;
+        margin-top: 3%;
+        background: #ccd0d5;
+        font-weight: 500;
+        color: #1e4258;
+    }
+    
+    .btn-save:hover,
+    .btn-save:active {
+        background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
+        transform: scale(1.1);
+    }
+    
+    .btn-cancel:hover,
+    .btn-cancel:active {
+        background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
+        transform: scale(1.1);
+        color: #fff;
     }
 `;
