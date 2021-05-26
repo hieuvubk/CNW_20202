@@ -2,11 +2,10 @@ package com.company.pm.interactionservice.domain.services;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.interactionservice.Like;
+import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.interactionservice.domain.repositories.LikeRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.userservice.domain.repositories.UserRepository;
-import com.company.pm.userservice.domain.services.dto.UserDTO;
-import com.company.pm.userservice.domain.services.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +20,6 @@ public class LikeService {
 
     private final static String ENTITY_NAME = "like";
     
-    private final UserMapper userMapper;
-    
     private final PostRepository postRepository;
     
     private final LikeRepository likeRepository;
@@ -30,18 +27,14 @@ public class LikeService {
     private final UserRepository userRepository;
     
     @Transactional(readOnly = true)
-    public Flux<UserDTO> getUsersLikePost(Long postId) {
-        return postRepository.findById(postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
-            .flatMapMany(post -> likeRepository.findByPost(post.getId()))
-            .flatMap(like -> userRepository.findById(like.getUserId()))
-            .map(userMapper::userToUserDto);
+    public Flux<Like> getUsersLikePost(Long postId) {
+        return findPost(postId)
+            .flatMapMany(post -> likeRepository.findByPost(post.getId()));
     }
     
     @Transactional(readOnly = true)
     public Mono<Long> countUsersLikePost(Long postId) {
-        return postRepository.findById(postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
+        return findPost(postId)
             .flatMap(post -> likeRepository.countByPost(post.getId()));
     }
     
@@ -49,8 +42,7 @@ public class LikeService {
     public Mono<Like> likePostByUser(String userId, Long postId) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
-            .flatMap(user -> postRepository.findById(postId)
-                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
+            .flatMap(user -> findPost(postId)
                 .flatMap(post -> {
                     Like like = Like.builder()
                         .user(user)
@@ -69,7 +61,14 @@ public class LikeService {
     public Mono<Void> unlikePostByUser(String userId, Long postId) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
-            .flatMap(user -> likeRepository.findByUserAndPost(user.getId(), postId))
-            .flatMap(likeRepository::delete);
+            .flatMap(user -> findPost(postId)
+                .flatMap(found -> likeRepository.findByUserAndPost(user.getId(), postId))
+                .flatMap(likeRepository::delete)
+            );
+    }
+    
+    private Mono<Post> findPost(Long postId) {
+        return postRepository.findById(postId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")));
     }
 }

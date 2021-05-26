@@ -20,7 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1/feeds/posts",
+    path = "/api/v1/feed",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
