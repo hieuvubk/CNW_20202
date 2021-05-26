@@ -19,3 +19,4 @@ export const modalStyle = css`
         display: block;
     }
 `;
+
