@@ -177,9 +177,9 @@ public class CommentController {
                 }
             });
     }
-    
-    @GetMapping(path = "/{commentId}/replies/count")
-    public Mono<Long> countRepliesOfComment(
+
+    @GetMapping(path = "/comments/{commentId}/replies/count")
+    public Mono<Long> countReply(
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long cmtId
     ) {

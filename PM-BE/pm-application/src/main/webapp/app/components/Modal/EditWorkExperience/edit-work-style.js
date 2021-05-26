@@ -1,6 +1,41 @@
-import { css } from '../../core/components/css-tag';
+import { css } from '../../../core/components/css-tag';
 
-export const personalInfoStyle = css`
+export const editWorkStyle = css`
+    .post__edit__header{
+        display: flex;
+        padding-bottom: 10px;
+        border-bottom: 1px solid black;
+    }
+    
+    .post__edit__header h3{
+        flex: 1 1 auto;
+    }
+
+    .post__edit__close{
+        border-radius: 50%;
+        height: 25px;
+        width: 25px;
+        border: 1px solid black;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .post__edit__close i{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .post__edit__close:hover {
+        color: #265077;
+    }
+
+    .avt-modal {
+        padding: 5px 10px;
+        width: 100%;
+    }
+
     :host {
         font-size: 1rem;
     }
@@ -9,7 +44,7 @@ export const personalInfoStyle = css`
         font-weight: lighter;
         line-height: 30px;
         color: #777;
-        padding-bottom: 13px;
+        padding-bottom: 12px;
         padding-top: 2px;
     }
     h1, h3 {
@@ -23,7 +58,7 @@ export const personalInfoStyle = css`
         text-align: left;
         border: 1px solid #ccd0d5;
         border-radius: 4px;
-        width: 95%;
+        width: 98%;
         height: 30px;
         line-height: 20px;
         margin-bottom: 2%;
@@ -41,7 +76,7 @@ export const personalInfoStyle = css`
         padding-right: 5%;
         height: 30px;
         margin-bottom: 2%;
-        width: 25%;
+        width: 48.5%;
         color: #777;
         border: 1px solid #ccd0d5;
         border-radius: 4px;
@@ -61,25 +96,29 @@ export const personalInfoStyle = css`
         font-size: 15px;
         padding: 0 10px 0 3px;
     }
-    .cancel-btn {
-        width: 47%;
-        height: 10%;
-        background-color: #E8E9EB;
-        color: #1e4157f2;
-        margin-right: 5%;
+    .post__edit__text textarea{
+        display: block;
+        resize: none;
+        width: 98%;
+        height: 80px;
+        outline: none;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ccd0d5;
     }
     .btn-save,
     .btn-cancel {
         border: none;
         font-size: 16px;
         letter-spacing: 1px;
-        padding: 7px;
-        width: 100px;
+        padding: 7px 15px;
         cursor: pointer;
         outline: none;
         transition: all 0.3s;
         margin-top: 3%;
+        text-decoration: none;
     }
+    
     .btn-save {
         border-radius: 7px 0 0 7px;
         background: linear-gradient(135deg, #1e4157f2 0%, #1597bb 100%);
@@ -87,6 +126,7 @@ export const personalInfoStyle = css`
         color: #fff;
         margin-right: 0.5%;
     }
+    
     .btn-cancel {
         border-radius: 0 7px 7px 0;
         margin-top: 3%;
@@ -94,23 +134,17 @@ export const personalInfoStyle = css`
         font-weight: 500;
         color: #1e4258;
     }
+    
     .btn-save:hover,
     .btn-save:active {
         background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
         transform: scale(1.1);
     }
+    
     .btn-cancel:hover,
     .btn-cancel:active {
         background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
         transform: scale(1.1);
         color: #fff;
-    }
-
-    .show-alert, .show-alert-fail {
-        display: none
-    }
-
-    .show-alert.active, .show-alert-fail.active {
-        display: block;
     }
 `;

@@ -21,7 +21,7 @@ export const workCardStyle = css`
 
     .poster .edit {
         color: #1687a7;
-        margin-top: 3%;
+        margin-top: 2.5%;
         margin-left: 5%;
         font-size: 17px;
         cursor: pointer;
@@ -37,5 +37,9 @@ export const workCardStyle = css`
 
     .poster-info p {
         margin-top: -20px;
+    }
+
+    .news-card.delete {
+        display: none;
     }
 `;

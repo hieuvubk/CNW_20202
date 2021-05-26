@@ -7,7 +7,7 @@ import '../Button/Button';
 import getProfile from '../../api/getProfile';
 import patchPersonalProfile from '../../api/patchPersonalProfile';
 import '../Alert/AlertSuccess';
-import { notFoundStyle } from '../../pages/not-found/not-found-style';
+import '../Alert/AlertFail';
 
 class PersonalInfo extends MaleficComponent {
     static get styles() {
@@ -55,6 +55,7 @@ class PersonalInfo extends MaleficComponent {
 
     submitForm() {
         const personalForm = this.shadowRoot.querySelector("#personalForm");
+        personalForm.addEventListener("submit", (e) => e.preventDefault());
         const formData = new FormData(personalForm);
 
         const day = this.shadowRoot.querySelector('#day');
@@ -69,21 +70,25 @@ class PersonalInfo extends MaleficComponent {
         const asString = data
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
-        console.log(asString);
 
         patchPersonalProfile(asString)
             .then(data => {
-                console.log(data);
                 if(data) {
                     const alertBox = this.shadowRoot.querySelector('.show-alert');
-                    console.log(alertBox);
                     alertBox.classList.add('active');
                     setTimeout(function(){ 
                         alertBox.classList.remove('active')
                     }, 2000);
                 }
             })
-            .catch(console.warn);
+            .catch(() => {
+                console.log("Hello")
+                const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
+                alertBox.classList.add('active');
+                setTimeout(function(){ 
+                    alertBox.classList.remove('active')
+                }, 2000);
+            });
     }
 
     render() {
@@ -120,15 +125,15 @@ class PersonalInfo extends MaleficComponent {
                     <input type="text" class="input" id="address" name="address" value="${this.address}">
                     <div class="dob" data-="selectors">
                         <select class="selector" aria-label="Day" id="day">
-                            <option>Day</option>
+                            <option value="0">Day</option>
                             ${days.map((day) => html`<option value="${day}">${day}</option>`)}
                         </select>
                         <select class="selector" aria-label="Month" id="month">
-                            <option>Month</option>
+                            <option value="0">Month</option>
                             ${months.map((month) => html`<option value="${month}">${month}</option>`)}
                         </select>
                         <select class="selector" aria-label="Year" id="year">
-                            <option>Year</option>
+                            <option value="0">Year</option>
                             ${years.map((year) => html`<option value="${year}">${year}</option>`)}
                         </select>
                     </div>
@@ -138,8 +143,8 @@ class PersonalInfo extends MaleficComponent {
                     <input type="text" class="input" id="location" name="location" value="${this.location}">
                     <input type="text" class="input" id="phoneNumber" name="phoneNumber" value="${this.phoneNumber}">
                     <div class="update-btn">
-                        <app-button btnclass="btn-save" @click="${this.submitForm}">Save</app-button>
-                        <app-button btnclass="btn-cancel">Cancel</app-button>
+                        <button class="btn-save" @click="${this.submitForm}">Save</button>
+                        <button type="reset" class="btn-cancel">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -147,8 +152,9 @@ class PersonalInfo extends MaleficComponent {
             <div class="show-alert">
                 <app-alert-success></app-alert-success>
             </div>
-
-           
+            <div class="show-alert-fail">
+                <app-alert-fail></app-alert-fail>
+            </div>
         `;
     }
 }
