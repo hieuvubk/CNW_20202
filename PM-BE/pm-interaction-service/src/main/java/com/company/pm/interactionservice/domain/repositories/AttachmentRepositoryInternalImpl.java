@@ -1,12 +1,13 @@
-package com.company.pm.personalservice.domain.repositories;
+package com.company.pm.interactionservice.domain.repositories;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
 import com.company.pm.common.services.EntityManager;
-import com.company.pm.domain.personalservice.WorkExperience;
-import com.company.pm.personalservice.domain.repositories.rowmapper.PersonalProfileRowMapper;
-import com.company.pm.personalservice.domain.repositories.rowmapper.WorkExperienceRowMapper;
+import com.company.pm.domain.Attachment;
+import com.company.pm.interactionservice.domain.repositories.rowmapper.AttachmentRowMapper;
+import com.company.pm.interactionservice.domain.repositories.rowmapper.CommentRowMapper;
+import com.company.pm.interactionservice.domain.repositories.rowmapper.PostRowMapper;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 import java.time.Instant;
@@ -30,61 +31,64 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Spring Data SQL reactive custom repository implementation for the WorkExperience entity.
+ * Spring Data SQL reactive custom repository implementation for the Attachment entity.
  */
 @SuppressWarnings("unused")
-class WorkExperienceRepositoryInternalImpl implements WorkExperienceRepositoryInternal {
+class AttachmentRepositoryInternalImpl implements AttachmentRepositoryInternal {
 
     private final DatabaseClient db;
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
-    private final PersonalProfileRowMapper personalprofileMapper;
-    private final WorkExperienceRowMapper workexperienceMapper;
+    private final PostRowMapper postMapper;
+    private final CommentRowMapper commentMapper;
+    private final AttachmentRowMapper attachmentMapper;
 
-    private static final Table entityTable = Table.aliased("work_experiences", EntityManager.ENTITY_ALIAS);
-    private static final Table personalProfileTable = Table.aliased("personal_profiles", "personalProfile");
+    private static final Table entityTable = Table.aliased("attachments", EntityManager.ENTITY_ALIAS);
+    private static final Table postTable = Table.aliased("posts", "post");
+    private static final Table commentTable = Table.aliased("comments", "e_comment");
 
-    public WorkExperienceRepositoryInternalImpl(
+    public AttachmentRepositoryInternalImpl(
         R2dbcEntityTemplate template,
         EntityManager entityManager,
-        PersonalProfileRowMapper personalprofileMapper,
-        WorkExperienceRowMapper workexperienceMapper
+        PostRowMapper postMapper,
+        CommentRowMapper commentMapper,
+        AttachmentRowMapper attachmentMapper
     ) {
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
-        this.personalprofileMapper = personalprofileMapper;
-        this.workexperienceMapper = workexperienceMapper;
+        this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
+        this.attachmentMapper = attachmentMapper;
     }
 
     @Override
-    public Flux<WorkExperience> findAllBy(Pageable pageable) {
+    public Flux<Attachment> findAllBy(Pageable pageable) {
         return findAllBy(pageable, null);
     }
 
     @Override
-    public Flux<WorkExperience> findAllBy(Pageable pageable, Criteria criteria) {
+    public Flux<Attachment> findAllBy(Pageable pageable, Criteria criteria) {
         return createQuery(pageable, criteria).all();
     }
-    
-    @Override
-    public Mono<WorkExperience> findOneBy(Criteria criteria) {
-        return createQuery(null, criteria).one();
-    }
-    
-    RowsFetchSpec<WorkExperience> createQuery(Pageable pageable, Criteria criteria) {
-        List<Expression> columns = WorkExperienceSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
-        columns.addAll(PersonalProfileSqlHelper.getColumns(personalProfileTable, "personalProfile"));
+
+    RowsFetchSpec<Attachment> createQuery(Pageable pageable, Criteria criteria) {
+        List<Expression> columns = AttachmentSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+        columns.addAll(PostSqlHelper.getColumns(postTable, "post"));
+        columns.addAll(CommentSqlHelper.getColumns(commentTable, "comment"));
         SelectFromAndJoinCondition selectFrom = Select
             .builder()
             .select(columns)
             .from(entityTable)
-            .leftOuterJoin(personalProfileTable)
-            .on(Column.create("personal_profile_id", entityTable))
-            .equals(Column.create("id", personalProfileTable));
+            .leftOuterJoin(postTable)
+            .on(Column.create("post_id", entityTable))
+            .equals(Column.create("id", postTable))
+            .leftOuterJoin(commentTable)
+            .on(Column.create("comment_id", entityTable))
+            .equals(Column.create("id", commentTable));
 
-        String select = entityManager.createSelect(selectFrom, WorkExperience.class, pageable, criteria);
+        String select = entityManager.createSelect(selectFrom, Attachment.class, pageable, criteria);
         String alias = entityTable.getReferenceName().getReference();
         String selectWhere = Optional
             .ofNullable(criteria)
@@ -104,28 +108,29 @@ class WorkExperienceRepositoryInternalImpl implements WorkExperienceRepositoryIn
     }
 
     @Override
-    public Flux<WorkExperience> findAll() {
+    public Flux<Attachment> findAll() {
         return findAllBy(null, null);
     }
 
     @Override
-    public Mono<WorkExperience> findById(Long id) {
+    public Mono<Attachment> findById(Long id) {
         return createQuery(null, where("id").is(id)).one();
     }
 
-    private WorkExperience process(Row row, RowMetadata metadata) {
-        WorkExperience entity = workexperienceMapper.apply(row, "e");
-        entity.setPersonalProfile(personalprofileMapper.apply(row, "personalProfile"));
+    private Attachment process(Row row, RowMetadata metadata) {
+        Attachment entity = attachmentMapper.apply(row, "e");
+        entity.setPost(postMapper.apply(row, "post"));
+        entity.setComment(commentMapper.apply(row, "comment"));
         return entity;
     }
 
     @Override
-    public <S extends WorkExperience> Mono<S> insert(S entity) {
+    public <S extends Attachment> Mono<S> insert(S entity) {
         return entityManager.insert(entity);
     }
 
     @Override
-    public <S extends WorkExperience> Mono<S> save(S entity) {
+    public <S extends Attachment> Mono<S> save(S entity) {
         if (entity.getId() == null) {
             return insert(entity);
         } else {
@@ -133,7 +138,7 @@ class WorkExperienceRepositoryInternalImpl implements WorkExperienceRepositoryIn
                 .map(
                     numberOfUpdates -> {
                         if (numberOfUpdates.intValue() <= 0) {
-                            throw new IllegalStateException("Unable to update WorkExperience with id = " + entity.getId());
+                            throw new IllegalStateException("Unable to update Attachment with id = " + entity.getId());
                         }
                         return entity;
                     }
@@ -142,23 +147,23 @@ class WorkExperienceRepositoryInternalImpl implements WorkExperienceRepositoryIn
     }
 
     @Override
-    public Mono<Integer> update(WorkExperience entity) {
+    public Mono<Integer> update(Attachment entity) {
         //fixme is this the proper way?
         return r2dbcEntityTemplate.update(entity).thenReturn(1);
     }
 }
 
-class WorkExperienceSqlHelper {
+class AttachmentSqlHelper {
 
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
         columns.add(Column.aliased("id", table, columnPrefix + "_id"));
-        columns.add(Column.aliased("title", table, columnPrefix + "_title"));
-        columns.add(Column.aliased("employment_type", table, columnPrefix + "_employment_type"));
-        columns.add(Column.aliased("location", table, columnPrefix + "_location"));
-        columns.add(Column.aliased("start_date", table, columnPrefix + "_start_date"));
-        columns.add(Column.aliased("end_date", table, columnPrefix + "_end_date"));
-        columns.add(Column.aliased("personal_profile_id", table, columnPrefix + "_personal_profile_id"));
+        columns.add(Column.aliased("thumb_url", table, columnPrefix + "_thumb_url"));
+        columns.add(Column.aliased("file_url", table, columnPrefix + "_file_url"));
+        columns.add(Column.aliased("created_at", table, columnPrefix + "_created_at"));
+
+        columns.add(Column.aliased("post_id", table, columnPrefix + "_post_id"));
+        columns.add(Column.aliased("comment_id", table, columnPrefix + "_comment_id"));
         return columns;
     }
 }

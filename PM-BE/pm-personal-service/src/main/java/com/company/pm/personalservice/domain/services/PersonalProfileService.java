@@ -51,6 +51,7 @@ public class PersonalProfileService {
                      PersonalProfile profile = mapper.profileDtoToProfile(profileDTO);
                      profile.setUser(user);
                      profile.setUserId(user.getId());
+                     log.debug("profile: {}", profile);
     
                      return profileRepository.findByUser(userId)
                          .switchIfEmpty(profileRepository.save(profile))

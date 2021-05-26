@@ -5,8 +5,9 @@ import com.cloudinary.utils.ObjectUtils;
 import com.company.pm.common.enumeration.RelStatus;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.companyservice.domain.repositories.CompanyRepository;
+import com.company.pm.domain.Attachment;
 import com.company.pm.domain.interactionservice.Post;
-import com.company.pm.domain.socialservice.Follow;
+import com.company.pm.interactionservice.domain.repositories.AttachmentRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.interactionservice.domain.services.dto.PostDTO;
 import com.company.pm.interactionservice.domain.services.mapper.PostMapper;
@@ -47,6 +48,8 @@ public class PostService {
     private final FollowRepository followRepository;
     
     private final CompanyRepository companyRepository;
+    
+    private final AttachmentRepository attachmentRepository;
     
     @Transactional(readOnly = true)
     public Flux<Post> getPostsOfUser(String userId) {
@@ -194,20 +197,52 @@ public class PostService {
             .flatMap(postRepository::delete);
     }
     
-    public Mono<Map> uploadUserPostImage(String userId, Long postId, byte[] bytes) {
-        return userRepository.findById(userId)
-            .map(user -> {
+    @Transactional
+    public Mono<Attachment> uploadUserPostImage(String userId, Long postId, byte[] bytes) {
+        return getPostOfUser(userId, postId)
+            .map(post -> {
                 try {
                     return cloudinary.uploader().upload(bytes, ObjectUtils.asMap(
-                        "public_id", UPLOAD_FOLDER + "/attachments/" + userId + "/" + Instant.now().getEpochSecond(),
+                        "public_id", UPLOAD_FOLDER + "/attachments/posts/" + postId + "-" + userId + "/" + Instant.now().getEpochSecond(),
                         "overwrite", true,
                         "format", "png",
                         "resource_type", "auto",
-                        "tags", List.of("user_post_image")
+                        "tags", List.of("user_post_attachment")
                     ));
                 } catch (IOException e) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
                 }
-            });
+            })
+            .flatMap(response -> saveMediaAttachmentOfPost(postId, response));
+    }
+    
+    @Transactional
+    public Mono<Attachment> uploadCompanyPostImage(String userId, Long companyId, Long postId, byte[] bytes) {
+        return getPostOfCompanyByAdmin(userId, postId, companyId)
+            .map(post -> {
+                try {
+                    return cloudinary.uploader().upload(bytes, ObjectUtils.asMap(
+                        "public_id", UPLOAD_FOLDER + "/attachments/posts/" + postId + "-" + companyId + "/" + Instant.now().getEpochSecond(),
+                        "overwrite", true,
+                        "format", "png",
+                        "resource_type", "auto",
+                        "tags", List.of("company_post_attachment")
+                    ));
+                } catch (IOException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                }
+            })
+            .flatMap(response -> saveMediaAttachmentOfPost(postId, response));
+    }
+    
+    private Mono<Attachment> saveMediaAttachmentOfPost(Long postId, Map response) {
+        String thumbUrl = response.get("secure_url").toString();
+        Attachment attachment = Attachment.builder()
+            .postId(postId)
+            .createdAt(Instant.now())
+            .thumbUrl(thumbUrl)
+            .build();
+    
+        return attachmentRepository.save(attachment);
     }
 }
