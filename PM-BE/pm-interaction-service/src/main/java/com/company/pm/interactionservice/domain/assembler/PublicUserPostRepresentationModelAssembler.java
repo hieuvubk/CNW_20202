@@ -1,8 +1,8 @@
 package com.company.pm.interactionservice.domain.assembler;
 
 import com.company.pm.common.assembler.SimpleIdentifiableReactiveRepresentationModelAssembler;
-import com.company.pm.domain.interactionservice.Comment;
-import com.company.pm.interactionservice.web.CommentController;
+import com.company.pm.domain.interactionservice.Post;
+import com.company.pm.interactionservice.web.PublicUserPostController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.HandlerMapping;
@@ -13,20 +13,20 @@ import java.util.Map;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.*;
 
 @Component
-public class CommentRepresentationModelAssembler
-    extends SimpleIdentifiableReactiveRepresentationModelAssembler<Comment> {
+public class PublicUserPostRepresentationModelAssembler
+    extends SimpleIdentifiableReactiveRepresentationModelAssembler<Post> {
     
-    public CommentRepresentationModelAssembler() {
-        super(CommentController.class);
+    public PublicUserPostRepresentationModelAssembler() {
+        super(PublicUserPostController.class);
     }
     
     @Override
     protected String getCollectionName() {
-        return "comments";
+        return "posts";
     }
     
     @Override
-    protected String getEntityId(EntityModel<Comment> resource) {
+    protected String getEntityId(EntityModel<Post> resource) {
         return resource.getContent().getId().toString();
     }
     
@@ -35,8 +35,8 @@ public class CommentRepresentationModelAssembler
         Map<String, String> attributes = exchange.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         assert attributes != null;
         
-        return linkTo(methodOn(CommentController.class).getCommentsByPost(
-            Long.parseLong(attributes.get("id")), exchange
+        return linkTo(methodOn(PublicUserPostController.class).getPublicUserPosts(
+            attributes.get("id"), exchange
         ), exchange);
     }
 }

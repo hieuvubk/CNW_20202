@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1",
+    path = "/api/v1/posts/{id}",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
@@ -44,25 +44,6 @@ public class CommentController {
     private final UserService userService;
     
     @GetMapping(path = "/comments")
-    public Mono<CollectionModel<EntityModel<Comment>>> getComments(
-        @ApiIgnore ServerWebExchange exchange
-    ) {
-        return exchange.getPrincipal()
-            .flatMap(principal -> {
-                if (principal instanceof AbstractAuthenticationToken) {
-                    return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> {
-                            Flux<Comment> cmtFlux = commentService.getCommentsByUser(user.getId());
-                            
-                            return assembler.toCollectionModel(cmtFlux, exchange);
-                        });
-                } else {
-                    return Mono.error(new BadRequestAlertException("Invalid user", "user", "principalinvalid"));
-                }
-            });
-    }
-    
-    @GetMapping(path = "/posts/{id}/comments")
     public Mono<CollectionModel<EntityModel<Comment>>> getCommentsByPost(
         @PathVariable("id") Long postId,
         @ApiIgnore ServerWebExchange exchange
@@ -72,13 +53,13 @@ public class CommentController {
         return assembler.toCollectionModel(cmtFlux, exchange);
     }
     
-    @GetMapping(path = "/posts/{id}/comments/count")
+    @GetMapping(path = "/comments/count")
     public Mono<Long> countCommentByPost(@PathVariable("id") Long postId) {
         return commentService.countCommentsByPost(postId);
     }
     
     @PostMapping(
-        path = "/posts/{id}/comments",
+        path = "/comments",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     public Mono<ResponseEntity<EntityModel<Comment>>> creatComment(
@@ -90,7 +71,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.createCommentByPost(user.getId(), postId, commentDTO)
+                        .flatMap(user -> commentService.createCommentToPost(user.getId(), postId, commentDTO)
                             .flatMap(comment -> assembler
                                 .toModel(comment, exchange)
                                 .map(model -> ResponseEntity
@@ -118,7 +99,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.createReplyByComment(user.getId(), commentId, commentDTO)
+                        .flatMap(user -> commentService.createReplyToComment(user.getId(), commentId, commentDTO)
                             .flatMap(reply -> assembler
                                 .toModel(reply, exchange)
                                 .map(model -> ResponseEntity

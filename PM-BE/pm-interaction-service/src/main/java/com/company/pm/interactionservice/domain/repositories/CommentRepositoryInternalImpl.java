@@ -4,6 +4,8 @@ import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
 import com.company.pm.common.services.EntityManager;
+import com.company.pm.companyservice.domain.repositories.CompanySqlHelper;
+import com.company.pm.companyservice.domain.repositories.rowmapper.CompanyRowMapper;
 import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.interactionservice.domain.repositories.rowmapper.CommentRowMapper;
 import com.company.pm.interactionservice.domain.repositories.rowmapper.PostRowMapper;
@@ -41,11 +43,13 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
     
+    private final CompanyRowMapper companyMapper;
     private final CommentRowMapper commentMapper;
     private final PostRowMapper postMapper;
     private final UserRowMapper userMapper;
     
     private static final Table entityTable = Table.aliased("comments", EntityManager.ENTITY_ALIAS);
+    private static final Table companyTable = Table.aliased("companies", "company");
     private static final Table parentCommentTable = Table.aliased("comments", "parentComment");
     private static final Table postTable = Table.aliased("posts", "post");
     private static final Table authorTable = Table.aliased("users", "author");
@@ -53,6 +57,7 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
     public CommentRepositoryInternalImpl(
         R2dbcEntityTemplate template,
         EntityManager entityManager,
+        CompanyRowMapper companyMapper,
         CommentRowMapper commentMapper,
         PostRowMapper postMapper,
         UserRowMapper userMapper
@@ -60,6 +65,7 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
+        this.companyMapper = companyMapper;
         this.commentMapper = commentMapper;
         this.postMapper = postMapper;
         this.userMapper = userMapper;
@@ -77,6 +83,7 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
     
     RowsFetchSpec<Comment> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = CommentSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+        columns.addAll(CompanySqlHelper.getColumns(companyTable, "company"));
         columns.addAll(CommentSqlHelper.getColumns(parentCommentTable, "parentComment"));
         columns.addAll(PostSqlHelper.getColumns(postTable, "post"));
         columns.addAll(UserSqlHelper.getColumns(authorTable, "author"));
@@ -84,6 +91,9 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
             .builder()
             .select(columns)
             .from(entityTable)
+            .leftOuterJoin(companyTable)
+            .on(Column.create("company_id", entityTable))
+            .equals(Column.create("id", companyTable))
             .leftOuterJoin(parentCommentTable)
             .on(Column.create("parent_comment_id", entityTable))
             .equals(Column.create("id", parentCommentTable))
@@ -125,6 +135,7 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
     
     private Comment process(Row row, RowMetadata metadata) {
         Comment entity = commentMapper.apply(row, "e");
+        entity.setCompany(companyMapper.apply(row, "company"));
         entity.setParentComment(commentMapper.apply(row, "parentComment"));
         entity.setPost(postMapper.apply(row, "post"));
         entity.setAuthor(userMapper.apply(row, "author"));
@@ -169,9 +180,11 @@ class CommentSqlHelper {
         columns.add(Column.aliased("created_at", table, columnPrefix + "_created_at"));
         columns.add(Column.aliased("updated_at", table, columnPrefix + "_updated_at"));
         
+        columns.add(Column.aliased("company_id", table, columnPrefix + "_company_id"));
         columns.add(Column.aliased("parent_comment_id", table, columnPrefix + "_parent_comment_id"));
         columns.add(Column.aliased("post_id", table, columnPrefix + "_post_id"));
         columns.add(Column.aliased("author_id", table, columnPrefix + "_author_id"));
         return columns;
     }
 }
+

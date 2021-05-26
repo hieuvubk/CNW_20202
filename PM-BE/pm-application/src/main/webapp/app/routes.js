@@ -28,6 +28,20 @@ const routes = [
         resolve: () => import('./pages/homepage/Homepage')
     },
     {
+        name: 'search-job',
+        pattern:'search',
+        data:{},
+        component:'app-search-job',
+        resolve:()=> import('./pages/search-job/searchJob')
+    },
+    {
+        name: 'company-page',
+        pattern: 'company',
+        data:{},
+        component:'app-company-page',
+        resolve: ()=> import('./pages/company-page/CompanyPage'),
+    },
+    {
         name: 'account-setting',
         pattern: 'account',
         data: {},
@@ -48,7 +62,7 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile',
+        pattern: 'profile/:id/:postId',
         data: {
             title: 'Profile'
         },

@@ -2,13 +2,14 @@ import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
 import { profileStyle } from './profile-style';
+import { withRouter } from '../../core/router/malefic-router';
 
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
 import '../../components/Modal/ContactInfo/ContactInfo';
 
-class Profile extends MaleficComponent {
+class Profile extends withRouter(MaleficComponent) {
     static get properties() {
         return {
             showModal: {type: Boolean}
@@ -24,6 +25,12 @@ class Profile extends MaleficComponent {
         window.addEventListener('beforeunload', () => {
             window.scrollTo(0, 0);
         });
+    }
+    
+    connectedCallback() {
+        super.connectedCallback();
+        document.getElementsByTagName('title')[0].innerHTML = this.data.title;
+        console.log(this.query, this.params);
     }
     
     handleOpenContactModal() {

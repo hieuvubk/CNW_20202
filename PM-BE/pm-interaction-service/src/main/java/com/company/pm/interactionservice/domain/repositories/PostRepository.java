@@ -21,22 +21,57 @@ public interface PostRepository extends R2dbcRepository<Post, Long>, PostReposit
     @Query("SELECT * FROM posts entity WHERE entity.author_id IS NULL")
     Flux<Post> findAllWhereAuthorIsNull();
     
-    @Query("SELECT * FROM posts entity WHERE entity.id = :id AND entity.author_id = :authorId")
-    Mono<Post> findByIdAndAuthor(Long id, String authorId);
+    @Query("SELECT * FROM posts entity WHERE entity.author_id = :id AND entity.author_id IS NULL")
+    Flux<Post> findByAuthorAndCompanyIsNull(String id);
     
-    @Query("SELECT * FROM posts entity WHERE entity.visionable != 'PRIVATE' AND entity.author_id = :userId")
-    Flux<Post> findVisiblePosts(String userId);
+    @Query("SELECT * FROM posts entity WHERE entity.company_id = :id")
+    Flux<Post> findByCompany(Long id);
     
-    @Query("SELECT * FROM posts entity WHERE entity.visionable != 'PRIVATE' AND entity.author_id = :userId AND" +
-        " entity.id = :postId")
-    Mono<Post> findVisiblePostById(String userId, Long postId);
+    @Query("SELECT * FROM posts entity WHERE entity.id = :id AND entity.company_id = :companyId")
+    Mono<Post> findByIdAndCompany(Long id, Long companyId);
     
-    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' AND entity.author_id = :userId")
-    Flux<Post> findPublicPosts(String userId);
+    @Query("SELECT * FROM posts entity WHERE entity.author_id = :authorId AND entity.company_id = :id")
+    Flux<Post> findByAuthorAndCompany(String authorId, Long companyId);
     
-    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' AND entity.author_id = :userId AND" +
-        " entity.id = :postId")
-    Mono<Post> findPublicPostById(String userId, Long postId);
+    @Query("SELECT * FROM posts entity WHERE entity.id = :id " +
+        "AND entity.author_id = :authorId AND entity.company_id = :companyId")
+    Mono<Post> findByIdAndAuthorAndCompany(Long id, String authorId, Long companyId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.id = :id " +
+        "AND entity.author_id = :authorId AND entity.company_id IS NULL")
+    Mono<Post> findByIdAndAuthorAndCompanyIsNull(Long id, String authorId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable != 'PRIVATE' " +
+        "AND entity.author_id = :userId AND entity.company_id IS NULL")
+    Flux<Post> findVisiblePostsOfUser(String userId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable != 'PRIVATE' AND entity.author_id = :userId " +
+        "AND entity.id = :postId AND entity.company_id IS NULL")
+    Mono<Post> findVisiblePostByIdOfUser(String userId, Long postId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' " +
+        "AND entity.author_id = :userId AND entity.company_id IS NULL")
+    Flux<Post> findPublicPostsOfUser(String userId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' AND entity.author_id = :userId " +
+        "AND entity.id = :postId AND entity.company_id IS NULL")
+    Mono<Post> findPublicPostByIdOfUser(String userId, Long postId);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' " +
+        "AND entity.company_id = :id")
+    Flux<Post> findPublicPostsOfCompany(Long id);
+    
+    @Query("SELECT * FROM posts entity WHERE entity.visionable = 'PUBLIC' " +
+        "AND entity.id = :postId AND entity.company_id = :companyId")
+    Mono<Post> findPublicPostByIdOfCompany(Long companyId, Long postId);
+    
+    default Flux<Post> findPublicPostsOfUserOrCompany(String id) {
+        return findAllBy(null, Criteria.where("visionable").is("PUBLIC")
+            .and(Criteria.where("author_id").is(id)
+                    .or("company_id").is(Long.parseLong(id))
+            )
+        );
+    }
 
     // just to avoid having unambigous methods
     @Override

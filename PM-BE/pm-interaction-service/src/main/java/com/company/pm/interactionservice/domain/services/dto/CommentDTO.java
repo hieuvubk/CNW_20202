@@ -13,5 +13,7 @@ public class CommentDTO {
     @NotNull
     @Size(min = 1)
     private final String content;
+    
+    private final String companyId;
 }
 

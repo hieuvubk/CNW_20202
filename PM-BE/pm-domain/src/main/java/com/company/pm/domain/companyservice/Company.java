@@ -2,9 +2,14 @@ package com.company.pm.domain.companyservice;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.company.pm.common.enumeration.CompanyType;
+import com.company.pm.domain.interactionservice.Comment;
+import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.domain.userservice.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -50,4 +55,14 @@ public class Company implements Serializable {
     
     @Column("admin_id")
     private String adminId;
+    
+    @Transient
+    @JsonIgnoreProperties(value = {"company", "author", "comments", "likes" }, allowSetters = true)
+    @Builder.Default
+    private Set<Post> posts = new HashSet<>();
+    
+    @Transient
+    @JsonIgnoreProperties(value = { "company", "parentComment", "post", "author", "commentLikes" }, allowSetters = true)
+    @Builder.Default
+    private Set<Comment> comments = new HashSet<>();
 }
