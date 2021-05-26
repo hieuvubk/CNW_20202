@@ -12,6 +12,8 @@ export const modalStyle = css`
         transition: 200ms ease-in-out;
         transform: scale(0);
         padding: 10px 15px;
+        max-height: calc(130vh - 210px);
+        overflow-y: auto;
     }
     .active {
         transform: scale(1);
