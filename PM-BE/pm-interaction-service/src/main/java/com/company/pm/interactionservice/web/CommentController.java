@@ -164,6 +164,7 @@ public class CommentController {
             });
     }
     
+<<<<<<< HEAD
 //    @GetMapping(path = "/comments/{id}/replies/count")
 //    public Mono<Long> countReply(@PathVariable("id") Long cmtId) {
 //        return commentService.countRepliesByComment(cmtId);
@@ -178,4 +179,24 @@ public class CommentController {
 //
 //        return assembler.toCollectionModel(cmtFlux, exchange);
 //    }
+=======
+    @GetMapping(path = "/comments/{commentId}/replies/count")
+    public Mono<Long> countReply(
+        @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long cmtId
+    ) {
+        return commentService.countRepliesByComment(postId, cmtId);
+    }
+    
+    @GetMapping(path = "/comments/{commentId}/replies")
+    public Mono<CollectionModel<EntityModel<Comment>>> getReplies(
+        @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long cmtId,
+        @ApiIgnore ServerWebExchange exchange
+    ) {
+        Flux<Comment> cmtFlux = commentService.getRepliesByComment(postId, cmtId);
+        
+        return assembler.toCollectionModel(cmtFlux, exchange);
+    }
+>>>>>>> ea4f90fa02c5bf2f025748a2f7edc5da9a558e18
 }

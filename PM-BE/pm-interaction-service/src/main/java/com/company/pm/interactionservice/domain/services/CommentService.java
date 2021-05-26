@@ -49,15 +49,15 @@ public class CommentService {
     }
     
     @Transactional(readOnly = true)
-    public Flux<Comment> getRepliesByComment(Long cmtId) {
-        return commentRepository.findById(cmtId)
+    public Flux<Comment> getRepliesByComment(Long postId, Long cmtId) {
+        return commentRepository.findByIdAndPost(cmtId, postId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
             .flatMapMany(comment -> commentRepository.findByParentComment(comment.getId()));
     }
     
     @Transactional(readOnly = true)
-    public Mono<Long> countRepliesByComment(Long cmtId) {
-        return commentRepository.findById(cmtId)
+    public Mono<Long> countRepliesByComment(Long postId, Long cmtId) {
+        return commentRepository.findByIdAndPost(cmtId, postId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
             .flatMap(comment -> commentRepository.countByParentComment(comment.getId()));
     }

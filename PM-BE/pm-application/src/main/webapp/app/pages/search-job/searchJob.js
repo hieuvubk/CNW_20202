@@ -8,11 +8,14 @@ import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
 import '../../components/brief-job-card/briefJobCard';
 import '../../components/recruit-detail-card/recruitDetailCard';
+import '../../components/recruit-detail-card/poupJobtype';
+import '../../components/recruit-detail-card/popupCreatedat';
 
 class SearchJob extends MaleficComponent{
     static get properties(){
         return{
-
+            showJobtype: {type:String},
+            showCreatedat: {type:String}
         }
     }
 
@@ -20,8 +23,22 @@ class SearchJob extends MaleficComponent{
         return [searchJobStyle];
     }
 
+    handleToggleShowPopupJobtype(){
+        let jobtype = this.shadowRoot.querySelector("popup-jobtype").showPopup;
+        this.shadowRoot.querySelector("popup-jobtype").showPopup = (jobtype=="none")?"block":"none";
+        this.shadowRoot.querySelector("popup-createdat").showPopup ="none";
+    }
+
+    handleToggleShowPopupCreatedat(){
+        let createdat = this.shadowRoot.querySelector("popup-createdat").showPopup;
+        this.shadowRoot.querySelector("popup-createdat").showPopup = (createdat=="none")?"block":"none";
+        this.shadowRoot.querySelector("popup-jobtype").showPopup ="none";
+    }
+
     constructor(){
         super();
+        this.showJobtype = "none";
+        this.showCreatedat ="none";
     }
 
     render(){
@@ -33,52 +50,14 @@ class SearchJob extends MaleficComponent{
             <div>
         <div class="search__filter">
             <input type="text" name="keywords">
-            <div id="search__filter__jobtype">Job type <i class="fas fa-sort-down"></i></div>
-            <div id="search__filter__createdat">Created at <i class="fas fa-sort-down"></i></div>
+            <div id="search__filter__jobtype" @click="${this.handleToggleShowPopupJobtype}">Job type <i class="fas fa-sort-down"></i></div>
+            <div id="search__filter__createdat" @click="${this.handleToggleShowPopupCreatedat}">Created at <i class="fas fa-sort-down"></i></div>
             <div>Search</div>
         </div>
  
-        <div id="overlay__jobtype">
-            <div class="overlay__jobtype__header">
-            </div>
-            <div class="overlay__jobtype__checkbox">
-                <form>
-                    <input type="checkbox" name="fulltime" value="fulltime">
-                        <label for="fulltime">Full time</label></br>
-                    <input type="checkbox" name="contract" value="contract">
-                        <label for="contract">Contract</label></br>
-                    <input type="checkbox" name="internship" value="internship">
-                        <label for="internship">Internship</label></br>
-                    <div>
-                        <button>Cancel</button>
-                        <button type="submit">Show result</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <popup-jobtype showPopup=${this.showJobtype}></popup-jobtype>
 
-        <div id="overlay__createdat">
-            <div class="overlay__createdat__header">
-            </div>
-
-            <div class="overlay__createdat__checkbox">
-                <form>
-                    <input type="checkbox" name="anytime" value="fulltime">
-                        <label for="anytime">Any time</label></br>
-                    <input type="checkbox" name="passmonth" value="contract">
-                        <label for="passmonth">Pass month</label></br>
-                    <input type="checkbox" name="passweek" value="internship">
-                        <label for="passweek">Pass week</label></br>
-                    <input type="checkbox" name="passday" value="internship">
-                        <label for="passday">Pass 24 hours</label></br>
-                    <div>
-                        <button>Cancel</button>
-                        <button type="submit">Show result</button>
-                    </div>
-                </form>
-            </div>
-            
-        </div>
+        <popup-createdat showPopup=${this.showCreatedat}></popup-createdat>
         <div class="main">
             <div class="main__left">
                 <brief-job-card 
