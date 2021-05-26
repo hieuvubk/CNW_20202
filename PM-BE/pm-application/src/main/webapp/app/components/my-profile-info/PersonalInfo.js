@@ -7,7 +7,6 @@ import '../Button/Button';
 import getProfile from '../../api/getProfile';
 import patchPersonalProfile from '../../api/patchPersonalProfile';
 import '../Alert/AlertSuccess';
-import { notFoundStyle } from '../../pages/not-found/not-found-style';
 
 class PersonalInfo extends MaleficComponent {
     static get styles() {
@@ -69,14 +68,11 @@ class PersonalInfo extends MaleficComponent {
         const asString = data
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
-        console.log(asString);
 
         patchPersonalProfile(asString)
             .then(data => {
-                console.log(data);
                 if(data) {
                     const alertBox = this.shadowRoot.querySelector('.show-alert');
-                    console.log(alertBox);
                     alertBox.classList.add('active');
                     setTimeout(function(){ 
                         alertBox.classList.remove('active')
@@ -147,8 +143,6 @@ class PersonalInfo extends MaleficComponent {
             <div class="show-alert">
                 <app-alert-success></app-alert-success>
             </div>
-
-           
         `;
     }
 }

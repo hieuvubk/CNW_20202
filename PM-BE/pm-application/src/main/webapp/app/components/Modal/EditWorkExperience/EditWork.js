@@ -1,21 +1,31 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { uploadWorkStyle } from './upload-work-style';
+import { editWorkStyle } from './edit-work-style';
 import { commonStyles } from '../../../shared/styles/common-styles';
 
 import '../Modal';
 import '../../Button/Button';
-import postWorkExperience from '../../../api/postWorkExperience';
+import patchWorkExperience from '../../../api/patchWorkExperience';
+import getWorkExById from '../../../api/getWorkExById';
 
-class UploadWork extends MaleficComponent {
+class EditWork extends MaleficComponent {
     static get properties() {
         return {
-            show: { type: Boolean }
+            show: { type: Boolean },
+            work: { type: Boolean },
+            id: { type: Int16Array },
         };
     }
 
     static get styles() {
-        return [uploadWorkStyle];
+        return [editWorkStyle];
+    }
+
+    constructor() {
+        super();
+        this.show = false;
+        this.work = {};
+        this.id = 0;
     }
 
     handleCloseModal() {
@@ -32,27 +42,57 @@ class UploadWork extends MaleficComponent {
         const workForm = this.shadowRoot.querySelector("#work-form");
         workForm.addEventListener("submit", (e) => e.preventDefault());
         const formData = new FormData(workForm);
-        console.log(formData);
+  
         // Convert formData to a query string
         const data = [...formData.entries()];
         const asString = data
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
-        console.log(asString);
 
-        postWorkExperience(asString)
+        patchWorkExperience(this.id, asString)
             .then(data => {
                 console.log(data);
-                if(data) {
-                    location.reload();
-                } else {
-                    alert("Fail to add a work experience!");
-                }
+                // if (data) {
+                //     location.reload();
+                // } else {
+                //     alert("Error occurs!");
+                // }
             })
             .catch(e => {
                 console.log(e);
-                alert("Fail to add a work experience!");
+                alert("Error occurs!");
             })
+    }
+
+    connectedCallback() {
+        super.connectedCallback()
+        getWorkExById(this.id)
+        .then(res => {
+            this.work = res;
+            this.shadowRoot.querySelector('#employmentType').value = res.employmentType;
+            const startDate = new Date(res.startDate);
+            const endDate = new Date(res.endDate);
+            const startMonth = startDate.getMonth() + 1;
+            const endMonth = endDate.getMonth() + 1;
+            const endYear = endDate.getFullYear();
+            const startYear = startDate.getFullYear();
+            if(endYear == 1970) {
+                this.shadowRoot.querySelector('#endMonth').value = 1;
+            } else {
+                if(endMonth <= 9) {
+                    this.shadowRoot.querySelector('#endMonth').value = `0${endMonth}`;
+                } else {
+                    this.shadowRoot.querySelector('#endMonth').value = endMonth;
+                }
+            }
+            if(startMonth <= 9) {
+                this.shadowRoot.querySelector('#startMonth').value = `0${startMonth}`;
+            } else {
+                this.shadowRoot.querySelector('#startMonth').value = startMonth;
+            }
+            this.shadowRoot.querySelector('#startYear').value = startYear;
+            this.shadowRoot.querySelector('#endYear').value = endYear;
+        });
     }
 
     render() {
@@ -70,7 +110,7 @@ class UploadWork extends MaleficComponent {
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
                     <div class="post__edit__header">
-                        <h3>Add Experience</h3>
+                        <h3>Edit Experience</h3>
                         <div class="post__edit__close" @click=${this.handleCloseModal}><i class="fas fa-times"></i></div>
                     </div>
                     <form id="work-form">
@@ -85,9 +125,9 @@ class UploadWork extends MaleficComponent {
                             <h5>Description</h5>
                         </div>
                         <div class="col span-3-of-4 info">
-                            <input type="text" class="input" id="title" name="title" required>
+                            <input type="text" class="input" id="title" name="title" value=${this.work.title} required>
                             <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Employment Type" id="employmentType" name="employmentType">
+                                <select class="selector" aria-label="Employment Type" value=${this.work.employmentType} id="employmentType" name="employmentType">
                                     <option value="FULL_TIME">Full-time</option>
                                     <option value="PART_TIME">Part-time</option>
                                     <option value="SELF_EMPLOYED">Self-employed</option>
@@ -95,10 +135,10 @@ class UploadWork extends MaleficComponent {
                                     <option value="INTERNSHIP">Internship</option>
                                 </select>
                             </div>
-                            <input type="text" class="input" id="company" name="company" required>
-                            <input type="text" class="input" id="location" name="location">
+                            <input type="text" class="input" value=${this.work.company} id="company" name="company" required>
+                            <input type="text" class="input" value=${this.work.location} id="location" name="location">
                             <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Month" id="startMonth" name="startMonth" required>
+                                <select class="selector" aria-label="Month" id="startMonth" name="startMonth" required @change="${this.onChange}">
                                     <option value="">Month</option>
                                     <option value="01">01</option>
                                     <option value="02">02</option>
@@ -119,16 +159,16 @@ class UploadWork extends MaleficComponent {
                             <div class="dob" data-="selectors">
                                 <select class="selector" aria-label="Month" id="endMonth" name="endMonth" required>
                                     <option value="">Month</option>
-                                    <option value="01">Now</option>
-                                    <option value="01">1</option>
-                                    <option value="02">2</option>
-                                    <option value="03">3</option>
-                                    <option value="04">4</option>
-                                    <option value="05">5</option>
-                                    <option value="06">6</option>
-                                    <option value="07">7</option>
-                                    <option value="08">8</option>
-                                    <option value="09">9</option>
+                                    <option value="1">Now</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
                                     ${months.map((month) => html`<option value="${month}">${month}</option>`)}
                                 </select>
                                 <select class="selector" id="endYear" name="endYear" required>
@@ -138,7 +178,7 @@ class UploadWork extends MaleficComponent {
                                 </select>
                             </div>
                             <div class="post__edit__text">
-                                <textarea name="headline" placeholder="Type something"></textarea>
+                                <textarea name="headline" value=${this.work.headline} placeholder="Type something"></textarea>
                             </div>
                             <div class="update-btn">
                                 <button type="submit" class="btn-save" @click="${this.submitForm}">Save</button>
@@ -153,6 +193,6 @@ class UploadWork extends MaleficComponent {
     }
 }
 
-customElements.define('app-upload-work', UploadWork);
+customElements.define('app-edit-work', EditWork);
 
 

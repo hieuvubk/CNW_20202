@@ -30,11 +30,7 @@ class WorkExperience extends MaleficComponent {
         });
         this.showModal = false;
         this.workList = [];
-        getWorkExperience()
-            .then(res => {
-                this.workList = res._embedded.workExperienceList;
-            })
-            .catch(e => console.log(e));
+
     }
 
     handleToggleModal() {
@@ -44,7 +40,24 @@ class WorkExperience extends MaleficComponent {
     closeModal() {
         this.showModal = false;
     }
-    
+
+    connectedCallback() {
+        super.connectedCallback()
+        getWorkExperience()
+            .then(res => {
+                this.workList = res._embedded.workExperienceList;
+            })
+            .catch(e => console.log(e));
+    }
+
+    // attributeChangedCallback() {
+    //     super.attributeChangedCallback();
+    //     getWorkExperience()
+    //         .then(res => {
+    //             this.workList = res._embedded.workExperienceList;
+    //         })
+    //         .catch(e => console.log(e));
+    // }
 
     render() {
         return html`
@@ -54,10 +67,9 @@ class WorkExperience extends MaleficComponent {
                 <h1>Work Experience</h1>
                 <app-button btnclass="custom-btn" @click="${this.handleToggleModal}"><i class="fas fa-plus"></i>Add Experience</app-button>
             </div>
-            ${this.workList.map((work) => 
-                html`<work-card title=${work.title} employmentType=${work.employmentType} company=${work.company} startDate=${work.startDate} endDate=${work.endDate} location=${work.location}></work-card>`
-            )}
-           
+            ${this.workList.map((work) =>
+            html`<work-card id=${work.id}></work-card>`
+        )}
         `;
     }
 }
