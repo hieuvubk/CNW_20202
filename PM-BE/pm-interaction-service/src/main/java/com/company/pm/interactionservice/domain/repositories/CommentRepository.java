@@ -5,7 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.relational.core.query.Criteria;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -41,6 +43,14 @@ public interface CommentRepository extends R2dbcRepository<Comment, Long>, Comme
     
     @Query("SELECT * FROM comments entity WHERE entity.id = :commentId AND entity.author_id = :authorId")
     Mono<Comment> findByIdAndAuthor(Long commentId, String authorId);
+    
+    default Mono<Comment> findByIdAndPost(Long commentId, Long postId) {
+        return findAllBy(null, Criteria.where("id").is(commentId)
+            .and("post_id").is(postId)
+        )
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+            .elementAt(0);
+    }
 
     // just to avoid having unambigous methods
     @Override
