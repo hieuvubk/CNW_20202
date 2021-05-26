@@ -1,6 +1,7 @@
 package com.company.pm.domain.interactionservice;
 
 import com.company.pm.common.enumeration.Visionable;
+import com.company.pm.domain.Attachment;
 import com.company.pm.domain.companyservice.Company;
 import com.company.pm.domain.userservice.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -64,4 +65,9 @@ public class Post implements Serializable {
     @JsonIgnoreProperties(value = { "post", "user" }, allowSetters = true)
     @Builder.Default
     private Set<Like> likes = new HashSet<>();
+    
+    @Transient
+    @JsonIgnoreProperties(value = { "post", "comment" }, allowSetters = true)
+    @Builder.Default
+    private Set<Attachment> attachments = new HashSet<>();
 }

@@ -19,6 +19,7 @@ public class CompanySqlHelper {
         columns.add(Column.aliased("company_type", table, columnPrefix + "_company_type"));
         columns.add(Column.aliased("logo_url", table, columnPrefix + "_logo_url"));
         columns.add(Column.aliased("tagline", table, columnPrefix + "_tagline"));
+        columns.add(Column.aliased("bg_image_url", table, columnPrefix + "_bg_image_url"));
         
         columns.add(Column.aliased("admin_id", table, columnPrefix + "_admin_id"));
         return columns;

@@ -1,9 +1,9 @@
 package com.company.pm.interactionservice.web;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
-import com.company.pm.domain.interactionservice.Like;
-import com.company.pm.interactionservice.domain.assembler.LikeRepresentationModelAssembler;
-import com.company.pm.interactionservice.domain.services.LikeService;
+import com.company.pm.domain.interactionservice.CommentLike;
+import com.company.pm.interactionservice.domain.assembler.CommentLikeRepresentationModelAssembler;
+import com.company.pm.interactionservice.domain.services.CommentLikeService;
 import com.company.pm.userservice.domain.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,53 +22,58 @@ import tech.jhipster.web.util.HeaderUtil;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1/posts/{id}",
+    path = "/api/v1/posts/{id}/comments/{commentId}",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
-public class LikeController {
+public class CommentLikeController {
     
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
     
-    private static final String ENTITY_NAME = "like";
+    private static final String ENTITY_NAME = "comment_likes";
     
-    private final LikeRepresentationModelAssembler assembler;
+    private final CommentLikeRepresentationModelAssembler assembler;
     
-    private final LikeService likeService;
+    private final CommentLikeService commentLikeService;
     
     private final UserService userService;
     
     @GetMapping(path = "/likes")
-    public Mono<CollectionModel<EntityModel<Like>>> getUserLikes(
+    public Mono<CollectionModel<EntityModel<CommentLike>>> getCommentLikes(
         @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long commentId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<Like> likeFlux = likeService.getUsersLikePost(postId);
+        Flux<CommentLike> commentLikeFlux = commentLikeService.getUsersLikeCommentOfPost(postId, commentId);
         
-        return assembler.toCollectionModel(likeFlux, exchange);
+        return assembler.toCollectionModel(commentLikeFlux, exchange);
     }
     
     @GetMapping(path = "/likes/count")
-    public Mono<Long> countLike(@PathVariable("id") Long postId) {
-        return likeService.countUsersLikePost(postId);
+    public Mono<Long> countCommentLikes(
+        @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long commentId
+    ) {
+        return commentLikeService.countUsersLikeCommentOfPost(postId, commentId);
     }
     
-    @PostMapping(path = "/action/like")
-    public Mono<ResponseEntity<EntityModel<Like>>> likePost(
+    @PostMapping(path = "/actions/like")
+    public Mono<ResponseEntity<EntityModel<CommentLike>>> likeCommentOfPost(
         @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long commentId,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> likeService.likePostByUser(user.getId(), postId)
-                            .flatMap(like -> assembler
-                                .toModel(like, exchange)
+                        .flatMap(user -> commentLikeService.likeCommentByUser(user.getId(), postId, commentId)
+                            .flatMap(commentLike -> assembler
+                                .toModel(commentLike, exchange)
                                 .map(model -> ResponseEntity
                                     .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, like.getId().toString()))
+                                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, commentLike.getId().toString()))
                                     .body(model)
                                 )
                             )
@@ -79,18 +84,19 @@ public class LikeController {
             });
     }
     
-    @DeleteMapping(path = "/action/unlike")
-    public Mono<ResponseEntity<Void>> unlikePost(
+    @DeleteMapping(path = "/actions/unlike")
+    public Mono<ResponseEntity<Void>> unlikeCommentOfPost(
         @PathVariable("id") Long postId,
+        @PathVariable("commentId") Long commentId,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> likeService.unlikePostByUser(user.getId(), postId)
+                        .flatMap(user -> commentLikeService.unlikeCommentByUser(user.getId(), postId, commentId)
                             .thenReturn(ResponseEntity.noContent()
-                                .headers(HeaderUtil.createAlert(applicationName, "Unlike post", postId.toString()))
+                                .headers(HeaderUtil.createAlert(applicationName, "Unlike comment", commentId.toString()))
                                 .build()
                             )
                         );

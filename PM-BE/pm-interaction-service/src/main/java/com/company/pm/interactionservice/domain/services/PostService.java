@@ -1,10 +1,13 @@
 package com.company.pm.interactionservice.domain.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.company.pm.common.enumeration.RelStatus;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.companyservice.domain.repositories.CompanyRepository;
+import com.company.pm.domain.Attachment;
 import com.company.pm.domain.interactionservice.Post;
-import com.company.pm.domain.socialservice.Follow;
+import com.company.pm.interactionservice.domain.repositories.AttachmentRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.interactionservice.domain.services.dto.PostDTO;
 import com.company.pm.interactionservice.domain.services.mapper.PostMapper;
@@ -19,7 +22,10 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +33,11 @@ public class PostService {
     
     private static final String ENTITY_NAME = "post";
     
+    private static final String UPLOAD_FOLDER = "personal-management-collection";
+    
     private final PostMapper mapper;
+    
+    private final Cloudinary cloudinary;
     
     private final PostRepository postRepository;
     
@@ -38,6 +48,8 @@ public class PostService {
     private final FollowRepository followRepository;
     
     private final CompanyRepository companyRepository;
+    
+    private final AttachmentRepository attachmentRepository;
     
     @Transactional(readOnly = true)
     public Flux<Post> getPostsOfUser(String userId) {
@@ -183,5 +195,54 @@ public class PostService {
     public Mono<Void> deleteCompanyPostByUser(String userId, Long companyId, Long postId) {
         return getPostOfCompanyByAdmin(userId, companyId, postId)
             .flatMap(postRepository::delete);
+    }
+    
+    @Transactional
+    public Mono<Attachment> uploadUserPostImage(String userId, Long postId, byte[] bytes) {
+        return getPostOfUser(userId, postId)
+            .map(post -> {
+                try {
+                    return cloudinary.uploader().upload(bytes, ObjectUtils.asMap(
+                        "public_id", UPLOAD_FOLDER + "/attachments/posts/" + postId + "-" + userId + "/" + Instant.now().getEpochSecond(),
+                        "overwrite", true,
+                        "format", "png",
+                        "resource_type", "auto",
+                        "tags", List.of("user_post_attachment")
+                    ));
+                } catch (IOException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                }
+            })
+            .flatMap(response -> saveMediaAttachmentOfPost(postId, response));
+    }
+    
+    @Transactional
+    public Mono<Attachment> uploadCompanyPostImage(String userId, Long companyId, Long postId, byte[] bytes) {
+        return getPostOfCompanyByAdmin(userId, postId, companyId)
+            .map(post -> {
+                try {
+                    return cloudinary.uploader().upload(bytes, ObjectUtils.asMap(
+                        "public_id", UPLOAD_FOLDER + "/attachments/posts/" + postId + "-" + companyId + "/" + Instant.now().getEpochSecond(),
+                        "overwrite", true,
+                        "format", "png",
+                        "resource_type", "auto",
+                        "tags", List.of("company_post_attachment")
+                    ));
+                } catch (IOException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                }
+            })
+            .flatMap(response -> saveMediaAttachmentOfPost(postId, response));
+    }
+    
+    private Mono<Attachment> saveMediaAttachmentOfPost(Long postId, Map response) {
+        String thumbUrl = response.get("secure_url").toString();
+        Attachment attachment = Attachment.builder()
+            .postId(postId)
+            .createdAt(Instant.now())
+            .thumbUrl(thumbUrl)
+            .build();
+    
+        return attachmentRepository.save(attachment);
     }
 }

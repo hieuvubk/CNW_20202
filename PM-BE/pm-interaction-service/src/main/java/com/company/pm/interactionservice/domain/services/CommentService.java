@@ -3,6 +3,8 @@ package com.company.pm.interactionservice.domain.services;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.companyservice.domain.repositories.CompanyRepository;
 import com.company.pm.domain.interactionservice.Comment;
+import com.company.pm.domain.interactionservice.Post;
+import com.company.pm.domain.userservice.User;
 import com.company.pm.interactionservice.domain.repositories.CommentRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.interactionservice.domain.services.dto.CommentDTO;
@@ -35,38 +37,40 @@ public class CommentService {
     private final CompanyRepository companyRepository;
     
     @Transactional(readOnly = true)
-    public Flux<Comment> getCommentsByPost(Long postId) {
-        return postRepository.findById(postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
+    public Flux<Comment> getCommentsOfPost(Long postId) {
+        return findPost(postId)
             .flatMapMany(post -> commentRepository.findByPost(post.getId()));
     }
     
     @Transactional(readOnly = true)
-    public Mono<Long> countCommentsByPost(Long postId) {
-        return postRepository.findById(postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")))
+    public Mono<Long> countCommentsOfPost(Long postId) {
+        return findPost(postId)
             .flatMap(post -> commentRepository.countByPost(post.getId()));
     }
     
     @Transactional(readOnly = true)
-    public Flux<Comment> getRepliesByComment(Long postId, Long cmtId) {
-        return commentRepository.findByIdAndPost(cmtId, postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
-            .flatMapMany(comment -> commentRepository.findByParentComment(comment.getId()));
+    public Flux<Comment> getRepliesOfComment(Long postId, Long cmtId) {
+        return findPost(postId)
+            .flatMapMany(found -> commentRepository.findByIdAndPost(cmtId, postId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
+                .flatMapMany(comment -> commentRepository.findByParentComment(comment.getId()))
+            );
     }
     
     @Transactional(readOnly = true)
-    public Mono<Long> countRepliesByComment(Long postId, Long cmtId) {
-        return commentRepository.findByIdAndPost(cmtId, postId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
-            .flatMap(comment -> commentRepository.countByParentComment(comment.getId()));
+    public Mono<Long> countRepliesOfComment(Long postId, Long cmtId) {
+        return findPost(postId)
+            .flatMap(found -> commentRepository.findByIdAndPost(cmtId, postId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
+                .flatMap(comment -> commentRepository.countByParentComment(comment.getId()))
+            );
     }
     
     @Transactional
     public Mono<Comment> createCommentToPost(String userId, Long postId, CommentDTO commentDTO) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
-            .flatMap(user -> postRepository.findById(postId)
+            .flatMap(user -> findPost(postId)
                  .flatMap(post -> {
                      Comment comment = mapper.commentDTOToComment(commentDTO);
                      comment.setAuthor(user);
@@ -76,68 +80,76 @@ public class CommentService {
                      comment.setCreatedAt(Instant.now());
                      comment.setUpdatedAt(Instant.now());
     
-                     return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
-                         .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
-                         .flatMap(company -> {
-                             comment.setCompany(company);
-                             
-                             return commentRepository.save(comment);
-                         });
+                     return saveComment(user, comment);
                  })
             );
     }
     
     @Transactional
-    public Mono<Comment> createReplyToComment(String userId, Long commentId, CommentDTO commentDTO) {
+    public Mono<Comment> createReplyToComment(String userId, Long postId, Long commentId, CommentDTO commentDTO) {
         return userRepository.findById(userId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "user", "idnotfound")))
-            .flatMap(user -> commentRepository.findById(commentId)
-                .flatMap(parentComment -> {
-                    Comment comment = mapper.commentDTOToComment(commentDTO);
-                    comment.setParentComment(parentComment);
-                    comment.setParentCommentId(parentComment.getId());
-                    comment.setAuthor(user);
-                    comment.setAuthorId(user.getId());
-                    comment.setPost(parentComment.getPost());
-                    comment.setPostId(parentComment.getPostId());
-                    comment.setCreatedAt(Instant.now());
-                    comment.setUpdatedAt(Instant.now());
-    
-                    return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
-                        .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
-                        .flatMap(company -> {
-                            comment.setCompany(company);
-            
-                            return commentRepository.save(comment);
-                        });
-                })
+            .flatMap(user -> findPost(postId)
+                .flatMap(found -> commentRepository.findById(commentId)
+                    .flatMap(parentComment -> {
+                        Comment comment = mapper.commentDTOToComment(commentDTO);
+                        comment.setParentComment(parentComment);
+                        comment.setParentCommentId(parentComment.getId());
+                        comment.setAuthor(user);
+                        comment.setAuthorId(user.getId());
+                        comment.setPost(parentComment.getPost());
+                        comment.setPostId(parentComment.getPostId());
+                        comment.setCreatedAt(Instant.now());
+                        comment.setUpdatedAt(Instant.now());
+        
+                        return saveComment(user, comment);
+                    })
+                )
             );
     }
     
-    @Transactional
-    public Mono<Comment> updateComment(String userId, Long commentId, CommentDTO commentDTO) {
-        return commentRepository.findByIdAndAuthor(commentId, userId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
-            .flatMap(comment -> {
-                Comment update = mapper.commentDTOToComment(commentDTO);
-                
-                if (update.getContent() != null) {
-                    comment.setContent(update.getContent());
-                    comment.setUpdatedAt(Instant.now());
-                }
-                if (update.getCompanyId() != null) {
-                    return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
-                }
-                
+    private Mono<Comment> saveComment(User user, Comment comment) {
+        return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
+            .flatMap(company -> {
+                comment.setCompany(company);
+            
                 return commentRepository.save(comment);
             });
     }
     
     @Transactional
-    public Mono<Void> deleteComment(String userId, Long commentId) {
-        return commentRepository.findByIdAndAuthor(commentId, userId)
-            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
-            .flatMap(commentRepository::delete);
+    public Mono<Comment> updateComment(String userId, Long postId, Long commentId, CommentDTO commentDTO) {
+        return findPost(postId)
+            .flatMap(found -> commentRepository.findByIdAndAuthor(commentId, userId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "comment", "idnotfound")))
+                .flatMap(comment -> {
+                    Comment update = mapper.commentDTOToComment(commentDTO);
+                    
+                    if (update.getContent() != null) {
+                        comment.setContent(update.getContent());
+                        comment.setUpdatedAt(Instant.now());
+                    }
+                    if (update.getCompanyId() != null) {
+                        return Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN));
+                    }
+                    
+                    return commentRepository.save(comment);
+                })
+            );
     }
     
+    @Transactional
+    public Mono<Void> deleteComment(String userId, Long postId, Long commentId) {
+        return findPost(postId)
+            .flatMap(found -> commentRepository.findByIdAndAuthor(commentId, userId)
+                .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+                .flatMap(commentRepository::delete)
+            );
+    }
+    
+    private Mono<Post> findPost(Long postId) {
+        return postRepository.findById(postId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")));
+    }
 }

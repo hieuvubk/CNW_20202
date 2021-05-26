@@ -1,5 +1,6 @@
 package com.company.pm.interactionservice.web;
 
+import com.company.pm.common.utils.FileUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.interactionservice.domain.assembler.CompanyPostRepresentationModelAssembler;
@@ -14,6 +15,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
@@ -82,10 +84,11 @@ public class CompanyPostController {
             });
     }
     
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<ResponseEntity<EntityModel<Post>>> createCompanyPost(
         @PathVariable("id") Long companyId,
-        @Valid PostDTO postDTO,
+        @RequestPart("image") Mono<FilePart> file,
+        @RequestPart("postDTO") @Valid PostDTO postDTO,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
@@ -93,6 +96,11 @@ public class CompanyPostController {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> postService.createCompanyPostByUser(user.getId(), companyId, postDTO)
+                            .flatMap(post -> file.ofType(FilePart.class)
+                                .flatMap(FileUtils::readBytesContent)
+                                .flatMap(bytes -> postService.uploadCompanyPostImage(user.getId(), companyId, post.getId(), bytes))
+                                .thenReturn(post)
+                            )
                             .flatMap(post -> assembler
                                 .toModel(post, exchange)
                                 .map(model -> ResponseEntity

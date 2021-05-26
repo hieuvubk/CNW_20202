@@ -26,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1/posts/{id}",
+    path = "/api/v1/posts/{id}/comments",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
@@ -43,26 +43,23 @@ public class CommentController {
     
     private final UserService userService;
     
-    @GetMapping(path = "/comments")
+    @GetMapping
     public Mono<CollectionModel<EntityModel<Comment>>> getCommentsByPost(
         @PathVariable("id") Long postId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<Comment> cmtFlux = commentService.getCommentsByPost(postId);
+        Flux<Comment> cmtFlux = commentService.getCommentsOfPost(postId);
         
         return assembler.toCollectionModel(cmtFlux, exchange);
     }
     
-    @GetMapping(path = "/comments/count")
-    public Mono<Long> countCommentByPost(@PathVariable("id") Long postId) {
-        return commentService.countCommentsByPost(postId);
+    @GetMapping(path = "/count")
+    public Mono<Long> countCommentsByPost(@PathVariable("id") Long postId) {
+        return commentService.countCommentsOfPost(postId);
     }
     
-    @PostMapping(
-        path = "/comments",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<EntityModel<Comment>>> creatComment(
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Mono<ResponseEntity<EntityModel<Comment>>> createComment(
         @PathVariable("id") Long postId,
         @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
@@ -87,10 +84,11 @@ public class CommentController {
     }
     
     @PostMapping(
-        path = "/comments/{commentId}/reply",
+        path = "/{commentId}/reply",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
-    public Mono<ResponseEntity<EntityModel<Comment>>> createReply(
+    public Mono<ResponseEntity<EntityModel<Comment>>> replyComment(
+        @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
         @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
@@ -99,7 +97,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.createReplyToComment(user.getId(), commentId, commentDTO)
+                        .flatMap(user -> commentService.createReplyToComment(user.getId(), postId, commentId, commentDTO)
                             .flatMap(reply -> assembler
                                 .toModel(reply, exchange)
                                 .map(model -> ResponseEntity
@@ -115,10 +113,11 @@ public class CommentController {
     }
     
     @PatchMapping(
-        path = "/comments/{commentId}",
+        path = "/{commentId}",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     public Mono<ResponseEntity<EntityModel<Comment>>> updateComment(
+        @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
         CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
@@ -127,7 +126,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.updateComment(user.getId(), commentId, commentDTO)
+                        .flatMap(user -> commentService.updateComment(user.getId(), postId, commentId, commentDTO)
                             .flatMap(comment -> assembler
                                 .toModel(comment, exchange)
                                 .map(model -> ResponseEntity
@@ -143,8 +142,9 @@ public class CommentController {
             });
     }
     
-    @DeleteMapping(path = "/comments/{commentId}")
+    @DeleteMapping(path = "/{commentId}")
     public Mono<ResponseEntity<Void>> deleteComment(
+        @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
         @ApiIgnore ServerWebExchange exchange
     ) {
@@ -152,7 +152,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.deleteComment(user.getId(), commentId)
+                        .flatMap(user -> commentService.deleteComment(user.getId(), postId, commentId)
                             .thenReturn(ResponseEntity.noContent()
                                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, commentId.toString()))
                                 .build()
@@ -169,16 +169,16 @@ public class CommentController {
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long cmtId
     ) {
-        return commentService.countRepliesByComment(postId, cmtId);
+        return commentService.countRepliesOfComment(postId, cmtId);
     }
     
-    @GetMapping(path = "/comments/{commentId}/replies")
-    public Mono<CollectionModel<EntityModel<Comment>>> getReplies(
+    @GetMapping(path = "/{commentId}/replies")
+    public Mono<CollectionModel<EntityModel<Comment>>> getRepliesOfComment(
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long cmtId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<Comment> cmtFlux = commentService.getRepliesByComment(postId, cmtId);
+        Flux<Comment> cmtFlux = commentService.getRepliesOfComment(postId, cmtId);
         
         return assembler.toCollectionModel(cmtFlux, exchange);
     }

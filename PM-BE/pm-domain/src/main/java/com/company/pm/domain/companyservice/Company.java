@@ -50,6 +50,9 @@ public class Company implements Serializable {
     @Column("tagline")
     private String tagline;
     
+    @Column("bg_image_url")
+    private String bgImageUrl;
+    
     @Transient
     private User admin;
     
