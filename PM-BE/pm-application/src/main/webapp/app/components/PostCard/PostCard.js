@@ -23,12 +23,12 @@ class PostCard extends MaleficComponent {
 
     constructor() {
         super();
-        this.accountImg = '';
-        this.accountName = 'Vu Minh Hieu';
-        this.numFollowers = 0;
-        this.time = '2hr';
-        this.postText = 'This is my first post';
-        this.postImg = 'content/images/engineering2.jpeg';
+        //this.accountImg = '';
+        //this.accountName = 'Vu Minh Hieu';
+        //this.numFollowers = 0;
+        //this.time = '2hr';
+        //this.postText = 'This is my first post';
+        //this.postImg = 'content/images/engineering2.jpeg';
     }
 
     render() {
