@@ -106,11 +106,11 @@ export const personalInfoStyle = css`
         color: #fff;
     }
 
-    .show-alert {
+    .show-alert, .show-alert-fail {
         display: none
     }
 
-    .show-alert.active {
+    .show-alert.active, .show-alert-fail.active {
         display: block;
     }
 `;

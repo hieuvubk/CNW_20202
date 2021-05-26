@@ -52,11 +52,11 @@ class EditWork extends MaleficComponent {
         patchWorkExperience(this.id, asString)
             .then(data => {
                 console.log(data);
-                // if (data) {
-                //     location.reload();
-                // } else {
-                //     alert("Error occurs!");
-                // }
+                if (data) {
+                    location.reload();
+                } else {
+                    alert("Error occurs!");
+                }
             })
             .catch(e => {
                 console.log(e);
