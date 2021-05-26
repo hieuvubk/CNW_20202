@@ -45,11 +45,9 @@ public interface CommentRepository extends R2dbcRepository<Comment, Long>, Comme
     Mono<Comment> findByIdAndAuthor(Long commentId, String authorId);
     
     default Mono<Comment> findByIdAndPost(Long commentId, Long postId) {
-        return findAllBy(null, Criteria.where("id").is(commentId)
+        return findOneBy(Criteria.where("id").is(commentId)
             .and("post_id").is(postId)
-        )
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .elementAt(0);
+        );
     }
 
     // just to avoid having unambigous methods
@@ -72,4 +70,5 @@ interface CommentRepositoryInternal {
     Mono<Comment> findById(Long id);
     Flux<Comment> findAllBy(Pageable pageable);
     Flux<Comment> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<Comment> findOneBy(Criteria criteria);
 }

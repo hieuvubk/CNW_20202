@@ -1,5 +1,6 @@
 package com.company.pm.interactionservice.web;
 
+import com.company.pm.common.utils.FileUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.interactionservice.domain.assembler.CommentRepresentationModelAssembler;
@@ -14,6 +15,7 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
@@ -58,10 +60,11 @@ public class CommentController {
         return commentService.countCommentsOfPost(postId);
     }
     
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<ResponseEntity<EntityModel<Comment>>> createComment(
         @PathVariable("id") Long postId,
-        @Valid CommentDTO commentDTO,
+        @RequestPart("image") Mono<FilePart> file,
+        @RequestPart("commentDTO") @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
@@ -69,6 +72,11 @@ public class CommentController {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> commentService.createCommentToPost(user.getId(), postId, commentDTO)
+                            .flatMap(comment -> file.ofType(FilePart.class)
+                                .flatMap(FileUtils::readBytesContent)
+                                .flatMap(bytes -> commentService.uploadCommentImage(postId, comment.getId(), bytes))
+                                .thenReturn(comment)
+                            )
                             .flatMap(comment -> assembler
                                 .toModel(comment, exchange)
                                 .map(model -> ResponseEntity
@@ -85,12 +93,13 @@ public class CommentController {
     
     @PostMapping(
         path = "/{commentId}/reply",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
     public Mono<ResponseEntity<EntityModel<Comment>>> replyComment(
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
-        @Valid CommentDTO commentDTO,
+        @RequestPart("image") Mono<FilePart> file,
+        @RequestPart("commentDTO") @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
@@ -98,6 +107,11 @@ public class CommentController {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> commentService.createReplyToComment(user.getId(), postId, commentId, commentDTO)
+                            .flatMap(reply -> file.ofType(FilePart.class)
+                                .flatMap(FileUtils::readBytesContent)
+                                .flatMap(bytes -> commentService.uploadCommentImage(postId, commentId, bytes))
+                                .thenReturn(reply)
+                            )
                             .flatMap(reply -> assembler
                                 .toModel(reply, exchange)
                                 .map(model -> ResponseEntity

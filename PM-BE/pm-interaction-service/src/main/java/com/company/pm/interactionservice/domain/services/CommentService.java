@@ -1,10 +1,14 @@
 package com.company.pm.interactionservice.domain.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.companyservice.domain.repositories.CompanyRepository;
+import com.company.pm.domain.Attachment;
 import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.domain.userservice.User;
+import com.company.pm.interactionservice.domain.repositories.AttachmentRepository;
 import com.company.pm.interactionservice.domain.repositories.CommentRepository;
 import com.company.pm.interactionservice.domain.repositories.PostRepository;
 import com.company.pm.interactionservice.domain.services.dto.CommentDTO;
@@ -18,15 +22,21 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
     
-    private final static String ENTITY_NAME = "comment";
+    private static final String ENTITY_NAME = "comment";
+    
+    private static final String UPLOAD_FOLDER = "personal-management-collection";
     
     private final CommentMapper mapper;
+    
+    private final Cloudinary cloudinary;
     
     private final CommentRepository commentRepository;
     
@@ -35,6 +45,8 @@ public class CommentService {
     private final UserRepository userRepository;
     
     private final CompanyRepository companyRepository;
+    
+    private final AttachmentRepository attachmentRepository;
     
     @Transactional(readOnly = true)
     public Flux<Comment> getCommentsOfPost(Long postId) {
@@ -109,13 +121,18 @@ public class CommentService {
     }
     
     private Mono<Comment> saveComment(User user, Comment comment) {
-        return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
-            .flatMap(company -> {
-                comment.setCompany(company);
+        if (comment.getCompanyId() == null) {
+            return commentRepository.save(comment);
+        } else {
+            return companyRepository.findByAdminAndId(user.getId(), comment.getCompanyId())
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.FORBIDDEN)))
+                .flatMap(company -> {
+                    comment.setCompany(company);
+                    comment.setCompanyId(company.getId());
             
-                return commentRepository.save(comment);
-            });
+                    return commentRepository.save(comment);
+                });
+        }
     }
     
     @Transactional
@@ -151,5 +168,39 @@ public class CommentService {
     private Mono<Post> findPost(Long postId) {
         return postRepository.findById(postId)
             .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", "post", "idnotfound")));
+    }
+    
+    @Transactional
+    public Mono<Attachment> uploadCommentImage(Long postId, Long commentId, byte[] bytes) {
+        if (bytes.length == 0) {
+            return Mono.empty();
+        }
+        
+        return commentRepository.findByIdAndPost(commentId, postId)
+            .switchIfEmpty(Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound")))
+            .map(comment -> {
+                try {
+                    return cloudinary.uploader().upload(bytes, ObjectUtils.asMap(
+                        "public_id", UPLOAD_FOLDER + "/attachments/comments/" + commentId + "-" + postId + "/" + Instant.now().getEpochSecond(),
+                        "overwrite", true,
+                        "format", "png",
+                        "resource_type", "auto",
+                        "tags", List.of("comment_attachment")
+                    ));
+                } catch (IOException e) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+                }
+            })
+            .flatMap(response -> {
+                String thumbUrl = response.get("secure_url").toString();
+                Attachment attachment = Attachment.builder()
+                    .postId(postId)
+                    .commentId(commentId)
+                    .createdAt(Instant.now())
+                    .thumbUrl(thumbUrl)
+                    .build();
+    
+                return attachmentRepository.save(attachment);
+            });
     }
 }

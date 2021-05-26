@@ -18,7 +18,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class LikeService {
 
-    private final static String ENTITY_NAME = "like";
+    private static final String ENTITY_NAME = "like";
     
     private final PostRepository postRepository;
     

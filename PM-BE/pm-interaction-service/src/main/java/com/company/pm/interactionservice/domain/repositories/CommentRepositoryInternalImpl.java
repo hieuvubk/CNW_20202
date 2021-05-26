@@ -81,6 +81,11 @@ class CommentRepositoryInternalImpl implements CommentRepositoryInternal {
         return createQuery(pageable, criteria).all();
     }
     
+    @Override
+    public Mono<Comment> findOneBy(Criteria criteria) {
+        return createQuery(null, criteria).one();
+    }
+    
     RowsFetchSpec<Comment> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = CommentSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
         columns.addAll(CompanySqlHelper.getColumns(companyTable, "company"));

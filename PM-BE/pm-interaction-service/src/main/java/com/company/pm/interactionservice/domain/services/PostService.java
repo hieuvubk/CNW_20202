@@ -199,6 +199,10 @@ public class PostService {
     
     @Transactional
     public Mono<Attachment> uploadUserPostImage(String userId, Long postId, byte[] bytes) {
+        if (bytes.length == 0) {
+            return Mono.empty();
+        }
+        
         return getPostOfUser(userId, postId)
             .map(post -> {
                 try {
@@ -218,6 +222,10 @@ public class PostService {
     
     @Transactional
     public Mono<Attachment> uploadCompanyPostImage(String userId, Long companyId, Long postId, byte[] bytes) {
+        if (bytes.length == 0) {
+            return Mono.empty();
+        }
+        
         return getPostOfCompanyByAdmin(userId, postId, companyId)
             .map(post -> {
                 try {
