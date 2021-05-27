@@ -33,11 +33,11 @@ const routes = [
         pattern: 'create_company',
         data: {},
         component: 'app-create-company',
-        resolve:()=> import('./pages/create-company/createCompany')
+        resolve:()=> import('./pages/create-company/CreateCompanyPage')
     },
     {
         name: 'company-page',
-        pattern: 'company',
+        pattern: 'company/:companyId',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),

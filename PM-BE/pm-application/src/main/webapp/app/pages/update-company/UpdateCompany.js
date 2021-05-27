@@ -5,11 +5,17 @@ import { CreatedCompanyStyle } from '../../pages/create-company/createCompany-st
 
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
+import patchPersonalProfile from "../../api/patchPersonalProfile";
+import postCompany from "../../api/postCompany";
+import {withRouter} from "../../core/router/malefic-router";
 
-class CreateCompany extends MaleficComponent{
+class UpdateCompany extends MaleficComponent{
+
     static get properties(){
         return{
-
+            tabShow: { type: Int16Array },
+            showModal: { type: Boolean },
+            formData: { type: FormData}
         }
     }
 
@@ -52,6 +58,44 @@ class CreateCompany extends MaleficComponent{
         super();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        ge
+    }
+
+    submitForm() {
+        let companyForm = this.shadowRoot.getElementById("main__basic__info__form");
+        companyForm.addEventListener("submit", (e) => e.preventDefault());
+        this.formData = new FormData(companyForm)
+
+        // Convert formData to a query string
+        const data = [...this.formData.entries()];
+        const asString = data
+            .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+            .join('&');
+
+        postCompany(asString)
+            .then(data => {
+                if(data) {
+                    // const alertBox = this.shadowRoot.querySelector('.show-alert');
+                    // alertBox.classList.add('active');
+                    console.log(data)
+                    setTimeout(function(){
+                        // alertBox.classList.remove('active')
+                    }, 2000);
+                }
+            })
+            .catch(() => {
+                console.log("Hello")
+                // const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
+                // alertBox.classList.add('active');
+                setTimeout(function(){
+                    // alertBox.classList.remove('active')
+                }, 2000);
+            });
+    }
+
+
     render(){
         return html`
 
@@ -67,21 +111,31 @@ class CreateCompany extends MaleficComponent{
                             <label for="name" >Name *</label></br>
                             <input type="text" id="name" name="name" 
                                 @keyup=${this.handleReviewName} required></br>
+                            
                             <label for="website">Website *</label></br>
                             <input type="url" id="website" name="website" required></br>
+                            
                             <label for="companySize">Company size *</label></br>
                             <input type="text" id="companySize" name="companySize"
                                 @keyup=${this.handleReviewSize} required></br>
+                            
                             <label for="companyType">Company type *</label></br>
                             <input type="text" id="companyType" name="companyType" required></br>
+                            
+                            <label for="industry">Industry *</label></br>
+                            <input type="text" id="industry" name="industry" required></br>
+                            
                             <label for="tagLine">Tag line *</label></br>
                             <input type="text" id="tagLine" name="tagLine" required></br>
+                            
                             <label for="logo">Logo *</label></br>
                             <input type="file" id="logo" name="logo" accept="image/*" 
                                 @change=${this.handleReviewLogo} required></br>
+                            
                             <label for="background">Background *</label></br>
                             <input type="file" id="background" name="background" accept="image/*" 
                                 @change=${this.handleReviewBackground} required></br>
+                            
                             <div id="term__agree">
                                 <div><input type="checkbox" id="term" name="term" required></div>
                                 <div for="term">I verify that I am an authorized representative of this organization 
@@ -89,7 +143,7 @@ class CreateCompany extends MaleficComponent{
                                 The organization and I agree to the additional terms for Pages.</div>
                             </div>
                             
-                            <button type="submit">Create company</button>
+                            <button type="submit" @click="${this.submitForm}">Create company</button>
                         </form>
                         <div id="filter__jobtitle">
                         </div>
@@ -134,4 +188,4 @@ class CreateCompany extends MaleficComponent{
     }
 }
 
-customElements.define("app-create-company", CreateCompany);
+customElements.define("app-create-company", UpdateCompany);

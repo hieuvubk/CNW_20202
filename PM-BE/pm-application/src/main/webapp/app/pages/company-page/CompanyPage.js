@@ -21,6 +21,8 @@ class CompanyPage extends MaleficComponent {
             avatar: {type:String},
             showIcon: {type: String},
 
+            id: {type: Int16Array},
+
             company : {type: JSON},
             showAlert: { type: Boolean }
 
@@ -40,6 +42,7 @@ class CompanyPage extends MaleficComponent {
         this.avatar ="content/images/avatar.png";
         this.showIcon = "plus";
         this.showAlert = false;
+        this.company = {};
 
         // getCompany()
         //     .then(res => {
@@ -62,9 +65,10 @@ class CompanyPage extends MaleficComponent {
 
     connectedCallback() {
         super.connectedCallback()
-        getCompany().then(res => {
+        getCompany(this.id).then(res => {
             this.company = res._embedded.companyList[0];
             console.log(this.company);
+            console.log(this.params);
         })
             .catch(e => console.log(e));
     }

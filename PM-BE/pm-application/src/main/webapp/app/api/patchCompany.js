@@ -1,6 +1,6 @@
 import { getXSRFToken } from '../shared/utils/header-utils';
-const patchCompany = (asString) => {
-    const url = `http://localhost:9002/api/v1/companies/${companyId}`;
+const patchCompany = (id, asString) => {
+    const url = `/api/v1/companies/${id}`;
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     headers.append('X-XSRF-TOKEN', getXSRFToken(document.cookie));
@@ -10,6 +10,6 @@ const patchCompany = (asString) => {
         body: asString,
     });
     return fetch(request)
-        .then(res => res.json())
+        .then(res => res.status)
 }
-export default patchCompany();
+export default patchCompany;
