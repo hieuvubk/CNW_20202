@@ -63,16 +63,16 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile/:id/:postId',
+        pattern: 'profile',///:id/:postId',
         data: {
             title: 'Profile'
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
-        authentication: {
+        /*authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }
+        }*/
     },
     {
         name: 'edit-profile',

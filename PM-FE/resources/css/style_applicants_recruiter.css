@@ -1,3 +1,89 @@
 main{
-    margin-top: 70px;
+    margin-top: 80px;
+    display: flex;
+}
+
+#main__left{
+    width: 300px;
+    background-color: aqua;
+    height: max-content;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2)
+}
+
+#main__right{
+    background-color: blanchedalmond;
+    margin: 10px;
+    width: 100%;
+}
+
+#filter{
+    width: 100%;
+    background-color: rgb(253, 253, 253);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#filter div{
+    margin-bottom: 10px;
+}
+
+#custom__filter{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px 5px 10px;
+    border-bottom: 1px solid black;
+}
+
+#filter select{
+    margin: 10px;
+    width: 250px;
+    outline: none;
+    height: 30px;
+}
+
+#applicants__amount{
+    background-color: white;
+    border: 1px solid black;
+}
+
+#applicants__brief__card{
+    border-bottom: 1px solid black;
+}
+
+#applicants__brief__card div{
+    margin: 5px;
+}
+
+#applicants__brief__card__header{
+    display: flex;
+}
+
+#applicants__brief__card__header__name{
+    flex: 1  1 auto;
+    background-color: teal;
+}
+
+.applicants__brief__card__info{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.applicants__brief__card__info__title{
+    font-weight: bold;
+}
+
+.applicants__brief__card__info__title{
+    text-align: right;
+}
+
+.applicants__brief__card__info__detail i{
+    font-size: 8px;
+    margin: 5px;
+}
+
+.applicants__brief__card__info__detail span{
+    font-style: italic;
+    font-size: 13px;
 }
