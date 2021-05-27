@@ -1,6 +1,5 @@
 package com.company.pm.interactionservice.web;
 
-import com.company.pm.common.utils.FileUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.interactionservice.domain.assembler.CommentRepresentationModelAssembler;
@@ -15,7 +14,6 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
@@ -28,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(
-    path = "/api/v1/posts/{id}/comments",
+    path = "/api/v1/posts/{id}",
     produces = MediaTypes.HAL_JSON_VALUE
 )
 @RequiredArgsConstructor
@@ -45,26 +43,28 @@ public class CommentController {
     
     private final UserService userService;
     
-    @GetMapping
+    @GetMapping(path = "/comments")
     public Mono<CollectionModel<EntityModel<Comment>>> getCommentsByPost(
         @PathVariable("id") Long postId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<Comment> cmtFlux = commentService.getCommentsOfPost(postId);
+        Flux<Comment> cmtFlux = commentService.getRepliesOfComment(postId);
         
         return assembler.toCollectionModel(cmtFlux, exchange);
     }
     
-    @GetMapping(path = "/count")
-    public Mono<Long> countCommentsByPost(@PathVariable("id") Long postId) {
+    @GetMapping(path = "/comments/count")
+    public Mono<Long> countCommentByPost(@PathVariable("id") Long postId) {
         return commentService.countCommentsOfPost(postId);
     }
     
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<ResponseEntity<EntityModel<Comment>>> createComment(
+    @PostMapping(
+        path = "/comments",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+    )
+    public Mono<ResponseEntity<EntityModel<Comment>>> creatComment(
         @PathVariable("id") Long postId,
-        @RequestPart("image") Mono<FilePart> file,
-        @RequestPart("commentDTO") @Valid CommentDTO commentDTO,
+        @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
@@ -72,11 +72,6 @@ public class CommentController {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> commentService.createCommentToPost(user.getId(), postId, commentDTO)
-                            .flatMap(comment -> file.ofType(FilePart.class)
-                                .flatMap(FileUtils::readBytesContent)
-                                .flatMap(bytes -> commentService.uploadCommentImage(postId, comment.getId(), bytes))
-                                .thenReturn(comment)
-                            )
                             .flatMap(comment -> assembler
                                 .toModel(comment, exchange)
                                 .map(model -> ResponseEntity
@@ -92,26 +87,19 @@ public class CommentController {
     }
     
     @PostMapping(
-        path = "/{commentId}/reply",
-        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+        path = "/comments/{commentId}/reply",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
-    public Mono<ResponseEntity<EntityModel<Comment>>> replyComment(
-        @PathVariable("id") Long postId,
+    public Mono<ResponseEntity<EntityModel<Comment>>> createReply(
         @PathVariable("commentId") Long commentId,
-        @RequestPart("image") Mono<FilePart> file,
-        @RequestPart("commentDTO") @Valid CommentDTO commentDTO,
+        @Valid CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
     ) {
         return exchange.getPrincipal()
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.createReplyToComment(user.getId(), postId, commentId, commentDTO)
-                            .flatMap(reply -> file.ofType(FilePart.class)
-                                .flatMap(FileUtils::readBytesContent)
-                                .flatMap(bytes -> commentService.uploadCommentImage(postId, commentId, bytes))
-                                .thenReturn(reply)
-                            )
+                        .flatMap(user -> commentService.createReplyToComment(user.getId(), commentId, commentDTO)
                             .flatMap(reply -> assembler
                                 .toModel(reply, exchange)
                                 .map(model -> ResponseEntity
@@ -127,11 +115,10 @@ public class CommentController {
     }
     
     @PatchMapping(
-        path = "/{commentId}",
+        path = "/comments/{commentId}",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
     )
     public Mono<ResponseEntity<EntityModel<Comment>>> updateComment(
-        @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
         CommentDTO commentDTO,
         @ApiIgnore ServerWebExchange exchange
@@ -140,7 +127,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.updateComment(user.getId(), postId, commentId, commentDTO)
+                        .flatMap(user -> commentService.updateComment(user.getId(), commentId, commentDTO)
                             .flatMap(comment -> assembler
                                 .toModel(comment, exchange)
                                 .map(model -> ResponseEntity
@@ -156,9 +143,8 @@ public class CommentController {
             });
     }
     
-    @DeleteMapping(path = "/{commentId}")
+    @DeleteMapping(path = "/comments/{commentId}")
     public Mono<ResponseEntity<Void>> deleteComment(
-        @PathVariable("id") Long postId,
         @PathVariable("commentId") Long commentId,
         @ApiIgnore ServerWebExchange exchange
     ) {
@@ -166,7 +152,7 @@ public class CommentController {
             .flatMap(principal -> {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
-                        .flatMap(user -> commentService.deleteComment(user.getId(), postId, commentId)
+                        .flatMap(user -> commentService.deleteComment(user.getId(), commentId)
                             .thenReturn(ResponseEntity.noContent()
                                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, commentId.toString()))
                                 .build()
@@ -177,22 +163,38 @@ public class CommentController {
                 }
             });
     }
-
+    
+//<<<<<<< HEAD
+//    @GetMapping(path = "/comments/{id}/replies/count")
+//    public Mono<Long> countReply(@PathVariable("id") Long cmtId) {
+//        return commentService.countRepliesByComment(cmtId);
+//    }
+//
+//    @GetMapping(path = "/comments/{id}/replies")
+//    public Mono<CollectionModel<EntityModel<Comment>>> getReplies(
+//        @PathVariable("id") Long cmtId,
+//        @ApiIgnore ServerWebExchange exchange
+//    ) {
+//        Flux<Comment> cmtFlux = commentService.getRepliesByComment(cmtId);
+//
+//        return assembler.toCollectionModel(cmtFlux, exchange);
+//    }
+=======
     @GetMapping(path = "/comments/{commentId}/replies/count")
     public Mono<Long> countReply(
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long cmtId
     ) {
-        return commentService.countRepliesOfComment(postId, cmtId);
+        return commentService.countRepliesByComment(postId, cmtId);
     }
     
-    @GetMapping(path = "/{commentId}/replies")
-    public Mono<CollectionModel<EntityModel<Comment>>> getRepliesOfComment(
+    @GetMapping(path = "/comments/{commentId}/replies")
+    public Mono<CollectionModel<EntityModel<Comment>>> getReplies(
         @PathVariable("id") Long postId,
         @PathVariable("commentId") Long cmtId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<Comment> cmtFlux = commentService.getRepliesOfComment(postId, cmtId);
+        Flux<Comment> cmtFlux = commentService.getRepliesByComment(postId, cmtId);
         
         return assembler.toCollectionModel(cmtFlux, exchange);
     }

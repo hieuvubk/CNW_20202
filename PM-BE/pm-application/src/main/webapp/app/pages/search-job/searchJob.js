@@ -3,9 +3,9 @@ import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
 import { searchJobStyle} from './search-job-style';
 
-import '../../components/layouts/Header/Header';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
 import '../../components/Sidebar/PeopleSidebar';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/brief-job-card/briefJobCard';
 import '../../components/recruit-detail-card/recruitDetailCard';
 import '../../components/recruit-detail-card/poupJobtype';

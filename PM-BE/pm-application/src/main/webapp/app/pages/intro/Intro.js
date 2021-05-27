@@ -3,8 +3,8 @@ import { html } from '../../core/components/malefic-html';
 import { introStyle } from './intro-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
-import '../../components/layouts/Header/Intro/IntroHeader';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/intro/IntroHeader.js';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/Button/Button';
 
 class Intro extends MaleficComponent {

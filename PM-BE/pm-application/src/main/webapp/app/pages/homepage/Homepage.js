@@ -3,8 +3,8 @@ import { html } from '../../core/components/malefic-html';
 import { homepageStyle } from './homepage-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
-import '../../components/layouts/Header/Header';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/Button/Button';
 import '../../components/PostCard/PostCard';
 import '../../components/Modal/UploadPost/UploadPost';

@@ -3,9 +3,9 @@ import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
 import { popupCreatedatStyle} from './popupCreatedat-style';
 
-import '../../components/layouts/Header/Header';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
 import '../../components/Sidebar/PeopleSidebar';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 
 class PopupCreatedat extends MaleficComponent{
     static get properties(){

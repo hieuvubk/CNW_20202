@@ -4,9 +4,9 @@ import { commonStyles } from '../../shared/styles/common-styles';
 import { profileStyle } from './profile-style';
 import { withRouter } from '../../core/router/malefic-router';
 
-import '../../components/layouts/Header/Header';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
 import '../../components/Sidebar/PeopleSidebar';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/Modal/ContactInfo/ContactInfo';
 
 class Profile extends withRouter(MaleficComponent) {
@@ -77,7 +77,7 @@ class Profile extends withRouter(MaleficComponent) {
             
                         <div id="info">
                             <div id="personal-info">
-                                <h1 id="personal-name">Name</h1>
+                                <h1 id="personal-name"></h1>
                                 <h3 id="personal-jobs">Jobs</h3>
                                 <h4 id="personal-address">Address</h4>
                                 <h4 id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
