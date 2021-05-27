@@ -23,7 +23,7 @@ export const personalInfoStyle = css`
         text-align: left;
         border: 1px solid #ccd0d5;
         border-radius: 4px;
-        width: 90%;
+        width: 95%;
         height: 30px;
         line-height: 20px;
         margin-bottom: 2%;
@@ -104,5 +104,13 @@ export const personalInfoStyle = css`
         background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
         transform: scale(1.1);
         color: #fff;
+    }
+
+    .show-alert, .show-alert-fail {
+        display: none
+    }
+
+    .show-alert.active, .show-alert-fail.active {
+        display: block;
     }
 `;

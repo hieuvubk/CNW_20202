@@ -30,6 +30,7 @@ public class CommentRowMapper implements BiFunction<Row, String, Comment> {
         entity.setContent(converter.fromRow(row, prefix + "_content", String.class));
         entity.setCreatedAt(converter.fromRow(row, prefix + "_created_at", Instant.class));
         entity.setUpdatedAt(converter.fromRow(row, prefix + "_updated_at", Instant.class));
+        entity.setCompanyId(converter.fromRow(row, prefix + "_company_id", Long.class));
         entity.setParentCommentId(converter.fromRow(row, prefix + "_parent_comment_id", Long.class));
         entity.setPostId(converter.fromRow(row, prefix + "_post_id", Long.class));
         entity.setAuthorId(converter.fromRow(row, prefix + "_author_id", String.class));

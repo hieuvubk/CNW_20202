@@ -13,13 +13,7 @@ const notAuthorized = {
 };
 
 const routes = [
-    // {
-    //     name: 'cv-template',
-    //     pattern: '',
-    //     data: {},
-    //     component: 'cv-template',
-    //     resolve: () => import('./pages/cv/CVTemplate')
-    // },
+
     {
         name: 'homepage',
         pattern: 'home',
@@ -69,7 +63,7 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile',
+        pattern: 'profile/:id/:postId',
         data: {
             title: 'Profile'
         },

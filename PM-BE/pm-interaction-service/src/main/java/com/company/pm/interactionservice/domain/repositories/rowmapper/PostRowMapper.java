@@ -33,6 +33,7 @@ public class PostRowMapper implements BiFunction<Row, String, Post> {
         entity.setCreatedAt(converter.fromRow(row, prefix + "_created_at", Instant.class));
         entity.setUpdatedAt(converter.fromRow(row, prefix + "_updated_at", Instant.class));
         entity.setAuthorId(converter.fromRow(row, prefix + "_author_id", String.class));
+        entity.setCompanyId(converter.fromRow(row, prefix + "_company_id", Long.class));
         return entity;
     }
 }

@@ -15,8 +15,10 @@ import reactor.core.publisher.Mono;
 @SuppressWarnings("unused")
 @Repository
 public interface LikeRepository extends R2dbcRepository<Like, Long>, LikeRepositoryInternal {
-    @Query("SELECT * FROM likes entity WHERE entity.post_id = :id")
-    Flux<Like> findByPost(Long id);
+    
+    default Flux<Like> findByPost(Long id) {
+        return findAllBy(null, Criteria.where("post_id").is(id));
+    }
 
     @Query("SELECT * FROM likes entity WHERE entity.post_id IS NULL")
     Flux<Like> findAllWherePostIsNull();

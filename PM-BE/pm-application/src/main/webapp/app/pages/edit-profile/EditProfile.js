@@ -3,14 +3,13 @@ import { html } from '../../core/components/malefic-html';
 import { editProfileStyle } from './edit-profile-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
-
 import '../../components/layouts/Header/Header';
 import '../../components/layouts/footer/SmallFooter';
 import '../../components/my-profile-info/PersonalInfo';
 import '../../components/my-profile-info/ChangePass';
 import '../../components/Modal/UploadAvatar/UploadAvatar';
 import '../../components/Button/Button';
-import { updateprofile } from '../../store/actions/updateProfile';
+import '../../components/my-profile-info/WorkExperience';
 
 class EditProfile extends MaleficComponent {
     static get properties() {
@@ -60,8 +59,8 @@ class EditProfile extends MaleficComponent {
                                 <span class="setting-title">Personal Info</span>
                             </a>
                             <a @click="${() => this.showTab(1)}" class="tab" id="${this.tabShow == 1 ? 'tab-active' : ''}">
-                                <i class="fas fa-lock"></i>
-                                <span class="setting-title">Change Password</span>
+                                <i class="fas fa-briefcase"></i>
+                                <span class="setting-title">Work Experience</span>
                             </a>
                             <a @click="${() => this.showTab(2)}" class="tab" id="${this.tabShow == 2 ? 'tab-active' : ''}">
                                 <i class="far fa-address-card"></i>
@@ -80,7 +79,7 @@ class EditProfile extends MaleficComponent {
                         </div>
         
                         <div class="profile tab-show" id="${this.tabShow == 1 ? 'tab-show-active' : ''}">
-                            <change-pass></change-pass>
+                            <work-experience></work-experience>
                         </div>
         
                         <div class="profile tab-show" id="${this.tabShow == 2 ? 'tab-show-active' : ''}">

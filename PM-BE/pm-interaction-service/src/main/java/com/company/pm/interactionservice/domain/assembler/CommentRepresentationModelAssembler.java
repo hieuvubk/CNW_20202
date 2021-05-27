@@ -5,7 +5,10 @@ import com.company.pm.domain.interactionservice.Comment;
 import com.company.pm.interactionservice.web.CommentController;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.server.ServerWebExchange;
+
+import java.util.Map;
 
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.*;
 
@@ -29,6 +32,11 @@ public class CommentRepresentationModelAssembler
     
     @Override
     protected WebFluxBuilder initLinkBuilder(ServerWebExchange exchange) {
-        return linkTo(methodOn(CommentController.class).getComments(exchange), exchange);
+        Map<String, String> attributes = exchange.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        assert attributes != null;
+        
+        return linkTo(methodOn(CommentController.class).getCommentsByPost(
+            Long.parseLong(attributes.get("id")), exchange
+        ), exchange);
     }
 }

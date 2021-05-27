@@ -2,15 +2,12 @@ import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { personalInfoStyle } from './personal-info-style';
 import { commonStyles } from '../../shared/styles/common-styles';
-// import {
-//     updateProfile
-// } from '../../store/actions/updateProfile';
 
 import '../Button/Button';
 import getProfile from '../../api/getProfile';
-import getAccount from '../../api/getAccount';
-import updatePersonalInfo from '../../api/updatePersonalInfo';
-// import store from '../../store/store';
+import patchPersonalProfile from '../../api/patchPersonalProfile';
+import '../Alert/AlertSuccess';
+import '../Alert/AlertFail';
 
 class PersonalInfo extends MaleficComponent {
     static get styles() {
@@ -31,43 +28,70 @@ class PersonalInfo extends MaleficComponent {
             industry: { type: String },
             location: { type: String },
             phoneNumber: { type: String },
+            showAlert: {type: Boolean}
         };
     }
 
-    submitForm() {
-        // const personalForm = this.shadowRoot.querySelector("#personalForm");
-        // const request = new XMLHttpRequest();
-        // let config = {
-        //     headers: {
-        //       'Content-Type': 'multipart/form-data',
-        //       'X-XSRF-TOKEN': '1be6e0e2-8ab6-4e71-a4c0-e050d33153f0',
-        //     }
-        //   }
-        // request.open("PATCH", "http://localhost:9002/api/v1/profile", config);
-        // request.onload = function() {
-        //     console.log(request.responseText);
-        // }
-        // request.send(new FormData(personalForm));
-        updatePersonalInfo('Hello')
-            .then(res => console.log(res))
-            .catch(e => console.log(e));
-    }
-
-    render() {
+    constructor() {
+        super();
         getProfile()
             .then(res => {
                 this.about = res.about;
                 this.address = res.address;
                 this.bgImageUrl = res.bgImageUrl;
-                this.birthday = res.birthday;
+                this.birthday = new Date(res.birthday);
                 this.country = res.country;
                 this.headline = res.headline;
                 this.industry = res.industry;
                 this.location = res.location;
                 this.phoneNumber = res.phoneNumber;
+                this.shadowRoot.querySelector('#day').value = this.birthday.getDate();
+                this.shadowRoot.querySelector('#month').value = this.birthday.getMonth() + 1;
+                this.shadowRoot.querySelector('#year').value = this.birthday.getFullYear();
             })
             .catch(e => console.log(e));
+            this.showAlert = false;
+    }
 
+    submitForm() {
+        const personalForm = this.shadowRoot.querySelector("#personalForm");
+        personalForm.addEventListener("submit", (e) => e.preventDefault());
+        const formData = new FormData(personalForm);
+
+        const day = this.shadowRoot.querySelector('#day');
+        const month = this.shadowRoot.querySelector('#month');
+        const year = this.shadowRoot.querySelector('#year');
+        const birthday = new Date(year.value, month.value - 1, day.value);
+        const ISODate = new Date(birthday.getTime() - (birthday.getTimezoneOffset() * 60000)).toISOString();
+        formData.append('birthday', ISODate);
+
+        // Convert formData to a query string
+        const data = [...formData.entries()];
+        const asString = data
+            .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+            .join('&');
+
+        patchPersonalProfile(asString)
+            .then(data => {
+                if(data) {
+                    const alertBox = this.shadowRoot.querySelector('.show-alert');
+                    alertBox.classList.add('active');
+                    setTimeout(function(){ 
+                        alertBox.classList.remove('active')
+                    }, 2000);
+                }
+            })
+            .catch(() => {
+                console.log("Hello")
+                const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
+                alertBox.classList.add('active');
+                setTimeout(function(){ 
+                    alertBox.classList.remove('active')
+                }, 2000);
+            });
+    }
+
+    render() {
         const days = [];
         const months = [];
         const years = [];
@@ -83,14 +107,12 @@ class PersonalInfo extends MaleficComponent {
 
         return html`
             ${commonStyles}
-         
             <h1>Personal Information</h1>
             <form id="personalForm">
                 <div class="row">
                 <div class="col span-1-of-4 title">
                     <h5>About</h5>
                     <h5>Address</h5>
-                    <h5>Cover Picture</h5>
                     <h5>Date Of Birth</h5>
                     <h5>Country</h5>
                     <h5>Headline</h5>
@@ -101,40 +123,38 @@ class PersonalInfo extends MaleficComponent {
                 <div class="col span-3-of-4 info">
                     <input type="text" class="input" id="about" name="about" value="${this.about}">
                     <input type="text" class="input" id="address" name="address" value="${this.address}">
-                    <input type="text" class="input" id="bgImageUrl" name="bgImageUrl" value="${this.bgImageUrl}">
                     <div class="dob" data-="selectors">
-                        <select class="selector" aria-label="Day" name="birthday_day" id="birthday">
+                        <select class="selector" aria-label="Day" id="day">
                             <option value="0">Day</option>
-                            ${days.map((day) =>
-                                html`<option value="${day}">${day}</option>`
-                            )}
+                            ${days.map((day) => html`<option value="${day}">${day}</option>`)}
                         </select>
-                        <select class="selector" aria-label="Month" name="birthday_month" id="month">
+                        <select class="selector" aria-label="Month" id="month">
                             <option value="0">Month</option>
-                            ${months.map((month) =>
-            html`<option value="${month}">${month}</option>`
-        )}
+                            ${months.map((month) => html`<option value="${month}">${month}</option>`)}
                         </select>
-                        <select class="selector" aria-label="Year" name="birthday_year" id="year">
+                        <select class="selector" aria-label="Year" id="year">
                             <option value="0">Year</option>
-                            ${years.map((year) =>
-            html`<option value="${year}">${year}</option>`
-        )}
+                            ${years.map((year) => html`<option value="${year}">${year}</option>`)}
                         </select>
                     </div>
-                    <input type="text" class="input" id="country" value="${this.country}">
-                    <input type="text" class="input" id="headline" value="${this.headline}">
-                    <input type="text" class="input" id="address" value="${this.industry}">
-                    <input type="text" class="input" id="about" value="${this.location}">
-                    <input type="text" class="input" id="industry" value="${this.phoneNumber}">
+                    <input type="text" class="input" id="country" name="country" value="${this.country}">
+                    <input type="text" class="input" id="headline" name="headline" value="${this.headline}">
+                    <input type="text" class="input" id="address" name="industry" value="${this.industry}">
+                    <input type="text" class="input" id="location" name="location" value="${this.location}">
+                    <input type="text" class="input" id="phoneNumber" name="phoneNumber" value="${this.phoneNumber}">
                     <div class="update-btn">
-                        <app-button btnclass="btn-save" @click="${this.submitForm}">Save</app-button>
-                        <app-button btnclass="btn-cancel">Cancel</app-button>
+                        <button class="btn-save" @click="${this.submitForm}">Save</button>
+                        <button type="reset" class="btn-cancel">Cancel</button>
                     </div>
                 </div>
             </div>
             </form>
-           
+            <div class="show-alert">
+                <app-alert-success></app-alert-success>
+            </div>
+            <div class="show-alert-fail">
+                <app-alert-fail></app-alert-fail>
+            </div>
         `;
     }
 }

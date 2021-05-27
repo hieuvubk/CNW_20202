@@ -33,13 +33,9 @@ public interface CommentLikeRepository extends R2dbcRepository<CommentLike, Long
     Mono<Long> countByComment(Long commentId);
     
     default Mono<CommentLike> findByUserAndComment(String userId, Long commentId) {
-        return findAllBy(null, Criteria.where("user_id").is(userId)
+        return findOneBy(Criteria.where("user_id").is(userId)
             .and("comment_id").is(commentId)
-        )
-            .switchIfEmpty(Mono.error(
-                new BadRequestAlertException("Entity not found", "comment_like", "idnotfound"))
-            )
-            .elementAt(0);
+        );
     }
 
     // just to avoid having unambigous methods
@@ -62,4 +58,5 @@ interface CommentLikeRepositoryInternal {
     Mono<CommentLike> findById(Long id);
     Flux<CommentLike> findAllBy(Pageable pageable);
     Flux<CommentLike> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<CommentLike> findOneBy(Criteria criteria);
 }

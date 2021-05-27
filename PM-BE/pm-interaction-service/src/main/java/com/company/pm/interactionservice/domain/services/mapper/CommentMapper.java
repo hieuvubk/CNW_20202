@@ -13,6 +13,12 @@ public class CommentMapper {
     private final ModelMapper mapper;
     
     public Comment commentDTOToComment(CommentDTO commentDTO) {
-        return mapper.map(commentDTO, Comment.class);
+        Comment comment = mapper.map(commentDTO, Comment.class);
+        
+        if (commentDTO.getCompanyId() != null) {
+            comment.setCompanyId(Long.parseLong(commentDTO.getCompanyId()));
+        }
+        
+        return comment;
     }
 }

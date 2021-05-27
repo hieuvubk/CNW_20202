@@ -4,6 +4,8 @@ import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
 
 import com.company.pm.common.services.EntityManager;
+import com.company.pm.companyservice.domain.repositories.CompanySqlHelper;
+import com.company.pm.companyservice.domain.repositories.rowmapper.CompanyRowMapper;
 import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.interactionservice.domain.repositories.rowmapper.PostRowMapper;
 import com.company.pm.userservice.domain.repositories.UserSqlHelper;
@@ -35,51 +37,59 @@ import reactor.core.publisher.Mono;
  */
 @SuppressWarnings("unused")
 class PostRepositoryInternalImpl implements PostRepositoryInternal {
-
+    
     private final DatabaseClient db;
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
-
+    
+    private final CompanyRowMapper companyMapper;
     private final UserRowMapper userMapper;
     private final PostRowMapper postMapper;
-
+    
     private static final Table entityTable = Table.aliased("posts", EntityManager.ENTITY_ALIAS);
+    private static final Table companyTable = Table.aliased("companies", "company");
     private static final Table authorTable = Table.aliased("users", "author");
-
+    
     public PostRepositoryInternalImpl(
         R2dbcEntityTemplate template,
         EntityManager entityManager,
+        CompanyRowMapper companyMapper,
         UserRowMapper userMapper,
         PostRowMapper postMapper
     ) {
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
+        this.companyMapper = companyMapper;
         this.userMapper = userMapper;
         this.postMapper = postMapper;
     }
-
+    
     @Override
     public Flux<Post> findAllBy(Pageable pageable) {
         return findAllBy(pageable, null);
     }
-
+    
     @Override
     public Flux<Post> findAllBy(Pageable pageable, Criteria criteria) {
         return createQuery(pageable, criteria).all();
     }
-
+    
     RowsFetchSpec<Post> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = PostSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+        columns.addAll(CompanySqlHelper.getColumns(companyTable, "company"));
         columns.addAll(UserSqlHelper.getColumns(authorTable, "author"));
         SelectFromAndJoinCondition selectFrom = Select
             .builder()
             .select(columns)
             .from(entityTable)
+            .leftOuterJoin(companyTable)
+            .on(Column.create("company_id", entityTable))
+            .equals(Column.create("id", companyTable))
             .leftOuterJoin(authorTable)
             .on(Column.create("author_id", entityTable))
             .equals(Column.create("id", authorTable));
-
+        
         String select = entityManager.createSelect(selectFrom, Post.class, pageable, criteria);
         String alias = entityTable.getReferenceName().getReference();
         String selectWhere = Optional
@@ -98,28 +108,29 @@ class PostRepositoryInternalImpl implements PostRepositoryInternal {
             .orElse(select); // TODO remove once https://github.com/spring-projects/spring-data-jdbc/issues/907 will be fixed
         return db.sql(selectWhere).map(this::process);
     }
-
+    
     @Override
     public Flux<Post> findAll() {
         return findAllBy(null, null);
     }
-
+    
     @Override
     public Mono<Post> findById(Long id) {
         return createQuery(null, where("id").is(id)).one();
     }
-
+    
     private Post process(Row row, RowMetadata metadata) {
         Post entity = postMapper.apply(row, "e");
+        entity.setCompany(companyMapper.apply(row, "company"));
         entity.setAuthor(userMapper.apply(row, "author"));
         return entity;
     }
-
+    
     @Override
     public <S extends Post> Mono<S> insert(S entity) {
         return entityManager.insert(entity);
     }
-
+    
     @Override
     public <S extends Post> Mono<S> save(S entity) {
         if (entity.getId() == null) {
@@ -136,7 +147,7 @@ class PostRepositoryInternalImpl implements PostRepositoryInternal {
                 );
         }
     }
-
+    
     @Override
     public Mono<Integer> update(Post entity) {
         //fixme is this the proper way?
@@ -145,7 +156,7 @@ class PostRepositoryInternalImpl implements PostRepositoryInternal {
 }
 
 class PostSqlHelper {
-
+    
     static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
         columns.add(Column.aliased("id", table, columnPrefix + "_id"));
@@ -153,7 +164,8 @@ class PostSqlHelper {
         columns.add(Column.aliased("visionable", table, columnPrefix + "_visionable"));
         columns.add(Column.aliased("created_at", table, columnPrefix + "_created_at"));
         columns.add(Column.aliased("updated_at", table, columnPrefix + "_updated_at"));
-
+        
+        columns.add(Column.aliased("company_id", table, columnPrefix + "_company_id"));
         columns.add(Column.aliased("author_id", table, columnPrefix + "_author_id"));
         return columns;
     }

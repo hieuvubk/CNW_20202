@@ -1,6 +1,5 @@
 package com.company.pm.interactionservice.domain.services.mapper;
 
-import com.company.pm.common.enumeration.JobType;
 import com.company.pm.common.enumeration.Visionable;
 import com.company.pm.domain.interactionservice.Post;
 import com.company.pm.interactionservice.domain.services.dto.PostDTO;

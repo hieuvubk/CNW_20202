@@ -2,16 +2,15 @@ package com.company.pm.interactionservice.web;
 
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.domain.interactionservice.Like;
+import com.company.pm.interactionservice.domain.assembler.LikeRepresentationModelAssembler;
 import com.company.pm.interactionservice.domain.services.LikeService;
-import com.company.pm.userservice.domain.assembler.PublicUserRepresentationModelAssembler;
 import com.company.pm.userservice.domain.services.UserService;
-import com.company.pm.userservice.domain.services.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.MediaTypes;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -34,20 +33,20 @@ public class LikeController {
     
     private static final String ENTITY_NAME = "like";
     
-    private final PublicUserRepresentationModelAssembler userAssembler;
+    private final LikeRepresentationModelAssembler assembler;
     
     private final LikeService likeService;
     
     private final UserService userService;
     
     @GetMapping(path = "/likes")
-    public Mono<CollectionModel<EntityModel<UserDTO>>> getUserLike(
+    public Mono<CollectionModel<EntityModel<Like>>> getUserLikes(
         @PathVariable("id") Long postId,
         @ApiIgnore ServerWebExchange exchange
     ) {
-        Flux<UserDTO> userFlux = likeService.getUsersLikePost(postId);
+        Flux<Like> likeFlux = likeService.getUsersLikePost(postId);
         
-        return userAssembler.toCollectionModel(userFlux, exchange);
+        return assembler.toCollectionModel(likeFlux, exchange);
     }
     
     @GetMapping(path = "/likes/count")
@@ -55,11 +54,8 @@ public class LikeController {
         return likeService.countUsersLikePost(postId);
     }
     
-    @PostMapping(
-        path = "/action/like",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
-    )
-    public Mono<ResponseEntity<Like>> likePost(
+    @PostMapping(path = "/action/like")
+    public Mono<ResponseEntity<EntityModel<Like>>> likePost(
         @PathVariable("id") Long postId,
         @ApiIgnore ServerWebExchange exchange
     ) {
@@ -68,10 +64,13 @@ public class LikeController {
                 if (principal instanceof AbstractAuthenticationToken) {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> likeService.likePostByUser(user.getId(), postId)
-                            .map(like -> ResponseEntity
-                                .ok()
-                                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, like.getId().toString()))
-                                .body(like)
+                            .flatMap(like -> assembler
+                                .toModel(like, exchange)
+                                .map(model -> ResponseEntity
+                                    .created(model.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, like.getId().toString()))
+                                    .body(model)
+                                )
                             )
                         );
                 } else {
@@ -91,7 +90,7 @@ public class LikeController {
                     return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal)
                         .flatMap(user -> likeService.unlikePostByUser(user.getId(), postId)
                             .thenReturn(ResponseEntity.noContent()
-                                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, postId.toString()))
+                                .headers(HeaderUtil.createAlert(applicationName, "Unlike post", postId.toString()))
                                 .build()
                             )
                         );

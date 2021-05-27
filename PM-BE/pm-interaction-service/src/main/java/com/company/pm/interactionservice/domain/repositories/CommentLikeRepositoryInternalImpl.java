@@ -1,7 +1,6 @@
 package com.company.pm.interactionservice.domain.repositories;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
-import static org.springframework.data.relational.core.query.Query.query;
 
 import com.company.pm.common.services.EntityManager;
 import com.company.pm.domain.interactionservice.CommentLike;
@@ -11,13 +10,11 @@ import com.company.pm.userservice.domain.repositories.UserSqlHelper;
 import com.company.pm.userservice.domain.repositories.rowmapper.UserRowMapper;
 import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
-import java.time.Instant;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.BiFunction;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.data.relational.core.query.Criteria;
@@ -73,7 +70,12 @@ class CommentLikeRepositoryInternalImpl implements CommentLikeRepositoryInternal
     public Flux<CommentLike> findAllBy(Pageable pageable, Criteria criteria) {
         return createQuery(pageable, criteria).all();
     }
-
+    
+    @Override
+    public Mono<CommentLike> findOneBy(Criteria criteria) {
+        return createQuery(null, criteria).one();
+    }
+    
     RowsFetchSpec<CommentLike> createQuery(Pageable pageable, Criteria criteria) {
         List<Expression> columns = CommentLikeSqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
         columns.addAll(UserSqlHelper.getColumns(userTable, "user"));

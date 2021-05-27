@@ -25,9 +25,7 @@ public interface PersonalProfileRepository extends R2dbcRepository<PersonalProfi
     Mono<PersonalProfile> findById(Long id);
     
     default Mono<PersonalProfile> findByUser(String userId) {
-        return findAllBy(null, Criteria.where("user_id").is(userId))
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .elementAt(0);
+        return findOneBy(Criteria.where("user_id").is(userId));
     }
     
     @Override
@@ -43,4 +41,5 @@ interface PersonalProfileRepositoryInternal {
     Mono<PersonalProfile> findById(Long id);
     Flux<PersonalProfile> findAllBy(Pageable pageable);
     Flux<PersonalProfile> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<PersonalProfile> findOneBy(Criteria criteria);
 }
