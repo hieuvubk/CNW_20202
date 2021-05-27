@@ -35,6 +35,13 @@ const routes = [
         resolve:()=> import('./pages/search-job/searchJob')
     },
     {
+        name: 'create-company',
+        pattern: 'create_company',
+        data: {},
+        component: 'app-create-company',
+        resolve:()=> import('./pages/create-company/createCompany')
+    },
+    {
         name: 'company-page',
         pattern: 'company',
         data:{},

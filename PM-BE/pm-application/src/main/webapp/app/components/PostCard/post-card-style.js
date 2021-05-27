@@ -36,6 +36,7 @@ export const postCardStyle = css`
 
     .news-react{
         background-color: red white;
+        margin-bottom: 0 !important;
     }
 
     #poster-avatar{
@@ -66,6 +67,7 @@ export const postCardStyle = css`
         width: 100%;
         display: flex;
         border-top: 0.5px solid rgb(201, 201, 201);
+
     }
 
     .react-icon {
@@ -81,6 +83,7 @@ export const postCardStyle = css`
 
     .react-icon i {
         margin-right: 5px;
+        font-weight: bold;
     }
 
     .react-icon:hover {
@@ -90,6 +93,21 @@ export const postCardStyle = css`
 
     .react-icon:active {
         color: #265077;
-        font-weight: bold;
+        
     }
+
+    /*Comment======================================*/
+    .comment{
+        background-color: whitesmoke;
+        padding: 10px;
+        margin-top: 0 !important;
+        display: none;
+        border-top: 0.5px solid rgb(201, 201, 201);
+    }
+
+    .display-comment{
+        display: block;
+    }
+
+    
 `;

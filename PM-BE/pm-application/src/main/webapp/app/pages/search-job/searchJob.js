@@ -167,12 +167,14 @@ class SearchJob extends MaleficComponent{
                     type="Full-time"
                     industry="Electrical & Electronic Manufactoring"
                     function="Engineering"
-                    jobBriefInfo="Example Info"
+                    jobBriefInfo="List info"
                     companyBriefInfo="Example Info"> 
                 </recruit-detail-card>
             </div>
         </div>
 
+
+    
     </div>
         `;
     }

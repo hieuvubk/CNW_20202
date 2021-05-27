@@ -4,6 +4,7 @@ import { postCardStyle } from './post-card-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
 import '../Button/Button';
+import '../PostCard/commentCard';
 
 class PostCard extends MaleficComponent {
     static get styles() {
@@ -17,8 +18,13 @@ class PostCard extends MaleficComponent {
             numFollowers: {type: Int32Array},
             time: {type: Date},
             postText: {type: String},
-            postImg: {type: String}
+            postImg: {type: String},
+            showComment:{type:String}
         };
+    }
+
+    handleToggleShowComment(){
+        this.showComment = (this.showComment=="block")?"none":"block";
     }
 
     constructor() {
@@ -54,8 +60,15 @@ class PostCard extends MaleficComponent {
                 <div class="news-react">
                     <div class="react">
                         <button class="react-icon"><i class="fas fa-thumbs-up"></i>Like</button>
-                        <button class="react-icon"><i class="fas fa-comment-dots"></i>Comment</button>
+                        <button class="react-icon" @click="${this.handleToggleShowComment}"><i class="fas fa-comment-dots"></i>Comment</button>
                     </div>
+                </div>
+
+                <div class="comment" id="comment" style="display:${this.showComment};">
+                    <comment-card></comment-card>
+                    <form>
+                        <input type="text">
+                    </form>
                 </div>
             </div>
         `;
