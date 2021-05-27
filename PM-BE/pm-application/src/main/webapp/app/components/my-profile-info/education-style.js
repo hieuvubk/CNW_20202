@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const workExperienceStyle = css`
+export const educationStyle = css`
     :host {
         font-size: 1rem;
     }
@@ -20,7 +20,7 @@ export const workExperienceStyle = css`
     }
 
     app-button {
-        margin-left: 39%;
+        margin-left: 55.5%;
         margin-top: 2%;
     }
 

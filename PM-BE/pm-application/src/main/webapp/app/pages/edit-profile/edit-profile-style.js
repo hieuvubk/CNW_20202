@@ -89,7 +89,6 @@ export const editProfileStyle = css`
 
     .sidemenu {
         background-color: transparent;
-        margin-left: 6%;
     }
 
     .sidemenu nav a {
@@ -116,6 +115,10 @@ export const editProfileStyle = css`
 
     .setting-title {
         margin-left: 10px;
+    }
+
+    .account-info {
+        padding-right: 5%;
     }
 
     .account-info .profile {
