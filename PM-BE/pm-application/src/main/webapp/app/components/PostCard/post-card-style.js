@@ -109,5 +109,29 @@ export const postCardStyle = css`
         display: block;
     }
 
+    .news-header{
+        display: flex;
+        justify-content: space-between;
+    }
     
+    .edit{
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .edit:hover{
+        background-color: gray;
+    }
+
+    .edit i{
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
 `;

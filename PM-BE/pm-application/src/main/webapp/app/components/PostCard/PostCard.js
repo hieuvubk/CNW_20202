@@ -50,6 +50,10 @@ class PostCard extends MaleficComponent {
                             <div style="font-size: 12px;">${this.time}</div>
                         </div>
                     </div>
+
+                    <div class="edit">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
                 </div>
 
                 <div class="recruit-info">

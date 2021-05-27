@@ -242,4 +242,11 @@ export const profileStyle = css`
         }
     }
 
+    .skill__list, .certification__list, .workExperience__list, 
+        .project__list, .publication__list{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: white;
+        }
+
 `;
