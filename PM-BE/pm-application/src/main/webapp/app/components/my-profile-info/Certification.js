@@ -1,16 +1,16 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
-import { workExperienceStyle } from './work-experience-style';
+import { certificationStyle } from './cert-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
 import '../Button/Button';
-import '../Modal/UploadWorkExperience/UploadWork'
-import '../WorkCard/WorkCard';
-import getWorkExperience from '../../api/getWorkExperience';
+import '../Modal/UploadCertification/UploadCertification';
+import '../CertificationCard/CertificationCard';
+import getCertification from '../../api/getCertification';
 
-class WorkExperience extends MaleficComponent {
+class Certification extends MaleficComponent {
     static get styles() {
-        return [workExperienceStyle];
+        return [certificationStyle];
     }
 
     static get properties() {
@@ -18,7 +18,7 @@ class WorkExperience extends MaleficComponent {
             tabShow: { type: Int16Array },
             showModal: { type: Boolean },
 
-            workList: { type: Array },
+            certList: { type: Array },
             showAlert: { type: Boolean }
         };
     }
@@ -29,7 +29,7 @@ class WorkExperience extends MaleficComponent {
             window.scrollTo(0, 0);
         });
         this.showModal = false;
-        this.workList = [];
+        this.certList = [];
     }
 
     handleToggleModal() {
@@ -42,9 +42,9 @@ class WorkExperience extends MaleficComponent {
 
     connectedCallback() {
         super.connectedCallback()
-        getWorkExperience()
+        getCertification()
             .then(res => {
-                this.workList = res._embedded.workExperienceList;
+                this.certList = res._embedded.certificationList;
             })
             .catch(e => console.log(e));
     }
@@ -52,17 +52,17 @@ class WorkExperience extends MaleficComponent {
     render() {
         return html`
             ${commonStyles}
-            <app-upload-work .show="${this.showModal}" @close-modal="${this.closeModal}"></app-upload-work>
+            <app-upload-cert .show="${this.showModal}" @close-modal="${this.closeModal}"></app-upload-cert>
             <div class="header-row">
-                <h1>Work Experience</h1>
-                <app-button btnclass="custom-btn" @click="${this.handleToggleModal}"><i class="fas fa-plus"></i>Add Experience</app-button>
+                <h1>Certification</h1>
+                <app-button btnclass="custom-btn" @click="${this.handleToggleModal}"><i class="fas fa-plus"></i>Add Certification</app-button>
             </div>
-            ${this.workList.map((work) =>
-            html`<work-card id=${work.id}></work-card>`
+            ${this.certList.map((cert) =>
+            html`<cert-card id=${cert.id}></cert-card>`
         )}
         `;
     }
 }
 
-customElements.define('work-experience', WorkExperience);
+customElements.define('app-cert', Certification);
 

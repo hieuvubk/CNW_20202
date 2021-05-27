@@ -1,13 +1,13 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { uploadWorkStyle } from './upload-work-style';
+import { uploadCertStyle } from './upload-cert-style';
 import { commonStyles } from '../../../shared/styles/common-styles';
 
 import '../Modal';
 import '../../Button/Button';
-import postWorkExperience from '../../../api/postWorkExperience';
+import postCertification from '../../../api/postCertification';
 
-class UploadWork extends MaleficComponent {
+class UploadCertification extends MaleficComponent {
     static get properties() {
         return {
             show: { type: Boolean }
@@ -15,7 +15,7 @@ class UploadWork extends MaleficComponent {
     }
 
     static get styles() {
-        return [uploadWorkStyle];
+        return [uploadCertStyle];
     }
 
     handleCloseModal() {
@@ -29,20 +29,19 @@ class UploadWork extends MaleficComponent {
     }
 
     submitForm() {
-        const workForm = this.shadowRoot.querySelector("#work-form");
-        workForm.addEventListener("submit", (e) => e.preventDefault());
-        const formData = new FormData(workForm);
-        console.log(formData);
+        const certForm = this.shadowRoot.querySelector("#cert-form");
+        certForm.addEventListener("submit", (e) => e.preventDefault());
+        const formData = new FormData(certForm);
+
         // Convert formData to a query string
         const data = [...formData.entries()];
         const asString = data
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
-        console.log(asString);
 
-        postWorkExperience(asString)
+        postCertification(asString)
             .then(data => {
-                if(data == 201) {
+                if (data == 201) {
                     location.reload();
                 }
             })
@@ -67,35 +66,24 @@ class UploadWork extends MaleficComponent {
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
                     <div class="post__edit__header">
-                        <h3>Add Experience</h3>
+                        <h3>Add Certification</h3>
                         <div class="post__edit__close" @click=${this.handleCloseModal}><i class="fas fa-times"></i></div>
                     </div>
-                    <form id="work-form">
+                    <form id="cert-form">
                     <div class="row">
                         <div class="col span-1-of-4 title">
-                            <h5>Title *</h5>
-                            <h5>Employment type</h5>
-                            <h5>Company *</h5>
-                            <h5>Location</h5>
-                            <h5>Start Date *</h5>
-                            <h5>End Date *</h5>
-                            <h5>Description</h5>
+                            <h5>Name *</h5>
+                            <h5>Organization *</h5>
+                            <h5>Issue Date *</h5>
+                            <h5>Expiration Date *</h5>
+                            <h5>Credential ID</h5>
+                            <h5>Credential URL</h5>
                         </div>
                         <div class="col span-3-of-4 info">
-                            <input type="text" class="input" id="title" name="title" required>
+                            <input type="text" class="input" id="name" name="name" required>
+                            <input type="text" class="input" id="issOrganization" name="issOrganization" required>
                             <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Employment Type" id="employmentType" name="employmentType">
-                                    <option value="FULL_TIME">Full-time</option>
-                                    <option value="PART_TIME">Part-time</option>
-                                    <option value="SELF_EMPLOYED">Self-employed</option>
-                                    <option value="FREE_LANCE">Freelance</option>
-                                    <option value="INTERNSHIP">Internship</option>
-                                </select>
-                            </div>
-                            <input type="text" class="input" id="company" name="company" required>
-                            <input type="text" class="input" id="location" name="location">
-                            <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Month" id="startMonth" name="startMonth" required>
+                                <select class="selector" aria-label="Month" id="issMonth" name="issMonth" required>
                                     <option value="">Month</option>
                                     <option value="01">01</option>
                                     <option value="02">02</option>
@@ -108,15 +96,15 @@ class UploadWork extends MaleficComponent {
                                     <option value="09">09</option>
                                     ${months.map((month) => html`<option value="${month}">${month}</option>`)}
                                 </select>
-                                <select class="selector" aria-label="Year" id="startYear" name="startYear" required>
+                                <select class="selector" aria-label="Year" id="issYear" name="issYear" required>
                                     <option value="">Year</option>
                                     ${years.map((year) => html`<option value="${year}">${year}</option>`)}
                                 </select>
                             </div>
                             <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Month" id="endMonth" name="endMonth" required>
+                                <select class="selector" aria-label="Month" id="expMonth" name="expMonth" required>
                                     <option value="">Month</option>
-                                    <option value="01">Now</option>
+                                    <option value="01">Not yet</option>
                                     <option value="01">1</option>
                                     <option value="02">2</option>
                                     <option value="03">3</option>
@@ -128,15 +116,14 @@ class UploadWork extends MaleficComponent {
                                     <option value="09">9</option>
                                     ${months.map((month) => html`<option value="${month}">${month}</option>`)}
                                 </select>
-                                <select class="selector" id="endYear" name="endYear" required>
+                                <select class="selector" id="expYear" name="expYear" required>
                                     <option value="">Year</option>
-                                    <option value="1970">Now</option>
+                                    <option value="1970">Not yet</option>
                                     ${years.map((year) => html`<option value="${year}">${year}</option>`)}
                                 </select>
                             </div>
-                            <div class="post__edit__text">
-                                <textarea name="headline" placeholder="Type something"></textarea>
-                            </div>
+                            <input type="text" class="input" id="credentialID" name="credentialID">
+                            <input type="text" class="input" id="credentialURL" name="credentialURL">
                             <div class="update-btn">
                                 <button type="submit" class="btn-save" @click="${this.submitForm}">Save</button>
                                 <button type="reset"class="btn-cancel">Cancel</button>
@@ -150,6 +137,6 @@ class UploadWork extends MaleficComponent {
     }
 }
 
-customElements.define('app-upload-work', UploadWork);
+customElements.define('app-upload-cert', UploadCertification);
 
 

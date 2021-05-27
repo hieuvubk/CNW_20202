@@ -18,7 +18,6 @@ class PersonalInfo extends MaleficComponent {
         return {
             tabShow: { type: Int16Array },
             showModal: { type: Boolean },
-
             about: { type: String },
             address: { type: String },
             bgImageUrl: { type: String },
@@ -28,12 +27,16 @@ class PersonalInfo extends MaleficComponent {
             industry: { type: String },
             location: { type: String },
             phoneNumber: { type: String },
-            showAlert: {type: Boolean}
+            showAlert: { type: Boolean }
         };
     }
 
     constructor() {
         super();
+        this.showAlert = false;
+    }
+    connectedCallback() {
+        super.connectedCallback()
         getProfile()
             .then(res => {
                 this.about = res.about;
@@ -50,7 +53,7 @@ class PersonalInfo extends MaleficComponent {
                 this.shadowRoot.querySelector('#year').value = this.birthday.getFullYear();
             })
             .catch(e => console.log(e));
-            this.showAlert = false;
+        this.showAlert = false;
     }
 
     submitForm() {
@@ -73,10 +76,10 @@ class PersonalInfo extends MaleficComponent {
 
         patchPersonalProfile(asString)
             .then(data => {
-                if(data) {
+                if (data) {
                     const alertBox = this.shadowRoot.querySelector('.show-alert');
                     alertBox.classList.add('active');
-                    setTimeout(function(){ 
+                    setTimeout(function () {
                         alertBox.classList.remove('active')
                     }, 2000);
                 }
@@ -85,7 +88,7 @@ class PersonalInfo extends MaleficComponent {
                 console.log("Hello")
                 const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
                 alertBox.classList.add('active');
-                setTimeout(function(){ 
+                setTimeout(function () {
                     alertBox.classList.remove('active')
                 }, 2000);
             });
