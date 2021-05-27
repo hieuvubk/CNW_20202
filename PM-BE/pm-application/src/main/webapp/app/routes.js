@@ -63,7 +63,7 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile',///:id/:postId',
+        pattern: 'profile/:id',
         data: {
             title: 'Profile'
         },

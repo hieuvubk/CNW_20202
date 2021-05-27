@@ -4,54 +4,77 @@ import { commonStyles } from '../../shared/styles/common-styles';
 import { profileStyle } from './profile-style';
 import { withRouter } from '../../core/router/malefic-router';
 
-import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
+import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
-import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
+import '../../components/layouts/Footer/Footer';
 import '../../components/Modal/ContactInfo/ContactInfo';
+import '../../api/getPublicProfile';
+import getPublicProfile from '../../api/getPublicProfile';
+import getPublicWorkEx from '../../api/getPublicWorkEx';
+import getPublicEducation from '../../api/getPublicEducation';
 
 class Profile extends withRouter(MaleficComponent) {
     static get properties() {
         return {
-            showModal: {type: Boolean}
+            showModal: { type: Boolean },
+            profile: { type: Object },
+            work: { type: Array },
+            education: { type: Array },
         };
     }
-    
+
     static get styles() {
         return [profileStyle];
     }
-    
+
     constructor() {
         super();
         window.addEventListener('beforeunload', () => {
             window.scrollTo(0, 0);
         });
+        this.profile = {};
     }
-    
+
     connectedCallback() {
         super.connectedCallback();
         document.getElementsByTagName('title')[0].innerHTML = this.data.title;
-        console.log(this.query, this.params);
+
+        getPublicProfile(this.params.id)
+            .then(res => this.profile = res)
+            .catch(e => console.log(e));
+
+        getPublicWorkEx(this.params.id)
+            .then(res => this.work = res._embedded.workExperienceList)
+            .catch(e => console.log(e));
+
+        getPublicEducation(this.params.id)
+            .then(res => this.education = res._embedded.educationList)
+            .catch(e => console.log(e));
     }
-    
+
     handleOpenContactModal() {
         this.showModal = true;
     }
-    
+
     handleCloseContactModal() {
         this.showModal = false;
     }
-    
+
     scrollIntoEducation(e) {
         e.preventDefault();
         this.shadowRoot.querySelector('#education').scrollIntoView({
             block: 'center'
         });
     }
-    
+
     render() {
+        const startDate = new Date(this.education[0].startDate);
+        const endDate = new Date(this.education[0].endDate);  
+        const endYear = endDate.getFullYear();
+        const startYear = startDate.getFullYear();
+        const endText = endYear == 1970 ? 'Now' : endYear;
         return html`
             ${commonStyles}
-            
             <app-header></app-header>
 
             <main>
@@ -77,21 +100,26 @@ class Profile extends withRouter(MaleficComponent) {
             
                         <div id="info">
                             <div id="personal-info">
-                                <h1 id="personal-name"></h1>
-                                <h3 id="personal-jobs">Jobs</h3>
-                                <h4 id="personal-address">Address</h4>
-                                <h4 id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
+                                <h1 id="personal-name">${this.profile.user.firstName} ${this.profile.user.lastName}</h1>
+                                <h3 class="light" id="personal-jobs">${this.profile.headline}</h3>
+                                <h4 class="light" id="personal-address">${this.profile.address}</h4>
+                                <h4 class="light" id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
                             </div>
                 
                             <div id="workplace">
                                 <a style="cursor: pointer" @click="${this.scrollIntoEducation}">
-                                    <p>Name of school of company,etc.</p>
+                                    <p>${this.work[0].company}</p>
                                 </a>
                             </div>
                         </div>
                     </div>
         
                     <app-contact-info .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
+
+                    <div class="main-content-div" id="experience">
+                        <h2>About</h2>
+                        <p class="profile-text">${this.profile.about}</p>
+                    </div>
         
                     <div class="main-content-div" id="experience">
                         <h2>Experience</h2>
@@ -133,9 +161,10 @@ class Profile extends withRouter(MaleficComponent) {
                         <div class="education">
                             <img class="education__logo" src="content/images/HUST_logo.png">
                             <div class="education__info">
-                                <h3 class="education__info__name">Hanoi University of Science and Technology</h3>
-                                <h4 class="education__info__degree">Engineer's degree, Computer Engineering</h4>
-                                <h4 class="education__info__time">2018 - 2023</h4>
+                                <h3 class="education__info__name">${this.education[0].school}</h3>
+                                <h4 class="education__info__degree">${this.education[0].degree}, ${this.education[0].fieldOfStudy}</h4>
+                                <h4 class="education__info__degree">${this.education[0].grade}</h4>
+                                <h4 class="education__info__time">${startYear} - ${endText}</h4>
                             </div>
                         </div>
                     </div>

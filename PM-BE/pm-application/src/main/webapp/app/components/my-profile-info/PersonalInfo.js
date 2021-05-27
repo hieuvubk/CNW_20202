@@ -107,14 +107,13 @@ class PersonalInfo extends MaleficComponent {
         for (var i = 1980; i <= 2004; i++) {
             years.push(i);
         }
-
         return html`
             ${commonStyles}
             <h1>Personal Information</h1>
             <form id="personalForm">
                 <div class="row">
                 <div class="col span-1-of-4 title">
-                    <h5>About</h5>
+                    <h5 class="about-title">About</h5>
                     <h5>Address</h5>
                     <h5>Date Of Birth</h5>
                     <h5>Country</h5>
@@ -124,7 +123,9 @@ class PersonalInfo extends MaleficComponent {
                     <h5>Phone Number</h5>
                 </div>
                 <div class="col span-3-of-4 info">
-                    <input type="text" class="input" id="about" name="about" value="${this.about}">
+                    <div class="post__edit__text">
+                        <textarea id="about" name="about" value="${this.about}"></textarea>
+                    </div>
                     <input type="text" class="input" id="address" name="address" value="${this.address}">
                     <div class="dob" data-="selectors">
                         <select class="selector" aria-label="Day" id="day">

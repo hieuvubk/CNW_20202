@@ -10,6 +10,6 @@ const postCompany = (asString) => {
         body: asString,
     });
     return fetch(request)
-        .then(res => res.status())
+        .then(res => res.json())
 }
-export default postCompany;
+export default postCompany();

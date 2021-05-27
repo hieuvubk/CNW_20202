@@ -2,7 +2,8 @@ import { css } from '../../core/components/css-tag';
 
 export const profileStyle = css`
     :host {
-        color: black;
+        font-size: 1rem;
+        color: #5a5a5a;
     }
 
     main {
@@ -26,14 +27,13 @@ export const profileStyle = css`
     
     .main-content-div {
         width: 780px;
-        border:0.5px solid gray;
+        border: 0.1px solid #c7cfd4;
         border-radius: 10px;
         border-collapse: separate;
         padding: 1px;
         margin-bottom: 20px;
         background-color: white;
     }
-    
     
     #background-avatar {
         position: relative;
@@ -115,10 +115,18 @@ export const profileStyle = css`
         border-bottom-left-radius: 25px;
         border-bottom-right-radius: 25px;
     }
+
+    #workplace {
+        margin-top: 10px;
+    }
     
-    #info div {
-        width: 50%;
-        padding: 0 20px;
+    #info #personal-info {
+        width: 70%;
+        padding: 0 20px 10px 20px;
+    }
+
+    #info #work-place {
+        width: 30%;
     }
     
     #workplace a {
@@ -126,10 +134,19 @@ export const profileStyle = css`
         color: black;
         text-decoration: none;
     }
+
+    .profile-text {
+        line-height: 20px;
+        padding: 22px;
+    }
     
     #workplace a:hover {
         color: blue;
         text-decoration: underline;
+    }
+
+    .light {
+        font-weight: lighter;
     }
     
     #contact-info {
@@ -147,7 +164,7 @@ export const profileStyle = css`
         padding: 20px;
         background-color: transparent;
         width:100%;
-        border-bottom: 0.2px solid gray;
+        border-bottom: 0.1px solid #c7cfd4;
     }
     .education {
         margin: 20px;
@@ -164,6 +181,11 @@ export const profileStyle = css`
     
     .education__info {
         margin-left: 20px;
+    }
+
+    .education__info h4 {
+        font-weight: lighter;
+        line-height: 20px;
     }
     
     #experience > div {
