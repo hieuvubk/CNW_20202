@@ -37,7 +37,7 @@ const routes = [
     },
     {
         name: 'company-page',
-        pattern: 'company',
+        pattern: 'company/:companyId',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),
@@ -63,7 +63,7 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile/:id/:postId',
+        pattern: 'profile/:id',
         data: {
             title: 'Profile'
         },
