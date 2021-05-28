@@ -30,14 +30,21 @@ const routes = [
     },
     {
         name: 'create-company',
-        pattern: 'create_company',
+        pattern: 'create-company',
         data: {},
         component: 'app-create-company',
         resolve:()=> import('./pages/create-company/CreateCompanyPage')
     },
     {
+        name: 'update-company',
+        pattern: 'update-company/:id',
+        data: {},
+        component: 'app-update-company',
+        resolve:()=> import('./pages/update-company/UpdateCompany')
+    },
+    {
         name: 'company-page',
-        pattern: 'company/:companyId',
+        pattern: 'company/:id',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),

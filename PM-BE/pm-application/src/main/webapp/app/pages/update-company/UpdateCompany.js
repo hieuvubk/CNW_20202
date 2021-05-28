@@ -6,16 +6,19 @@ import { CreatedCompanyStyle } from '../../pages/create-company/createCompany-st
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
 import patchPersonalProfile from "../../api/patchPersonalProfile";
-import postCompany from "../../api/postCompany";
+import getCompany from "../../api/getCompany";
 import {withRouter} from "../../core/router/malefic-router";
+import patchCompany from "../../api/patchCompany";
+import uploadLogo from "../../api/uploadLogo";
 
-class UpdateCompany extends MaleficComponent{
+class UpdateCompany extends withRouter(MaleficComponent){
 
     static get properties(){
         return{
             tabShow: { type: Int16Array },
             showModal: { type: Boolean },
-            formData: { type: FormData}
+            formData: { type: FormData},
+            company: {type: JSON}
         }
     }
 
@@ -60,7 +63,12 @@ class UpdateCompany extends MaleficComponent{
 
     connectedCallback() {
         super.connectedCallback();
-        ge
+        getCompany(this.params.id).then(res => {
+            this.company = res;
+            console.log(this.company);
+            console.log(this.params);
+        })
+            .catch(e => console.log(e));
     }
 
     submitForm() {
@@ -68,13 +76,23 @@ class UpdateCompany extends MaleficComponent{
         companyForm.addEventListener("submit", (e) => e.preventDefault());
         this.formData = new FormData(companyForm)
 
+        var logo = new FormData();
+        logo.append("logo", this.shadowRoot.getElementById("logo").files[0]);
+        uploadLogo(this.params.id, logo)
+            .then(data => {
+                console.log(data)
+            })
+        var bg = new FormData();
+
+
+
         // Convert formData to a query string
         const data = [...this.formData.entries()];
         const asString = data
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
 
-        postCompany(asString)
+        patchCompany(this.params.id, asString)
             .then(data => {
                 if(data) {
                     // const alertBox = this.shadowRoot.querySelector('.show-alert');
@@ -106,27 +124,28 @@ class UpdateCompany extends MaleficComponent{
             <main>
                 <div id="main__left">
                     <div id="main__basic__info">
-                        <h2>Let’s get started with a few details about your business</h2>
+                        <h2>Change your company information</h2>
                         <form id="main__basic__info__form">
                             <label for="name" >Name *</label></br>
-                            <input type="text" id="name" name="name" 
+                            <input type="text" id="name" name="name" value="${this.company["name"]}"
                                 @keyup=${this.handleReviewName} required></br>
                             
                             <label for="website">Website *</label></br>
-                            <input type="url" id="website" name="website" required></br>
+                            <input type="url" id="website" name="website"  required value="${this.company["website"]}"></br>
                             
                             <label for="companySize">Company size *</label></br>
-                            <input type="text" id="companySize" name="companySize"
+                            <input type="text" id="companySize" name="companySize" value="${this.company["companySize"]}"
                                 @keyup=${this.handleReviewSize} required></br>
                             
                             <label for="companyType">Company type *</label></br>
-                            <input type="text" id="companyType" name="companyType" required></br>
+                            <input type="text" id="companyType" name="companyType" required value="${this.company["companyType"]}"
+                            ></br>
                             
                             <label for="industry">Industry *</label></br>
-                            <input type="text" id="industry" name="industry" required></br>
+                            <input type="text" id="industry" name="industry" required value="${this.company["industry"]}"></br>
                             
                             <label for="tagLine">Tag line *</label></br>
-                            <input type="text" id="tagLine" name="tagLine" required></br>
+                            <input type="text" id="tagLine" name="tagLine"  required value="${this.company["tagLine"]}"></br>
                             
                             <label for="logo">Logo *</label></br>
                             <input type="file" id="logo" name="logo" accept="image/*" 
@@ -134,16 +153,9 @@ class UpdateCompany extends MaleficComponent{
                             
                             <label for="background">Background *</label></br>
                             <input type="file" id="background" name="background" accept="image/*" 
-                                @change=${this.handleReviewBackground} required></br>
+                                @change=${this.handleReviewBackground} required></br>    
                             
-                            <div id="term__agree">
-                                <div><input type="checkbox" id="term" name="term" required></div>
-                                <div for="term">I verify that I am an authorized representative of this organization 
-                                and have the right to act on its behalf in the creation and management of this page.
-                                The organization and I agree to the additional terms for Pages.</div>
-                            </div>
-                            
-                            <button type="submit" @click="${this.submitForm}">Create company</button>
+                            <button type="submit" @click="${this.submitForm}">Update company</button>
                         </form>
                         <div id="filter__jobtitle">
                         </div>
@@ -188,4 +200,4 @@ class UpdateCompany extends MaleficComponent{
     }
 }
 
-customElements.define("app-create-company", UpdateCompany);
+customElements.define("app-update-company", UpdateCompany);

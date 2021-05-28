@@ -4,9 +4,9 @@ import { commonStyles } from '../../shared/styles/common-styles';
 import { profileStyle } from './profile-style';
 import { withRouter } from '../../core/router/malefic-router';
 
-import '../../components/layouts/Header/Header';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer';
 import '../../components/Modal/ContactInfo/ContactInfo';
 import '../../api/getPublicProfile';
 import getPublicProfile from '../../api/getPublicProfile';

@@ -1,15 +1,15 @@
 import { getXSRFToken } from '../shared/utils/header-utils';
-const patchCompany = (id, asString) => {
-    const url = `http://localhost:9002/api/v1/companies/${id}`;
+const uploadLogo = (companyId, asString) => {
+    const url = `http://localhost:9002/api/v1//companies/${companyId}/admin/logo`;
     const headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    headers.append('Content-Type', 'multipart/form-data');
     headers.append('X-XSRF-TOKEN', getXSRFToken(document.cookie));
     const request = new Request(url, {
-        method: 'PATCH',
+        method: 'POST',
         headers: headers,
         body: asString,
     });
     return fetch(request)
         .then(res => res.json())
 }
-export default patchCompany;
+export default uploadLogo;

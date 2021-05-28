@@ -3,17 +3,30 @@ import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
 import { companyPageStyle } from './company-Page-style';
 
-import '../../components/layouts/Header/Header';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
-import '../../components/layouts/Footer/Footer';
+import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/PostCard/PostCard';
 
-class CompanyPage extends MaleficComponent {
+
+
+import getCompany from '../../api/getCompany';
+import getProfile from '../../api/getProfile';
+import {withRouter} from "../../core/router/malefic-router";
+
+
+class CompanyPage extends withRouter(MaleficComponent) {
     static get properties() {
         return {
             background: {type:String},
             avatar: {type:String},
-            showIcon: {type: String}
+            showIcon: {type: String},
+
+            id: {type: Int16Array},
+
+            company : {type: JSON},
+            showAlert: { type: Boolean }
+
         };
     }
     
@@ -29,12 +42,41 @@ class CompanyPage extends MaleficComponent {
         this.background = "content/images/4853433.jpg";
         this.avatar ="content/images/avatar.png";
         this.showIcon = "plus";
+        this.showAlert = false;
+        this.company = {};
+
+        // getCompany()
+        //     .then(res => {
+        //         // this.companySize = res.companySize;
+        //         // this.companyType = res.companyType;
+        //         // this.industry = res.industry;
+        //         // this.logoUrl = res.logoUrl;
+        //         // this.name = res.name;
+        //         // this.tagline = res.tagline;
+        //         // this.website = res.website;
+        //         console.log(res.json()._embedded.companyList[0]);
+        //     })
+        //     .catch(e => {
+        //         console.log(e)
+        //         alert("Error")
+        //     });
+
     }
-    
-    handleToggleFollow(){
-        if(this.showIcon=="plus") this.showIcon = "check";
-        else this.showIcon = "plus";
+
+
+    connectedCallback() {
+        super.connectedCallback()
+        getCompany(this.params.id).then(res => {
+            this.company = res;
+            console.log(this.company);
+            console.log(this.params);
+        })
+            .catch(e => console.log(e));
     }
+    // handleToggleFollow(){
+    //     if(this.showIcon=="plus") this.showIcon = "check";
+    //     else this.showIcon = "plus";
+    // }
 
     render() {
         return html`
@@ -55,7 +97,7 @@ class CompanyPage extends MaleficComponent {
 
                 <div id="info">
                     <div id="company-info">
-                        <h1>Name</h1>
+                        <h1>${this.company["name"]}</h1>
                         <p>Slogan</p>
                         <span>Address</span>
                         <span>Followers</span>
@@ -100,57 +142,50 @@ class CompanyPage extends MaleficComponent {
                             Website
                         </div>
                         <div class="about__detail__specified__content">
-                            <a href="#">https://google.com</a>
+                            <a href="#">${this.company["website"]}</a>
                         </div>
 
                         <div class="about__detail__specified__tag">
                             Industry
                         </div>
                         <div class="about__detail__specified__content">
-                            Human resources
+                            ${this.company["industry"]}
                         </div>
 
                         <div class="about__detail__specified__tag">
                             Company size
                         </div>
                         <div class="about__detail__specified__content">
-                            300 employees
-                        </div>
-
-                        <div class="about__detail__specified__tag">
-                            Headquarters
-                        </div>
-                        <div class="about__detail__specified__content">
-                            District Hai Ba Trung, Ha Noi City
+                            ${this.company["companySize"]} employees
                         </div>
 
                         <div class="about__detail__specified__tag">
                             Type
                         </div>
                         <div class="about__detail__specified__content">
-                            Public Company
+                            ${this.company["companyType"]}
                         </div>
 
-                        <div class="about__detail__specified__tag">
-                            Founded
-                        </div>
-                        <div class="about__detail__specified__content">
-                            2000
-                        </div>
+<!--                        <div class="about__detail__specified__tag">-->
+<!--                            Founded-->
+<!--                        </div>-->
+<!--                        <div class="about__detail__specified__content">-->
+<!--                            2000-->
+<!--                        </div>-->
 
-                        <div class="about__detail__specified__tag">
-                            Specialties
-                        </div>
-                        <div class="about__detail__specified__content">
-                            Recruitment Solutions
-                        </div>
+<!--                        <div class="about__detail__specified__tag">-->
+<!--                            Specialties-->
+<!--                        </div>-->
+<!--                        <div class="about__detail__specified__content">-->
+<!--                            Recruitment Solutions-->
+<!--                        </div>-->
                     </div>
                 </div>
 
-                <div id="about__location">
-                    <h3>Location</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.6408192902422!2d105.840947314245!3d21.007030293897216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac76ccab6dd7%3A0x55e92a5b07a97d03!2sHanoi%20University%20of%20Science%20%26%20Technology%20(HUST)!5e0!3m2!1sen!2s!4v1621399599154!5m2!1sen!2s" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                </div>
+<!--                <div id="about__location">-->
+<!--                    <h3>Location</h3>-->
+<!--                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.6408192902422!2d105.840947314245!3d21.007030293897216!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac76ccab6dd7%3A0x55e92a5b07a97d03!2sHanoi%20University%20of%20Science%20%26%20Technology%20(HUST)!5e0!3m2!1sen!2s!4v1621399599154!5m2!1sen!2s" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>-->
+<!--                </div>-->
             </div>
 
             <div class="main-content-div" id="post">
