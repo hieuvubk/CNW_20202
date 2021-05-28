@@ -43,10 +43,8 @@ export const UploadAvatarStyle = css`
     }
 
     .wrapper .image img {
-        border: 1px solid #265077;
-        border-radius: 50%;
-        height: 200px;
-        width: 200px;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
     }
 
@@ -80,15 +78,17 @@ export const UploadAvatarStyle = css`
         border-radius: 7px;
         margin-top: 3%;
         transition: all 0.3s;
+        text-align: center;
     }
     
     .custom-btn {
         width: 100%;
-        height: 10%;
+        height: 35px;
         display: block;
         background: linear-gradient(135deg, #1e4157f2 0%, #1597bb 100%);
         font-weight: 500;
         color: #fff;
+        padding-top: 7px;
     }
     
     .custom-btn:hover,
@@ -98,14 +98,14 @@ export const UploadAvatarStyle = css`
     
     .save-btn {
         width: 47%;
-        height: 10%;
+        height: 35px;
         background-color: #E8E9EB;
         color: #1e4157f2;
     }
     
     .cancel-btn {
         width: 47%;
-        height: 10%;
+        height: 35px;
         background-color: #E8E9EB;
         color: #1e4157f2;
         margin-right: 5%;

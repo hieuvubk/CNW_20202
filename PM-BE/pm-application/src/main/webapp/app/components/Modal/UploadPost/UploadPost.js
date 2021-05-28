@@ -9,7 +9,11 @@ import '../../Button/Button';
 class UploadPost extends MaleficComponent {
     static get properties() {
         return {
-            show: { type: Boolean }
+            show: { type: Boolean },
+            typePost: {type: String},
+            placeHolder: {type:  String},
+            editText: {type:String},
+            placeHolderImage: {type: String}
         };
     }
 
@@ -34,6 +38,7 @@ class UploadPost extends MaleficComponent {
         defaultBtn.click();
         defaultBtn.addEventListener("change", function () {
             const file = this.files[0];
+            this.placeHolderImage = URL.createObjectURL(file);
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function () {
@@ -52,6 +57,7 @@ class UploadPost extends MaleficComponent {
     reloadImage() {
         const img = this.shadowRoot.querySelector(".image img");
         img.src = "";
+        this.placeHolderImage="";
     }
 
     saveImage() {
@@ -74,14 +80,17 @@ class UploadPost extends MaleficComponent {
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
                     <div class="post__edit__header">
-                        <h3>Create your post</h3>
+                        <h3>${this.typePost}</h3>
                         <div class="post__edit__close" @click=${this.handleCloseModal}><i class="fas fa-times"></i></div>
                     </div>
                     <div class="post__edit__text">
-                        <textarea name="post_text" placeholder="Type something"></textarea>
+                        <textarea name="post_text" placeholder="${this.placeHolder}">${this.editText}</textarea>
                     </div>
                     <div class="wrapper">
-                        <div class="image"><img src="content/images/avatar.png" alt=""></div>
+                        <div class="image" 
+                            style="display:${this.placeHolderImage==""?'none':'block'}">
+                            <img src="${this.placeHolderImage}" alt="">
+                        </div>
                         <div class="content">
                             <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
                             <div class="text">No file chosen</div>
@@ -116,5 +125,3 @@ class UploadPost extends MaleficComponent {
 }
 
 customElements.define('app-upload-post', UploadPost);
-
-

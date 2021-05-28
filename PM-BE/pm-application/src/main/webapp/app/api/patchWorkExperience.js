@@ -10,6 +10,6 @@ const patchWorkExperience = (id, asString) => {
         body: asString,
     });
     return fetch(request)
-        .then(res => res.json())
+        .then(res => res.status)
 }
 export default patchWorkExperience;

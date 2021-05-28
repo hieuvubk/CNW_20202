@@ -7,9 +7,12 @@ import '../../components/layouts/Header/Header';
 import '../../components/layouts/footer/SmallFooter';
 import '../../components/my-profile-info/PersonalInfo';
 import '../../components/my-profile-info/ChangePass';
-import '../../components/Modal/UploadAvatar/UploadAvatar';
+import '../../components/Modal/UploadAvatar/UploadBackground';
 import '../../components/Button/Button';
 import '../../components/my-profile-info/WorkExperience';
+import '../../components/my-profile-info/Education';
+import '../../components/my-profile-info/Certification';
+import '../../components/my-profile-info/Skill';
 
 class EditProfile extends MaleficComponent {
     static get properties() {
@@ -49,8 +52,6 @@ class EditProfile extends MaleficComponent {
             ${commonStyles}
             <app-header></app-header>
             <section class="container">
-                <app-upload-avt .show="${this.showModal}" @close-modal="${this.closeModal}"></app-upload-avt>
-
                 <div class="row">
                     <div class="col span-1-of-5 sidemenu">
                         <nav>
@@ -63,17 +64,21 @@ class EditProfile extends MaleficComponent {
                                 <span class="setting-title">Work Experience</span>
                             </a>
                             <a @click="${() => this.showTab(2)}" class="tab" id="${this.tabShow == 2 ? 'tab-active' : ''}">
-                                <i class="far fa-address-card"></i>
-                                <span class="setting-title">My CV</span>
+                                <i class="fas fa-graduation-cap"></i>
+                                <span class="setting-title">Education</span>
                             </a>
                             <a @click="${() => this.showTab(3)}" class="tab" id="${this.tabShow == 3 ? 'tab-active' : ''}">
-                                <i class="fas fa-receipt"></i>
-                                <span class="setting-title">My Application</span>
+                                <i class="fas fa-certificate"></i>
+                                <span class="setting-title">Certification</span>
+                            </a>
+                            <a @click="${() => this.showTab(4)}" class="tab" id="${this.tabShow == 4 ? 'tab-active' : ''}">
+                                <i class="fas fa-american-sign-language-interpreting"></i>
+                                <span class="setting-title">Skill</span>
                             </a>
                         </nav>
                     </div>
 
-                    <div class="col span-3-of-5 account-info">
+                    <div class="col span-4-of-5 account-info">
                         <div class="profile tab-show" id="${this.tabShow == 0 ? 'tab-show-active' : ''}">
                             <personal-info></personal-info>
                         </div>
@@ -83,25 +88,15 @@ class EditProfile extends MaleficComponent {
                         </div>
         
                         <div class="profile tab-show" id="${this.tabShow == 2 ? 'tab-show-active' : ''}">
-                            <h1>My CV</h1>
-                            <h3>Fill these information to make your own CV</h3>
+                            <app-education></app-education>
                         </div>
         
                         <div class="profile tab-show" id="${this.tabShow == 3 ? 'tab-show-active' : ''}">
-                            <h1>My Application Forms</h1>
-                            <h3>You have 0 application forms</h3>
+                            <app-cert></app-cert>
                         </div>
-                    </div>
-                    
-                    <div class="col span-1-of-5 avt-image">
-                        <div id="main-avatar">
-                            <img src="content/images/avatar.png">
-                        </div>
-                        <div>
-                            <button class="btn-upload" @click="${this.handleToggleModal}">
-                                <i class="fas fa-camera"></i>
-                                Select Image
-                            </button>
+
+                        <div class="profile tab-show" id="${this.tabShow == 4 ? 'tab-show-active' : ''}">
+                            <app-skill></app-skill>
                         </div>
                     </div>
                 </div>

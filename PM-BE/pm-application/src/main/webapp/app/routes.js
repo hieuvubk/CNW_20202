@@ -33,8 +33,15 @@ const routes = [
         resolve:()=> import('./pages/search-job/searchJob')
     },
     {
+        name: 'create-company',
+        pattern: 'create_company',
+        data: {},
+        component: 'app-create-company',
+        resolve:()=> import('./pages/create-company/createCompany')
+    },
+    {
         name: 'company-page',
-        pattern: 'company',
+        pattern: 'company/:companyId',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),
@@ -52,16 +59,16 @@ const routes = [
     },
     {
         name: 'profile',
-        pattern: 'profile/:id/:postId',
+        pattern: 'profile/:id',
         data: {
             title: 'Profile'
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
-        authentication: {
+        /*authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }
+        }*/
     },
     {
         name: 'edit-profile',

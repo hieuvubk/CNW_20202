@@ -42,11 +42,8 @@ class UploadWork extends MaleficComponent {
 
         postWorkExperience(asString)
             .then(data => {
-                console.log(data);
-                if(data) {
+                if(data == 201) {
                     location.reload();
-                } else {
-                    alert("Fail to add a work experience!");
                 }
             })
             .catch(e => {

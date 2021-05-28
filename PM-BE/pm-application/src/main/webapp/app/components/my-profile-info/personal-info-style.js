@@ -4,6 +4,19 @@ export const personalInfoStyle = css`
     :host {
         font-size: 1rem;
     }
+    .post__edit__text textarea{
+        display: block;
+        resize: none;
+        width: 95%;
+        height: 80px;
+        outline: none;
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ccd0d5;
+    }
+    .about-title {
+        padding-bottom: 80px;
+    }
     h5 {
         font-size: 0.9rem;
         font-weight: lighter;

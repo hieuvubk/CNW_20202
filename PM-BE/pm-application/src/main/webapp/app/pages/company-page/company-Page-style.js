@@ -294,7 +294,8 @@ aside > div{
 
 .about__detail__specified__tag {
     font-weight: bold;
-    font-size: 15px;;
+    font-size: 15px;
+    padding-top: 5px;
 }
 
 .about__detail__specified__content{

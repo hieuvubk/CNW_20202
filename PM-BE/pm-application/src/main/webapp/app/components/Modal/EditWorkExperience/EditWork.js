@@ -42,7 +42,7 @@ class EditWork extends MaleficComponent {
         const workForm = this.shadowRoot.querySelector("#work-form");
         workForm.addEventListener("submit", (e) => e.preventDefault());
         const formData = new FormData(workForm);
-  
+
         // Convert formData to a query string
         const data = [...formData.entries()];
         const asString = data
@@ -51,11 +51,8 @@ class EditWork extends MaleficComponent {
 
         patchWorkExperience(this.id, asString)
             .then(data => {
-                console.log(data);
-                if (data) {
+                if (data == 200) {
                     location.reload();
-                } else {
-                    alert("Error occurs!");
                 }
             })
             .catch(e => {
@@ -67,32 +64,32 @@ class EditWork extends MaleficComponent {
     connectedCallback() {
         super.connectedCallback()
         getWorkExById(this.id)
-        .then(res => {
-            this.work = res;
-            this.shadowRoot.querySelector('#employmentType').value = res.employmentType;
-            const startDate = new Date(res.startDate);
-            const endDate = new Date(res.endDate);
-            const startMonth = startDate.getMonth() + 1;
-            const endMonth = endDate.getMonth() + 1;
-            const endYear = endDate.getFullYear();
-            const startYear = startDate.getFullYear();
-            if(endYear == 1970) {
-                this.shadowRoot.querySelector('#endMonth').value = 1;
-            } else {
-                if(endMonth <= 9) {
-                    this.shadowRoot.querySelector('#endMonth').value = `0${endMonth}`;
+            .then(res => {
+                this.work = res;
+                this.shadowRoot.querySelector('#employmentType').value = res.employmentType;
+                const startDate = new Date(res.startDate);
+                const endDate = new Date(res.endDate);
+                const startMonth = startDate.getMonth() + 1;
+                const endMonth = endDate.getMonth() + 1;
+                const endYear = endDate.getFullYear();
+                const startYear = startDate.getFullYear();
+                if (endYear == 1970) {
+                    this.shadowRoot.querySelector('#endMonth').value = 1;
                 } else {
-                    this.shadowRoot.querySelector('#endMonth').value = endMonth;
+                    if (endMonth <= 9) {
+                        this.shadowRoot.querySelector('#endMonth').value = `0${endMonth}`;
+                    } else {
+                        this.shadowRoot.querySelector('#endMonth').value = endMonth;
+                    }
                 }
-            }
-            if(startMonth <= 9) {
-                this.shadowRoot.querySelector('#startMonth').value = `0${startMonth}`;
-            } else {
-                this.shadowRoot.querySelector('#startMonth').value = startMonth;
-            }
-            this.shadowRoot.querySelector('#startYear').value = startYear;
-            this.shadowRoot.querySelector('#endYear').value = endYear;
-        });
+                if (startMonth <= 9) {
+                    this.shadowRoot.querySelector('#startMonth').value = `0${startMonth}`;
+                } else {
+                    this.shadowRoot.querySelector('#startMonth').value = startMonth;
+                }
+                this.shadowRoot.querySelector('#startYear').value = startYear;
+                this.shadowRoot.querySelector('#endYear').value = endYear;
+            });
     }
 
     render() {

@@ -6,8 +6,10 @@ import { commonStyles } from '../../../shared/styles/common-styles';
 class ProfileMenu extends MaleficComponent {
     static get properties() {
         return {
-            username: {type: String},
-            title: {type: String}
+            firstName: {type: String},
+            lastName: {type: String},
+            title: {type: String},
+            avtImg: {type: String},
         };
     }
     
@@ -17,8 +19,10 @@ class ProfileMenu extends MaleficComponent {
     
     constructor() {
         super();
-        this.username = '';
+        this.firstName = '';
         this.title = '';
+        this.lastName = '';
+        this.avtImg = '';
     }
     
     render() {
@@ -26,8 +30,8 @@ class ProfileMenu extends MaleficComponent {
             ${commonStyles}
 
             <div class="profile">
-                <img src="content/images/avatar.png" alt="Avatar">
-                <h3>${this.username} <br> <span>${this.title}</span></h3>
+                <img src="${this.avtImg}" alt="Avatar">
+                <h3>${this.firstName} ${this.lastName}<br> <span>${this.title}</span></h3>
             </div>
             <div class="setting-list">
                 <ul>

@@ -4,7 +4,7 @@ export const modalStyle = css`
     .modal {
         z-index: 10000;
         background-color: #fff;
-        position: absolute;
+        position: fixed;
         top: 70px;
         left:50%;
         right: 50%;
@@ -14,6 +14,8 @@ export const modalStyle = css`
         transform: translateX(-50%);
         padding: 10px 15px;
         display: none;
+        max-height: calc(130vh - 210px);
+        overflow-y: auto;
     }
     .active {
         display: block;

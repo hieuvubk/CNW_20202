@@ -30,7 +30,6 @@ class WorkExperience extends MaleficComponent {
         });
         this.showModal = false;
         this.workList = [];
-
     }
 
     handleToggleModal() {
@@ -49,15 +48,6 @@ class WorkExperience extends MaleficComponent {
             })
             .catch(e => console.log(e));
     }
-
-    // attributeChangedCallback() {
-    //     super.attributeChangedCallback();
-    //     getWorkExperience()
-    //         .then(res => {
-    //             this.workList = res._embedded.workExperienceList;
-    //         })
-    //         .catch(e => console.log(e));
-    // }
 
     render() {
         return html`

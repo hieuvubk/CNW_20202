@@ -20,7 +20,7 @@ export const workExperienceStyle = css`
     }
 
     app-button {
-        margin-left: 23.5%;
+        margin-left: 39%;
         margin-top: 2%;
     }
 

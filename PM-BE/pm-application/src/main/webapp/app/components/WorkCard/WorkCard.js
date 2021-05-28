@@ -44,7 +44,7 @@ class WorkCard extends MaleficComponent {
                         const workCard = this.shadowRoot.querySelector('.news-card');
                         workCard.classList.add('delete');
                     } else {
-
+                        alert("Unsuccessfully! Error occurs");
                     }
                 });
         }
@@ -73,7 +73,7 @@ class WorkCard extends MaleficComponent {
             <div class="news-card">
                 <div class="news-header">
                     <div class="poster">
-                        <i class="fas fa-briefcase brief"></i>
+                        <img class="iconImg" src="content/images/portfolio.png">
                         <div class="poster-info">
                             <div style="font-weight: bold; font-size: 18px;">${this.work.title}</div>
                             <p>${this.work.company}</p>
@@ -91,5 +91,3 @@ class WorkCard extends MaleficComponent {
 }
 
 customElements.define('work-card', WorkCard);
-
-{/*  */ }

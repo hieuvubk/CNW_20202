@@ -18,7 +18,6 @@ class PersonalInfo extends MaleficComponent {
         return {
             tabShow: { type: Int16Array },
             showModal: { type: Boolean },
-
             about: { type: String },
             address: { type: String },
             bgImageUrl: { type: String },
@@ -28,12 +27,16 @@ class PersonalInfo extends MaleficComponent {
             industry: { type: String },
             location: { type: String },
             phoneNumber: { type: String },
-            showAlert: {type: Boolean}
+            showAlert: { type: Boolean }
         };
     }
 
     constructor() {
         super();
+        this.showAlert = false;
+    }
+    connectedCallback() {
+        super.connectedCallback()
         getProfile()
             .then(res => {
                 this.about = res.about;
@@ -50,7 +53,7 @@ class PersonalInfo extends MaleficComponent {
                 this.shadowRoot.querySelector('#year').value = this.birthday.getFullYear();
             })
             .catch(e => console.log(e));
-            this.showAlert = false;
+        this.showAlert = false;
     }
 
     submitForm() {
@@ -73,10 +76,10 @@ class PersonalInfo extends MaleficComponent {
 
         patchPersonalProfile(asString)
             .then(data => {
-                if(data) {
+                if (data) {
                     const alertBox = this.shadowRoot.querySelector('.show-alert');
                     alertBox.classList.add('active');
-                    setTimeout(function(){ 
+                    setTimeout(function () {
                         alertBox.classList.remove('active')
                     }, 2000);
                 }
@@ -85,7 +88,7 @@ class PersonalInfo extends MaleficComponent {
                 console.log("Hello")
                 const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
                 alertBox.classList.add('active');
-                setTimeout(function(){ 
+                setTimeout(function () {
                     alertBox.classList.remove('active')
                 }, 2000);
             });
@@ -104,14 +107,13 @@ class PersonalInfo extends MaleficComponent {
         for (var i = 1980; i <= 2004; i++) {
             years.push(i);
         }
-
         return html`
             ${commonStyles}
             <h1>Personal Information</h1>
             <form id="personalForm">
                 <div class="row">
                 <div class="col span-1-of-4 title">
-                    <h5>About</h5>
+                    <h5 class="about-title">About</h5>
                     <h5>Address</h5>
                     <h5>Date Of Birth</h5>
                     <h5>Country</h5>
@@ -121,7 +123,9 @@ class PersonalInfo extends MaleficComponent {
                     <h5>Phone Number</h5>
                 </div>
                 <div class="col span-3-of-4 info">
-                    <input type="text" class="input" id="about" name="about" value="${this.about}">
+                    <div class="post__edit__text">
+                        <textarea id="about" name="about" value="${this.about}"></textarea>
+                    </div>
                     <input type="text" class="input" id="address" name="address" value="${this.address}">
                     <div class="dob" data-="selectors">
                         <select class="selector" aria-label="Day" id="day">
