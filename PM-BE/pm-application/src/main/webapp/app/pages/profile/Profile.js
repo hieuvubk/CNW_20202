@@ -212,6 +212,17 @@ class Profile extends withRouter(MaleficComponent) {
         
                     <div class="main-content-div" id="education">
                         <h2>Education</h2>
+                        <div class="education__list">
+                             <div class="education">
+                            <img class="education__logo" src="content/images/HUST_logo.png">
+                            <div class="education__info">
+                                <h3 class="education__info__name"></h3>
+                                <h4 class="education__info__degree"></h4>
+                                <h4 class="education__info__degree"></h4>
+                                <h4 class="education__info__time"></h4>
+                            </div>
+                        </div>
+
                         <div class="education">
                             <img class="education__logo" src="content/images/HUST_logo.png">
                             <div class="education__info">
@@ -221,15 +232,18 @@ class Profile extends withRouter(MaleficComponent) {
                                 <h4 class="education__info__time"></h4>
                             </div>
                         </div>
+                        </div>
+                   
                     </div>
         
                     <div class="main-content-div" id="interest">
                         <h2>Interest</h2>
+
+                        <div class="interest__list">
                         <div class="interest">
                             <div class="interest__page">
                                 <a href="#" class="interest__page__link">
                                     <img class="interest__page__logo" src="content/images/HUST_logo.png">
-                        
                                     <div class="interest__page__info">
                                         <h3>Hanoi University of Science and Technology</h3>
                                     </div>
@@ -237,6 +251,19 @@ class Profile extends withRouter(MaleficComponent) {
                 
                             </div>
                         </div>
+                        <div class="interest">
+                            <div class="interest__page">
+                                <a href="#" class="interest__page__link">
+                                    <img class="interest__page__logo" src="content/images/HUST_logo.png">
+                                    <div class="interest__page__info">
+                                        <h3>Hanoi University of Science and Technology</h3>
+                                    </div>
+                                </a>
+                
+                            </div>
+                        </div>
+                        </div>
+
                     </div>
                 </div>
     
