@@ -16,10 +16,14 @@ const routes = [
 
     {
         name: 'homepage',
-        pattern: 'home',
+        pattern: '',
         data: {},
         component: 'app-homepage',
-        resolve: () => import('./pages/homepage/Homepage')
+        resolve: () => import('./pages/homepage/Homepage'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'search-job',
@@ -46,14 +50,6 @@ const routes = [
             unauthenticated: notAuthenticated
         }
     },
-
-    {
-        name: 'intro',
-        pattern: '',
-        data: {},
-        component: 'app-intro',
-        resolve: () => import('./pages/intro/Intro')
-    },
     {
         name: 'profile',
         pattern: 'profile/:id/:postId',
@@ -75,6 +71,19 @@ const routes = [
         },
         component: 'app-edit-profile',
         resolve: () => import('./pages/edit-profile/EditProfile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'chat',
+        pattern: 'chat/:conversationId',
+        data: {
+            title: 'Chat App'
+        },
+        component: 'app-chat',
+        resolve: () => import('./pages/chat/Chat'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

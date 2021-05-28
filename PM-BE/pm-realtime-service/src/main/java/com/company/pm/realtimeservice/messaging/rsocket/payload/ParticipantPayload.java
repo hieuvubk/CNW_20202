@@ -1,4 +1,4 @@
-package com.company.pm.realtimeservice.messaging.websocket.payload;
+package com.company.pm.realtimeservice.messaging.rsocket.payload;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -8,11 +8,9 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @RequiredArgsConstructor
-public class MessagePayload {
+public class ParticipantPayload {
     
-    private final String senderId;
+    private final String userId;
     
-    private final String content;
-    
-    private final Long conversationId;
+    private final String participantId;
 }
