@@ -22,6 +22,11 @@ class Profile extends withRouter(MaleficComponent) {
             profile: { type: Object },
             work: { type: Array },
             education: { type: Array },
+            showCertification: {type:String},
+            showSkill: {type: String},
+            showWorkExperience: {type: String},
+            showProject: {type:String},
+            showPublication: {type: String}
         };
     }
 
@@ -35,6 +40,31 @@ class Profile extends withRouter(MaleficComponent) {
             window.scrollTo(0, 0);
         });
         this.profile = {};
+        this.showCertification = "none";
+        this.showProject = "none";
+        this.showPublication = "none";
+        this.showSkill = "none";
+        this.showWorkExperience= "none";
+    }
+
+    handleToggleCertification(){
+        this.showCertification = (this.showCertification=="grid")?"none":"grid";
+    }
+
+    handleToggleSkill(){
+        this.showSkill = (this.showSkill=="grid")?"none":"grid";
+    }
+
+    handleToggleWorkExperience(){
+        this.showWorkExperience = (this.showWorkExperience=="grid")?"none":"grid";
+    }
+
+    handleToggleProject(){
+        this.showProject = (this.showProject=="grid")?"none":"grid";
+    }
+
+    handleTogglePublication(){
+        this.showPublication = (this.showPublication=="grid")?"none":"grid";
     }
 
     /*connectedCallback() {
@@ -126,8 +156,8 @@ class Profile extends withRouter(MaleficComponent) {
                     <div class="main-content-div" id="experience">
                         <h2>Experience</h2>
                         <div class="certification">
-                            <h3 class="certification__title">Certification</h3>
-                            <div class="certification__list">
+                            <h3 class="certification__title" @click="${this.handleToggleCertification}">Certification</h3>
+                            <div class="certification__list" style="display:${this.showCertification};">
                                 <app-experience-card
                                     info="hello"
                                     image="./content/images/HUST_logo.png"
@@ -142,8 +172,8 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
             
                         <div class="skill">
-                            <h3 class="skill__title">Skill</h3>
-                            <div class="skill__list">
+                            <h3 class="skill__title" @click="${this.handleToggleSkill}">Skill</h3>
+                            <div class="skill__list" style="display:${this.showSkill};">
                                 <app-experience-card
                                     info="hello"
                                     image="./content/images/HUST_logo.png"
@@ -157,8 +187,8 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
             
                         <div class="workExperience">
-                            <h3 class="workExperience__title">Work Experience</h3>
-                            <div class="workExperience__list">
+                            <h3 class="workExperience__title" @click="${this.handleToggleWorkExperience}">Work Experience</h3>
+                            <div class="workExperience__list" style="display:${this.showWorkExperience};">
                                 <app-experience-card
                                     info="hello"
                                     image="./content/images/HUST_logo.png"
@@ -168,14 +198,14 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
             
                         <div class="project">
-                            <h3 class="project__title">Project</h3>
-                            <div class="project__list">
+                            <h3 class="project__title" @click="${this.handleToggleProject}">Project</h3>
+                            <div class="project__list" style="display:${this.showProject};">
                             </div>
                         </div>
             
                         <div class="publication">
-                            <h3 class="publication__title">Publication</h3>
-                            <div class="publication__list">
+                            <h3 class="publication__title"  @click="${this.handleTogglePublication}">Publication</h3>
+                            <div class="publication__list" style="display:${this.showPublication};">
                             </div>
                         </div>
                     </div>

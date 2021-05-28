@@ -249,4 +249,7 @@ export const profileStyle = css`
             background-color: white;
         }
 
+    h3{
+        cursor: pointer;
+    }
 `;
