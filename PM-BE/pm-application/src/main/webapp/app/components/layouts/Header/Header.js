@@ -6,11 +6,15 @@ import { headerStyle } from './header-style';
 import '../../Dropdown/Dropdown';
 import '../../Modal/SearchBar/SearchBar';
 import '../../Dropdown/ProfileMenu/ProfileMenu';
+import getProfile from '../../../api/getProfile';
+import getUserAvt from '../../../api/getUserAvt';
 
 class Header extends MaleficComponent {
     static get properties() {
         return {
-            showModal: {type: Boolean}
+            showModal: {type: Boolean},
+            profile: {type: Boolean},
+            avtImg: {type: Boolean}
         };
     }
     
@@ -21,6 +25,7 @@ class Header extends MaleficComponent {
     constructor() {
         super();
         this.showModal = false;
+       
     }
     
     handleToggleModal() {
@@ -30,11 +35,23 @@ class Header extends MaleficComponent {
     closeModal() {
         this.showModal = false;
     }
-    
+
+    connectedCallback() {
+        super.connectedCallback()
+        getProfile()
+        .then(res => {
+            this.profile = res;
+            getUserAvt(res.userId)
+            .then(result => this.avtImg = result.resources[0].secure_url)
+            .catch(e => console.log(e));
+        })
+        .catch(e => console.log(e));
+    }
+
     render() {
+
         return html`
             ${commonStyles}
-            
             <header id="header">
                 <div id="left-header">
                     <a href="/"><img class="logo" src="content/images/Logo_official.png" alt="Logo" /></a>
@@ -84,15 +101,17 @@ class Header extends MaleficComponent {
                         <app-dropdown>
                             <div class="menu-icons" slot="toggle">
                                 <div class="profile">
-                                    <img src="content/images/avatar.png" alt="Avatar">
+                                    <img src="${this.avtImg}" alt="Avatar">
                                 </div>
                                 <div>
                                     <h6>Me <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
                             <app-profile-menu
-                                username="admin"
-                                title="Student at Hanoi University of Science and Technology"
+                                avtImg="${this.avtImg}"
+                                firstName="${this.profile.user.firstName}"
+                                lastName="${this.profile.user.lastName}"
+                                title="${this.profile.headline}"
                                 slot="menu-item">
                             </app-profile-menu>
                         </app-dropdown>

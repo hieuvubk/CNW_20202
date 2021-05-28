@@ -73,7 +73,7 @@ class CertificationCard extends MaleficComponent {
             <div class="news-card">
                 <div class="news-header">
                     <div class="poster">
-                        <i class="fas fa-certificate brief"></i>
+                    <img class="iconImg" src="content/images/medal.png">
                         <div class="poster-info">
                             <div style="font-weight: bold; font-size: 18px;">${this.cert.name}</div>
                             <p>${this.cert.issOrganization}</p>

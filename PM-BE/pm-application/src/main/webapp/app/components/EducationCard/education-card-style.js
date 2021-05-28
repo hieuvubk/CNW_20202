@@ -42,4 +42,10 @@ export const educationCardStyle = css`
     .news-card.delete {
         display: none;
     }
+
+    .iconImg {
+        height: 100px;
+        width: 100px;
+        padding-right: 20px;
+    }
 `;

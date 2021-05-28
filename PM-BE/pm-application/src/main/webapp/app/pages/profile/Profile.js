@@ -12,6 +12,11 @@ import '../../api/getPublicProfile';
 import getPublicProfile from '../../api/getPublicProfile';
 import getPublicWorkEx from '../../api/getPublicWorkEx';
 import getPublicEducation from '../../api/getPublicEducation';
+import '../../components/Modal/UploadAvatar/UploadBackground';
+import '../../components/Modal/ExperienceCard/ExperienceCard';
+import getUserAvt from '../../api/getUserAvt';
+import getPublicCert from '../../api/getPublicCert';
+import getPublicSkill from '../../api/getPublicSkill';
 
 class Profile extends withRouter(MaleficComponent) {
     static get properties() {
@@ -20,6 +25,10 @@ class Profile extends withRouter(MaleficComponent) {
             profile: { type: Object },
             work: { type: Array },
             education: { type: Array },
+            showModalAvt: { type: Boolean },
+            imgAvt: { type: String },
+            certification: { type: Array },
+            skills: { type: Array},
         };
     }
 
@@ -33,6 +42,13 @@ class Profile extends withRouter(MaleficComponent) {
             window.scrollTo(0, 0);
         });
         this.profile = {};
+        this.showModalAvt = false;
+        this.showModal = false;
+        this.education = [];
+        this.profile = {};
+        this.work = [];
+        this.certification = [];
+        this.skills = [];
     }
 
     connectedCallback() {
@@ -40,7 +56,9 @@ class Profile extends withRouter(MaleficComponent) {
         document.getElementsByTagName('title')[0].innerHTML = this.data.title;
 
         getPublicProfile(this.params.id)
-            .then(res => this.profile = res)
+            .then(res => {
+                this.profile = res;
+            })
             .catch(e => console.log(e));
 
         getPublicWorkEx(this.params.id)
@@ -48,8 +66,26 @@ class Profile extends withRouter(MaleficComponent) {
             .catch(e => console.log(e));
 
         getPublicEducation(this.params.id)
-            .then(res => this.education = res._embedded.educationList)
+            .then(res => {
+                this.education = res._embedded.educationList;
+            })
             .catch(e => console.log(e));
+
+        getUserAvt(this.params.id)
+            .then(res => this.imgAvt = res.resources[0].secure_url)
+            .catch(e => console.log(e));
+
+        getPublicCert(this.params.id)
+        .then(res => {
+            this.certification = res._embedded.certificationList;
+        })
+        .catch(e => console.log(e));
+
+        getPublicSkill(this.params.id)
+        .then(res => {
+            this.skills = res._embedded.skillList;
+        })
+        .catch(e => console.log(e));
     }
 
     handleOpenContactModal() {
@@ -60,6 +96,14 @@ class Profile extends withRouter(MaleficComponent) {
         this.showModal = false;
     }
 
+    handleToggleModal() {
+        this.showModalAvt = !this.showModal;
+    }
+
+    closeModal() {
+        this.showModalAvt = false;
+    }
+
     scrollIntoEducation(e) {
         e.preventDefault();
         this.shadowRoot.querySelector('#education').scrollIntoView({
@@ -67,22 +111,24 @@ class Profile extends withRouter(MaleficComponent) {
         });
     }
 
+    scrollIntoWork(e) {
+        e.preventDefault();
+        this.shadowRoot.querySelector('#work-experience').scrollIntoView({
+            block: 'center'
+        });
+    }
+
     render() {
-        const startDate = new Date(this.education[0].startDate);
-        const endDate = new Date(this.education[0].endDate);  
-        const endYear = endDate.getFullYear();
-        const startYear = startDate.getFullYear();
-        const endText = endYear == 1970 ? 'Now' : endYear;
         return html`
             ${commonStyles}
             <app-header></app-header>
-
+            <app-upload-avt .show="${this.showModalAvt}" @close-modal="${this.closeModal}" id=${this.id}></app-upload-avt>
             <main>
                 <div id="main-content">
                     <div class="main-content-div" id="basic-info-div">
                         <div id="background-avatar">
-                            <img src="content/images/4853433.jpg" alt="">
-                            <a class="link-icon" href="#">
+                            <img src="${this.profile.bgImageUrl}" alt="">
+                            <a class="link-icon" @click="${this.handleToggleModal}">
                                 <div class="material-icons md-24">
                                     photo_camera
                                 </div>
@@ -90,12 +136,7 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
             
                         <div id="main-avatar">
-                            <img src="content/images/user.svg" style="height: 100px;width: 100px;" alt="">
-                            <a class="link-icon" href="#">
-                                <div class="material-icons md-24">
-                                    edit
-                                </div>
-                            </a>
+                            <img src="${this.imgAvt}" alt="">
                         </div>
             
                         <div id="info">
@@ -107,86 +148,119 @@ class Profile extends withRouter(MaleficComponent) {
                             </div>
                 
                             <div id="workplace">
-                                <a style="cursor: pointer" @click="${this.scrollIntoEducation}">
+                                <a style="cursor: pointer" @click="${this.scrollIntoWork}">
                                     <p>${this.work[0].company}</p>
+                                </a>
+                                <a style="cursor: pointer" @click="${this.scrollIntoEducation}">
+                                    <p>${this.education[0].school}</p>
                                 </a>
                             </div>
                         </div>
                     </div>
         
-                    <app-contact-info .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
+                    <app-contact-info id=${this.params.id} email=${this.profile.user.email} .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
 
                     <div class="main-content-div" id="experience">
                         <h2>About</h2>
                         <p class="profile-text">${this.profile.about}</p>
                     </div>
         
-                    <div class="main-content-div" id="experience">
-                        <h2>Experience</h2>
-                        <div class="certification">
-                            <h3 class="certification__title">Certification</h3>
-                            <div class="certification__list">
-                
+        
+                    <div class="main-content-div" id="work-experience">
+                        <h2>Work Experience</h2>
+                        <div class="education__list">
+                            ${this.work.map((e) => {
+                                const start = new Date(e.startDate);
+                                const end = new Date(e.endDate);
+                                const startMonth = start.getMonth() + 1;
+                                const endMonth = end.getMonth() + 1;
+                                const startYear = start.getFullYear();
+                                const endYear = end.getFullYear();
+                                const endText = endYear == 1970 ? 'Now' : `${endMonth}/${endYear}`;
+                            return html`
+                            <div class="education">
+                            <img class="education__logo" src="content/images/suitcase.png">
+                                <div class="education__info">
+                                    <h3 class="education__info__name">${e.title}</h3>
+                                    <h4 class="education__info__degree">${e.company}</h4>
+                                    <h4 class="education__info__degree">${e.employmentType}</h4>
+                                    <h4 class="education__info__time">${startMonth}/${startYear} - ${endText}</h4>
+                                </div>
                             </div>
-                        </div>
-            
-                        <div class="skill">
-                            <h3 class="skill__title">Skill</h3>
-                            <div class="skill__list">
-                            </div>
-                        </div>
-            
-                        <div class="workExperience">
-                            <h3 class="workExperience__title">Work Experience</h3>
-                            <div class="workExperience__list">
-                
-                            </div>
-                        </div>
-            
-                        <div class="project">
-                            <h3 class="project__title">Project</h3>
-                            <div class="project__list">
-                            </div>
-                        </div>
-            
-                        <div class="publication">
-                            <h3 class="publication__title">Publication</h3>
-                            <div class="publication__div">
-                            </div>
+                                
+                            `})}
                         </div>
                     </div>
-        
+                    
+
                     <div class="main-content-div" id="education">
                         <h2>Education</h2>
-                        <div class="education">
-                            <img class="education__logo" src="content/images/HUST_logo.png">
-                            <div class="education__info">
-                                <h3 class="education__info__name">${this.education[0].school}</h3>
-                                <h4 class="education__info__degree">${this.education[0].degree}, ${this.education[0].fieldOfStudy}</h4>
-                                <h4 class="education__info__degree">${this.education[0].grade}</h4>
-                                <h4 class="education__info__time">${startYear} - ${endText}</h4>
+                        <div class="education__list">
+                        ${this.education.map((e) => {
+                            const startDate = new Date(e.startDate);
+                            const endDate = new Date(e.endDate);
+                            const endYear = endDate.getFullYear();
+                            const startYear = startDate.getFullYear();
+                            const endText = (this.endYear == 1970) ? 'Now' : endYear;
+                            return html`
+                            <div class="education">
+                                <img class="education__logo" src="content/images/graduation-hat.png">
+                                <div class="education__info">
+                                    <h3 class="education__info__name">${e.school}</h3>
+                                    <h4 class="education__info__degree">${e.degree}, ${e.fieldOfStudy}</h4>
+                                    <h4 class="education__info__degree">${e.grade}</h4>
+                                    <h4 class="education__info__time">${startYear} - ${endText}</h4>
+                                </div>
                             </div>
+                                
+                            `})}
                         </div>
                     </div>
-        
-                    <div class="main-content-div" id="interest">
-                        <h2>Interest</h2>
-                        <div class="interest">
-                            <div class="interest__page">
-                                <a href="#" class="interest__page__link">
-                                    <img class="interest__page__logo" src="content/images/HUST_logo.png">
-                        
-                                    <div class="interest__page__info">
-                                        <h3>Hanoi University of Science and Technology</h3>
-                                    </div>
-                                </a>
-                
+
+
+                    <div class="main-content-div" id="work-experience">
+                    <h2>Certification</h2>
+                    <div class="education__list">
+                    ${this.certification.map((e) => {
+                        const start = new Date(e.issDate);
+                        const end = new Date(e.expDate);
+                        const startMonth = start.getMonth() + 1;
+                        const endMonth = end.getMonth() + 1;
+                        const startYear = start.getFullYear();
+                        const endYear = end.getFullYear();
+                        return html`
+                        <div class="education">
+                            <img class="education__logo" src="content/images/certificate.png">
+                            <div class="education__info">
+                                <h3 class="education__info__name">${e.name}</h3>
+                                <h4 class="education__info__degree">${e.issOrganization}</h4>
+                                <h4 class="education__info__degree">Issued: ${startMonth}/${startYear}</h4>
+                                <h4 class="education__info__time">Expired: ${endMonth}/${endYear}</h4>
                             </div>
                         </div>
+                            
+                        `})}
                     </div>
                 </div>
-    
-                <app-people-sidebar></app-people-sidebar>
+
+                <div class="main-content-div" id="skill">
+                    <h2>Skill</h2>
+                    <div class="skill-list">
+                    ${this.skills.map((e) => {
+                        return html`
+                        <div class="education">
+                            <i class="fas fa-star-of-life"></i>
+                            <div class="education__info">
+                                <p class="education__info__name">${e.name}</p>
+                            </div>
+                        </div>
+                        `})}
+                    </div>
+                    
+                </div>
+                     
+                    </div>
+                </div>
             </main>
             <app-footer></app-footer>
         `;
@@ -194,3 +268,7 @@ class Profile extends withRouter(MaleficComponent) {
 }
 
 customElements.define('app-profile', Profile);
+
+
+
+

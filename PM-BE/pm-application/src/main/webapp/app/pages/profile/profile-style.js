@@ -26,7 +26,7 @@ export const profileStyle = css`
     }
     
     .main-content-div {
-        width: 780px;
+        width: 97%;
         border: 0.1px solid #c7cfd4;
         border-radius: 10px;
         border-collapse: separate;
@@ -73,17 +73,20 @@ export const profileStyle = css`
     }
     
     #main-avatar {
-        margin-top: -50px;
+        margin-top: -11%;
         background-color:transparent;
         position: relative;
     }
     
     #main-avatar img {
         display: block;
+        height: 150px;
+        width: 150px;
         background-color: white;
-        border: 1px solid black;
+        border: 1px solid #1597bb;
         border-radius: 50%;
         margin-left: 20px;
+        cursor: pointer;
     }
     
     #main-avatar a {
@@ -131,8 +134,9 @@ export const profileStyle = css`
     
     #workplace a {
         font-weight: bold;
-        color: black;
+        color: #265077;
         text-decoration: none;
+        line-height: 30px
     }
 
     .profile-text {
@@ -141,7 +145,7 @@ export const profileStyle = css`
     }
     
     #workplace a:hover {
-        color: blue;
+        color: #1597bb;
         text-decoration: underline;
     }
 
@@ -151,11 +155,13 @@ export const profileStyle = css`
     
     #contact-info {
         cursor: pointer;
-        color: blue;
+        color: #265077;
+
     }
     
     #contact-info:hover {
         text-decoration: underline;
+        color: #1597bb;
     }
     
     /*-------------------------------------------------*/
@@ -176,7 +182,7 @@ export const profileStyle = css`
     .education__logo {
         display: inline-block;
         height: 100px;
-        width: 70px;
+        width: 100px;
     }
     
     .education__info {
@@ -242,4 +248,24 @@ export const profileStyle = css`
         }
     }
 
+    .skill__list, .certification__list, .workExperience__list, 
+        .project__list, .publication__list{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: white;
+        }
+
+    h3{
+        cursor: pointer;
+    }
+
+    .education {
+        .education__list, .interest__list {
+            margin: 20px;
+            background-color: white;
+            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
 `;
