@@ -115,6 +115,12 @@ export const postCardStyle = css`
     }
     
     .edit{
+        display:flex;
+        flex-direction: column;
+        margin-left: auto;
+    }
+
+    .edit-icon{
         border-radius: 50%;
         height: 30px;
         width: 30px;
@@ -123,15 +129,46 @@ export const postCardStyle = css`
         cursor: pointer;
     }
 
-    .edit:hover{
-        background-color: gray;
+    .edit-icon:hover{
+        background-color: whitesmoke;
     }
 
-    .edit i{
+    .edit-icon i{
         display: block;
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
+    }
+
+    #dropdown-edit{
+        position: absolute;
+        background-color: white;
+        margin-top: 32px;
+        border: 0.1px solid #c7cfd4;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    #dropdown-edit div{
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    #dropdown-edit div:hover{
+        background-color: whitesmoke;
+    }
+
+    #dropdown-edit::before {
+        content: '';
+        position: absolute;
+        top: -7%;
+        right: 78%;
+        width: 13px;
+        height: 13px;
+        background-color: #fff;
+        transform: rotate(45deg);
+        border-left: 0.1px solid #c7cfd4;
+        border-top: 0.1px solid #c7cfd4;
     }
 `;
