@@ -1,7 +1,6 @@
 package com.company.pm.uploadservice.domain.services;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 import com.company.pm.common.web.errors.BadRequestAlertException;
 import com.company.pm.companyservice.domain.repositories.CompanyRepository;
@@ -30,22 +29,6 @@ public class CloudinaryService {
     private final CompanyRepository companyRepository;
     
     private final UserRepository userRepository;
-    
-    @Transactional(readOnly = true)
-    public Mono<Map> getAvatarImgOfUser(String userId) {
-        return findUser(userId)
-            .map(user -> {
-                try {
-                    return cloudinary.search()
-                        .expression("folder:" + UPLOAD_FOLDER + "/" + userId + " AND tags=avatar AND resource_type:image")
-                        .sortBy("uploaded_at", "desc")
-                        .maxResults(1)
-                        .execute();
-                } catch (Exception e) {
-                    throw new RuntimeException(e.getMessage());
-                }
-            });
-    }
     
     @Transactional(readOnly = true)
     public Mono<Map> uploadBgImgOfUser(String userId, byte[] bytes) {

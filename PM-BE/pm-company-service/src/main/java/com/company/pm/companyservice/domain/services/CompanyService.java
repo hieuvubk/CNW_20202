@@ -123,21 +123,16 @@ public class CompanyService {
      * <p>
      * This is scheduled to get fired everyday, at 02:00 (am).
      */
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Ho_Chi_Minh")
     public void syncCompanySearch() {
         syncCompanySearchReactively().blockLast();
     }
     
     @Transactional
     public Flux<CompanySearch> syncCompanySearchReactively() {
-        return companyRepository.findAll()
-            .flatMap(company -> companySearchRepository.findById(company.getId())
-                .flatMap(companySearch -> {
-                    companySearch.setName(company.getName());
-                    
-                    return companySearchRepository.save(companySearch);
-                })
-                .switchIfEmpty(companySearchRepository.save(
+        return companySearchRepository.deleteAll()
+            .thenMany(companyRepository.findAll()
+                .flatMap(company -> companySearchRepository.save(
                     new CompanySearch(company.getId(), company.getName()))
                 )
             );
