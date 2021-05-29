@@ -13,10 +13,16 @@ const notAuthorized = {
 };
 
 const routes = [
-
+    {
+        name: 'intro',
+        pattern: '',
+        data: {},
+        component: 'app-intro',
+        resolve:()=> import('./pages/intro/Intro')
+    },
     {
         name: 'homepage',
-        pattern: '',
+        pattern: 'home',
         data: {},
         component: 'app-homepage',
         resolve: () => import('./pages/homepage/Homepage'),
@@ -37,14 +43,22 @@ const routes = [
         pattern: 'create-company',
         data: {},
         component: 'app-create-company',
-        resolve:()=> import('./pages/create-company/createCompany')
+        resolve:()=> import('./pages/create-company/createCompany'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'update-company',
         pattern: 'update-company/:id',
         data: {},
         component: 'app-update-company',
-        resolve:()=> import('./pages/update-company/UpdateCompany')
+        resolve:()=> import('./pages/update-company/UpdateCompany'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'company-page',
@@ -52,6 +66,10 @@ const routes = [
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'account-setting',

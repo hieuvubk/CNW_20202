@@ -15,7 +15,7 @@ export const profileStyle = css`
     
     #main-content {
         margin-top: 0;
-        width: 800px;
+        width: 845px;
         height: auto;
         display: flex;
         flex-direction: column;
