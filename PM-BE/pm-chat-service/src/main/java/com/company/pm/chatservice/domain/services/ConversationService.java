@@ -89,23 +89,33 @@ public class ConversationService {
     }
     
     /*@Transactional
-    public Mono<Conversation> getOrCreateConversationByUser(String userId, String participantId) {
-        return conversationRepository.findByCreator(userId)
-            .flatMap(conversation -> participantRepository.findByConversation(conversation.getId())
-                .collectList()
-                .map(participants -> {
-                    List<String> participantsId = participants.stream()
-                        .map(Participant::getUserId)
-                        .collect(Collectors.toList());
-                    
-                    if (participantsId.containsAll(List.of(userId, participantId))) {
-                        if (participantsId.size() == 2) {
-                            return conversation;
-                        }
-                    } else {
-                        return Mono.error(new BadRequestAlertException("Invalid participant", "participant", "invalid"));
-                    }
-                })
-            );
+    public Mono<Conversation> getOrCreateConversation(String userId, String participantId, ConversationDTO conversationDTO) {
+        return conversationRepository.findByUserOrParticipant(userId, participantId)
+            .collectList()
+            .flatMap(conversations -> {
+                if (conversations.size() == 0) {
+                    return createConversationByUser(userId, conversationDTO);
+                }
+                
+                List<Long> conversationsId = conversations.stream()
+                    .map(Conversation::getId)
+                    .collect(Collectors.toList());
+                
+                return Flux.fromIterable(conversationsId)
+                    .flatMap(participantRepository::findByConversation)
+                        .collectList()
+                        .flatMap(participants -> {
+                            List<String> participantsId = participants.stream()
+                                .map(Participant::getUserId)
+                                .collect(Collectors.toList());
+                            
+                            if (participantsId.containsAll(List.of(userId, participantId))) {
+                                if (participantsId.size() == 2) {
+                                
+                                }
+                            }
+                        });
+                    );
+            });
     }*/
 }
