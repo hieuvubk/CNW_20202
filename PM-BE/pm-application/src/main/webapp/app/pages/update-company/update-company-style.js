@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const CreatedCompanyStyle = css`
+export const updateCompanyStyle = css`
 :host {
     font-size: 1rem;
     color: #5a5a5a;
@@ -64,16 +64,16 @@ main{
 #term{
     display: block !important;
     height: 20px !important;
-    width: 15px !important;
-    margin:0 10px 0 10px !important;
+    width: 20px !important;
+    margin:0 10px 0 0 !important;
 }
 
 #term__agree{
     display: flex;
 }
 
-#term__agree p {
-    font-size: 0.8rem;
+#term__agree div{
+    font-size: 15px;
 }
 
 
@@ -312,4 +312,3 @@ label {
 }
 
 `;
-

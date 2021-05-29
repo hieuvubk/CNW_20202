@@ -1,31 +1,35 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
-import { CreatedCompanyStyle } from './createCompany-style';
+import { updateCompanyStyle } from './update-company-style';
 
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
 import getCompany from "../../api/getPublicCompany";
 import {withRouter} from "../../core/router/malefic-router";
-import postCompany from "../../api/postCompany";
+import patchCompany from "../../api/patchCompany";
 import '../../components/Alert/AlertSuccess';
 import '../../components/Alert/AlertFail';
 import '../../components/Modal/UploadCompanyBackground/UploadCompanyBackground';
 import global from '../../components/global';
 import '../../components/Modal/UploadLogo/UploadLogo';
 
-class CreateCompanyPage extends withRouter(MaleficComponent){
+class UpdateCompany extends withRouter(MaleficComponent){
 
     static get properties(){
         return{
             tabShow: { type: Int16Array },
+            showLogoModal: { type: Boolean },
             formData: { type: FormData},
             company: {type: JSON},
+            showModalAvt: { type: Boolean },
+            bgImage: { type: String},
+            logoImage: {type: String},
         }
     }
 
     static get styles(){
-        return [CreatedCompanyStyle];
+        return [updateCompanyStyle];
     }
 
     constructor(){
@@ -55,11 +59,11 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
         reviewName.innerHTML=name.value;
     }
 
-    // handleReviewSize(){
-    //     let reviewSize = this.shadowRoot.querySelector("#company-info a");
-    //     let size = this.shadowRoot.getElementById("companySize");
-    //     reviewSize.innerHTML = size.value + " Employees";
-    // }
+    handleReviewSize(){
+        let reviewSize = this.shadowRoot.querySelector("#company-info a");
+        let size = this.shadowRoot.getElementById("companySize");
+        reviewSize.innerHTML = size.value + " Employees";
+    }
 
     handleReviewLogo(){
         let reviewLogo = this.shadowRoot.querySelector("#main-avatar img");
@@ -85,10 +89,22 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
         this.logoImage = image;
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getCompany(this.params.id).then(res => {
+            this.company = res;
+            this.logoImage = res.logoUrl;
+            this.bgImage = res.bgImageUrl;
+        })
+            .catch(e => console.log(e));
+    }
+
     submitForm() {
         let companyForm = this.shadowRoot.getElementById("main__basic__info__form");
         companyForm.addEventListener("submit", (e) => e.preventDefault());
         this.formData = new FormData(companyForm);
+        this.formData.append("bgImageUrl", this.bgImage);
+        this.formData.append("logoUrl", this.logoImage);
 
         // Convert formData to a query string
         const data = [...this.formData.entries()];
@@ -96,9 +112,10 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
             .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
             .join('&');
 
-        postCompany(asString)
+        patchCompany(this.params.id, asString)
             .then(data => {
-                if(data == 201) {
+                if(data) {
+                    console.log(data)
                     const alertBox = this.shadowRoot.querySelector('.show-alert');
                     alertBox.classList.add('active');
                     setTimeout(function () {
@@ -106,39 +123,41 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
                     }, 2000);
                 }
             })
-            .catch((e) => {
+            .catch(() => {
                 const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
                 alertBox.classList.add('active');
                 setTimeout(function () {
                     alertBox.classList.remove('active')
                 }, 2000);
             });
-
     }
 
     render(){
         return html`
             ${commonStyles}
+
             <app-header></app-header>
+            <app-upload-company-background .show="${this.showModalAvt}" @close-modal="${this.closeModal}" id=${this.company.id}></app-upload-company-background>
+            <app-upload-logo .show="${this.showLogoModal}" @close-modal="${this.closeModal}" id=${this.company.id}></app-upload-logo>
             <main>
                 <div id="main__left">
                     <div id="main__basic__info">
-                        <h2>Let’s get started with a few details about your business</h2>
+                        <h2>Change your company information</h2>
                         <form id="main__basic__info__form">
                             <label for="name" >Name *</label></br>
-                            <input type="text" id="name" name="name" value=""
+                            <input type="text" id="name" name="name" value="${this.company["name"]}"
                                 @keyup=${this.handleReviewName} required></br>
                             
                             <label for="website">Website</label></br>
-                            <input type="url" id="website" name="website" value=""></br>
+                            <input type="url" id="website" name="website" value="${this.company["website"]}"></br>
                             
                             <label for="companySize">Company size</label></br>
-                            <input type="text" id="companySize" name="companySize" value=""
+                            <input type="text" id="companySize" name="companySize" value="${this.company["companySize"]}"
                                 @keyup=${this.handleReviewSize}></br>
                             
                             <label for="companyType">Company type *</label></br>
                             <div class="dob" data-="selectors">
-                                <select class="selector" aria-label="Company Type" value="" id="companyType" name="companyType" required>
+                                <select class="selector" aria-label="Company Type" value="${this.company["companyType"]}" id="companyType" name="companyType" required>
                                     <option value="GOVERNMENT_AGENCY">Government agency</option>
                                     <option value="PUBLIC_COMPANY">Public company</option>
                                     <option value="SELF_EMPLOYED">Self-employed</option>
@@ -148,17 +167,15 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
                             </div>
  
                             <label for="industry">Industry</label></br>
-                            <input type="text" id="industry" name="industry" value=""></br>
+                            <input type="text" id="industry" name="industry" value="${this.company["industry"]}"></br>
                             
                             <label for="tagLine">Tag line </label></br>
-                            <input type="text" id="tagline" name="tagline" value=""></br> 
-
-                            <div id="term__agree">
-                                <div><input type="checkbox" id="term" name="term" required></div>
-                                <p for="term">I verify that I am an authorized representative of this organization 
-                                and have the right to act on its behalf in the creation and management of this page.
-                                The organization and I agree to the additional terms for Pages.</p>
+                            <input type="text" id="tagline" name="tagline" value="${this.company.tagline}"></br> 
+                            <div class="upload-btn">
+                                <div class="custom-btn" @click="${this.handleToggleLogoModal}"><i class="fas fa-cloud-upload-alt"></i>Upload Logo</div>
+                                <div class="custom-btn" @click="${this.handleToggleModal}"><i class="fas fa-cloud-upload-alt"></i>Upload Cover Photo</div>
                             </div>
+                            
                             <div class="update-button">
                             <button class="btn-save" @click="${this.submitForm}">Update</button>
                             <button type="reset" class="btn-cancel">Cancel</button>
@@ -213,5 +230,4 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
     }
 }
 
-customElements.define("app-create-company", CreateCompanyPage);
-
+customElements.define("app-update-company", UpdateCompany);
