@@ -1,19 +1,30 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { UploadAvatarStyle } from './upload-avatar-style';
+import { UploadLogoStyle } from './upload-logo-style';
 
 import '../Modal';
 import { commonStyles } from '../../../shared/styles/common-styles';
+import patchPersonalProfile from '../../../api/patchPersonalProfile';
+import postCompanyLogo from '../../../api/postCompanyLogo';
+import global from '../../global';
+import patchCompany from '../../../api/patchCompany';
 
-class UploadAvatar extends MaleficComponent {
+class UploadLogo extends MaleficComponent {
     static get properties() {
         return {
-            show: { type: Boolean }
+            show: { type: Boolean },
+            id: {type: Int16Array},
         };
     }
 
     static get styles() {
-        return [UploadAvatarStyle];
+        return [UploadLogoStyle];
+    }
+
+    constructor() {
+        super();
+        this.show = false;
+        this.id = 0;
     }
 
     handleCloseModal() {
@@ -29,7 +40,6 @@ class UploadAvatar extends MaleficComponent {
     clickDefaultUpload() {
         const defaultBtn = this.shadowRoot.querySelector('#default-btn');
         const img = this.shadowRoot.querySelector(".image img");
-        let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
         defaultBtn.click();
         defaultBtn.addEventListener("change", function () {
             const file = this.files[0];
@@ -38,13 +48,8 @@ class UploadAvatar extends MaleficComponent {
                 reader.onload = function () {
                     const result = reader.result;
                     img.src = result;
-                    console.log(result);
                 }
                 reader.readAsDataURL(file);
-            }
-            if (this.value) {
-                let valueStore = this.value.match(regExp);
-                console.log(valueStore);
             }
         });
     }
@@ -55,17 +60,27 @@ class UploadAvatar extends MaleficComponent {
     }
 
     saveImage() {
-        // loading profile image 
+        const uploadForm = this.shadowRoot.querySelector("#uploadForm");
+        uploadForm.addEventListener("submit", (e) => e.preventDefault());
+        const uploadFile = this.shadowRoot.querySelector(".uploadFile");
+        var formData = new FormData();
+        formData.append("logo", uploadFile.files[0]);
+
+        // show spinner while loading
         const spinner = this.shadowRoot.querySelector('.sk-chase');
         const avtWrapper = this.shadowRoot.querySelector('.wrapper');
         spinner.classList.add('showSpinner');
         avtWrapper.classList.add('loading');
 
-        // When finish loading
-        setTimeout(function () {
-            spinner.classList.remove('showSpinner');
-            avtWrapper.classList.remove('loading');
-        }, 2000);
+        postCompanyLogo(this.id, formData)
+            .then(res => {
+                spinner.classList.remove('showSpinner');
+                avtWrapper.classList.remove('loading');
+                this.show= false;
+                global.changeLogoImage(res.secure_url);
+                    
+            })
+            .catch(e => console.log(e));
     }
 
     render() {
@@ -74,6 +89,7 @@ class UploadAvatar extends MaleficComponent {
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
                     <div data-close-button id="close-button" @click="${this.handleCloseModal}"><i class="fas fa-times"></i></div>
+                    
                     <div class="wrapper">
                         <div class="image"><img src="content/images/avatar.png" alt=""></div>
                         <div class="content">
@@ -81,13 +97,13 @@ class UploadAvatar extends MaleficComponent {
                             <div class="text">No file chosen</div>
                         </div>
                     </div>
-                    <input type="file" id="default-btn" hidden>
-                    <button @click="${this.clickDefaultUpload}" class="custom-btn">CHOOSE A FILE</button>
-                    <button class="cancel-btn" @click="${this.reloadImage}">CANCEL</button>
-                    <button @click="${() => {
-                this.saveImage();
-
-            }}" class="save-btn">SAVE</button>
+                    <form class="uploadForm" id="uploadForm">
+                        <input type="file" id="default-btn" name="uploadFile" class="uploadFile" hidden>
+                        <div @click="${this.clickDefaultUpload}" class="custom-btn">CHOOSE A FILE</div>
+                        <button type="reset" class="cancel-btn" @click="${this.reloadImage}">CANCEL</button>
+                        <button type="submit" @click="${() => { this.saveImage() }}" class="save-btn">SAVE</button>
+                    </form>
+                    
                     <div class="sk-chase">
                         <div class="sk-chase-dot"></div>
                         <div class="sk-chase-dot"></div>
@@ -102,6 +118,6 @@ class UploadAvatar extends MaleficComponent {
     }
 }
 
-customElements.define('app-upload-avt', UploadAvatar);
+customElements.define('app-upload-logo', UploadLogo);
 
 

@@ -42,4 +42,10 @@ export const certCardStyle = css`
     .news-card.delete {
         display: none;
     }
+
+    .iconImg {
+        height: 90px;
+        width: 120px;
+        padding-right: 20px;
+    }
 `;

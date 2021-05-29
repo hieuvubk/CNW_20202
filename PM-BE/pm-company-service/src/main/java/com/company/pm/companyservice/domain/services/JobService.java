@@ -125,30 +125,22 @@ public class JobService {
      * <p>
      * This is scheduled to get fired everyday, at 02:00 (am).
      */
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 0 2 * * ?", zone = "Asia/Ho_Chi_Minh")
     public void syncJobSearch() {
         syncJobSearchReactively().blockLast();
     }
     
     @Transactional
     public Flux<JobSearch> syncJobSearchReactively() {
-        return jobRepository.findAll()
-            .flatMap(this::saveJobSearch);
+        return jobSearchRepository.deleteAll()
+            .thenMany(jobRepository.findAll()
+                .flatMap(this::saveJobSearch)
+            );
     }
     
     @Transactional
     public Mono<JobSearch> saveJobSearch(Job job) {
-        return jobSearchRepository.findById(job.getId())
-            .flatMap(jobSearch -> {
-                jobSearch.setTitle(job.getTitle());
-                jobSearch.setCompany(job.getCompany().getName());
-                jobSearch.setLocation(job.getLocation());
-                jobSearch.setJobType(job.getJobType());
-                jobSearch.setCreatedAt(job.getCreatedAt());
-                
-                return jobSearchRepository.save(jobSearch);
-            })
-            .switchIfEmpty(jobSearchRepository.save(jobToJobSearch(job)));
+        return jobSearchRepository.save(jobToJobSearch(job));
     }
     
     private JobSearch jobToJobSearch(Job job) {

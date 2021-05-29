@@ -40,7 +40,10 @@ class Homepage extends MaleficComponent {
         return html`
             ${commonStyles}
             <app-header></app-header>
-            <app-upload-post .show="${this.showModal}" @close-modal="${this.closeModal}"></app-upload-post>
+            <app-upload-post .show="${this.showModal}" @close-modal="${this.closeModal}" 
+                placeHolder="Type something" 
+                typePost="Upload your post"
+                placeHolderImage="./content/images/avatar.png"></app-upload-post>
             <main class="main">
                 <div class="main__content news">
                     <div class="status">
@@ -95,7 +98,6 @@ class Homepage extends MaleficComponent {
                             numFollowers = 900
                             time = '5w'
                             postText = 'This is my second post'
-                            postImg = 'content/images/engineering2.jpeg'
                         ></post-card>
                     </div>
                 </div>

@@ -16,10 +16,14 @@ const routes = [
 
     {
         name: 'homepage',
-        pattern: 'home',
+        pattern: '',
         data: {},
         component: 'app-homepage',
-        resolve: () => import('./pages/homepage/Homepage')
+        resolve: () => import('./pages/homepage/Homepage'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'search-job',
@@ -34,6 +38,13 @@ const routes = [
         data: {},
         component: 'app-create-company',
         resolve:()=> import('./pages/create-company/CreateCompanyPage')
+    },
+    {
+        name: 'update-company',
+        pattern: 'update-company/:id',
+        data: {},
+        component: 'app-update-company',
+        resolve:()=> import('./pages/update-company/UpdateCompany')
     },
     {
         name: 'update-company',
@@ -60,14 +71,6 @@ const routes = [
             unauthenticated: notAuthenticated
         }
     },
-
-    {
-        name: 'intro',
-        pattern: '',
-        data: {},
-        component: 'app-intro',
-        resolve: () => import('./pages/intro/Intro')
-    },
     {
         name: 'profile',
         pattern: 'profile/:id',
@@ -76,10 +79,10 @@ const routes = [
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
-        /*authentication: {
+        authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }*/
+        }
     },
     {
         name: 'edit-profile',
@@ -89,6 +92,19 @@ const routes = [
         },
         component: 'app-edit-profile',
         resolve: () => import('./pages/edit-profile/EditProfile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'chat',
+        pattern: 'chat/:conversationId',
+        data: {
+            title: 'Chat App'
+        },
+        component: 'app-chat',
+        resolve: () => import('./pages/chat/Chat'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Import;
     "com.company.pm.chatservice",
     "com.company.pm.interactionservice"
 })
-@Import({WebSocketConfiguration.class})
+@Import({RSocketConfiguration.class})
 public class RealtimeServiceConfiguration {
 }

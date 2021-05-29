@@ -85,7 +85,6 @@ class PersonalInfo extends MaleficComponent {
                 }
             })
             .catch(() => {
-                console.log("Hello")
                 const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
                 alertBox.classList.add('active');
                 setTimeout(function () {
