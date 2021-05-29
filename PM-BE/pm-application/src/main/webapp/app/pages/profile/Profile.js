@@ -14,7 +14,6 @@ import getPublicWorkEx from '../../api/getPublicWorkEx';
 import getPublicEducation from '../../api/getPublicEducation';
 import '../../components/Modal/UploadAvatar/UploadBackground';
 import '../../components/Modal/ExperienceCard/ExperienceCard';
-import getUserAvt from '../../api/getUserAvt';
 import getPublicCert from '../../api/getPublicCert';
 import getPublicSkill from '../../api/getPublicSkill';
 
@@ -26,7 +25,6 @@ class Profile extends withRouter(MaleficComponent) {
             work: { type: Array },
             education: { type: Array },
             showModalAvt: { type: Boolean },
-            imgAvt: { type: String },
             certification: { type: Array },
             skills: { type: Array},
         };
@@ -69,10 +67,6 @@ class Profile extends withRouter(MaleficComponent) {
             .then(res => {
                 this.education = res._embedded.educationList;
             })
-            .catch(e => console.log(e));
-
-        getUserAvt(this.params.id)
-            .then(res => this.imgAvt = res.resources[0].secure_url)
             .catch(e => console.log(e));
 
         getPublicCert(this.params.id)
@@ -136,7 +130,7 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
             
                         <div id="main-avatar">
-                            <img src="${this.imgAvt}" alt="">
+                            <img src="${this.profile.user.imageUrl}" alt="">
                         </div>
             
                         <div id="info">

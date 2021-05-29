@@ -10,6 +10,7 @@ class ProfileMenu extends MaleficComponent {
             lastName: {type: String},
             title: {type: String},
             avtImg: {type: String},
+            id: {type: String}
         };
     }
     
@@ -23,6 +24,7 @@ class ProfileMenu extends MaleficComponent {
         this.title = '';
         this.lastName = '';
         this.avtImg = '';
+        this.id = '';
     }
     
     render() {
@@ -35,9 +37,10 @@ class ProfileMenu extends MaleficComponent {
             </div>
             <div class="setting-list">
                 <ul>
-                    <li><i class="fas fa-user-circle"></i><a href="#">View Profile</a></li>
-                    <li><i class="fas fa-edit"></i><a href="#">Edit Profile</a></li>
-                    <li><i class="fas fa-users-cog"></i><a href="#">Account Settings</a></li>
+                    <li ><i class="fas fa-user-circle"></i><a href='profile/${this.id}'>View Profile</a></li>
+                    <li><i class="fas fa-edit"></i><a href="edit-profile">Edit Profile</a></li>
+                    <li><i class="fas fa-users-cog"></i><a href="account">Account Settings</a></li>
+                    <li><i class="fas fa-building"></i><a href="account">My Company</a></li>
                     <li><i class="fas fa-sign-out-alt"></i><a href="#">Sign Out</a></li>
                 </ul>
             </div>

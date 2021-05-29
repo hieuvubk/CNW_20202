@@ -55,11 +55,11 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
         reviewName.innerHTML=name.value;
     }
 
-    // handleReviewSize(){
-    //     let reviewSize = this.shadowRoot.querySelector("#company-info a");
-    //     let size = this.shadowRoot.getElementById("companySize");
-    //     reviewSize.innerHTML = size.value + " Employees";
-    // }
+    handleReviewSize(){
+        let reviewSize = this.shadowRoot.querySelector(".employees");
+        let size = this.shadowRoot.getElementById("companySize");
+        reviewSize.innerHTML = size.value + " Employees";
+    }
 
     handleReviewLogo(){
         let reviewLogo = this.shadowRoot.querySelector("#main-avatar img");
@@ -75,6 +75,12 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
 
         let img = background.files[0];
         reviewBackground.src = URL.createObjectURL(img);
+    }
+
+    handleReviewTagline(){
+        let reviewTagline = this.shadowRoot.querySelector(".tag-line");
+        let tagline = this.shadowRoot.getElementById("tagline");
+        reviewTagline.innerHTML = tagline.value;
     }
 
     changeBgImage = (image) => {
@@ -151,7 +157,7 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
                             <input type="text" id="industry" name="industry" value=""></br>
                             
                             <label for="tagLine">Tag line </label></br>
-                            <input type="text" id="tagline" name="tagline" value=""></br> 
+                            <input type="text" id="tagline" name="tagline" value="" @keyup=${this.handleReviewTagline}></br> 
 
                             <div id="term__agree">
                                 <div><input type="checkbox" id="term" name="term" required></div>
@@ -189,10 +195,10 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
                         <div id="info">
                             <div id="company-info">
                                 <h1>Name</h1>
-                                <p>Slogan</p>
+                                <p class="tag-line">Slogan</p>
                                 <span>Address</span>
                                 <span>Followers</span>
-                                <span>Employees</span>
+                                <span class="employees">Employees</span>
                             </div>
                         </div>
 
