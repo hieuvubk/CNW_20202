@@ -7,14 +7,13 @@ import '../../Dropdown/Dropdown';
 import '../../Modal/SearchBar/SearchBar';
 import '../../Dropdown/ProfileMenu/ProfileMenu';
 import getProfile from '../../../api/getProfile';
-import getUserAvt from '../../../api/getUserAvt';
+import '../../Dropdown/CompanyMenu/CompanyMenu';
 
 class Header extends MaleficComponent {
     static get properties() {
         return {
             showModal: {type: Boolean},
             profile: {type: Boolean},
-            avtImg: {type: Boolean}
         };
     }
     
@@ -25,7 +24,6 @@ class Header extends MaleficComponent {
     constructor() {
         super();
         this.showModal = false;
-       
     }
     
     handleToggleModal() {
@@ -41,9 +39,6 @@ class Header extends MaleficComponent {
         getProfile()
         .then(res => {
             this.profile = res;
-            getUserAvt(res.userId)
-            .then(result => this.avtImg = result.resources[0].secure_url)
-            .catch(e => console.log(e));
         })
         .catch(e => console.log(e));
     }
@@ -68,10 +63,13 @@ class Header extends MaleficComponent {
                         </div>
             
                         <div class="menu-icons">
+                        <a href="#">
                             <div class="material-icons md-24">
                                 home
                             </div>
                             <h6>Home</h6>
+                        </a>
+                            
                         </div>
                         <div class="menu-icons">
                             <div class="material-icons md-24">
@@ -91,27 +89,48 @@ class Header extends MaleficComponent {
                             </div>
                             <h6>Messaging</h6>
                         </div>
+
                         <div class="menu-icons">
                             <div class="material-icons md-24">
                                 notifications
                             </div>
                             <h6>Notifications</h6>
                         </div>
+
+                        <app-dropdown>
+                            <div class="menu-icons" slot="toggle">
+                                <div class="material-icons md-24">
+                                <i class="fas fa-building"></i>
+                                </div>
+                                <div>
+                                    <h6>Company <i class="fas fa-caret-down"></i></h6>
+                                </div>
+                            </div>
+                            <app-company-menu
+                                avtImg="${this.profile.user.imageUrl}"
+                                firstName="${this.profile.user.firstName}"
+                                lastName="${this.profile.user.lastName}"
+                                title="${this.profile.headline}"
+                                id="${this.profile.userId}"
+                                slot="menu-item">
+                            </app-company-menu>
+                        </app-dropdown>
                         
                         <app-dropdown>
                             <div class="menu-icons" slot="toggle">
                                 <div class="profile">
-                                    <img src="${this.avtImg}" alt="Avatar">
+                                    <img src="${this.profile.user.imageUrl}" alt="Avatar">
                                 </div>
                                 <div>
                                     <h6>Me <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
                             <app-profile-menu
-                                avtImg="${this.avtImg}"
+                                avtImg="${this.profile.user.imageUrl}"
                                 firstName="${this.profile.user.firstName}"
                                 lastName="${this.profile.user.lastName}"
                                 title="${this.profile.headline}"
+                                id="${this.profile.userId}"
                                 slot="menu-item">
                             </app-profile-menu>
                         </app-dropdown>

@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const companyPageStyle = css`
+export const myCompanyStyle = css`
     
 /*MAIN---------------------------*/
 :host {
@@ -12,23 +12,22 @@ main{
     display: flex;
     justify-content: center;
     background-color: rgb(245, 245, 245);
-    margin-top: 70px;
+    margin-top: 3%;
+    margin-left: 5px;
 }
 
 #main-content{
     margin-top: 0;
-    width: 800px;
     height: auto;
     display: flex;
     flex-direction: column;
     background-color: rgb(245, 245, 245);
     padding: 10px;
-    margin-left: 50px;
     align-items: center;
 }
 
 .main-content-div{
-    width: 780px;
+    width: 100%;
     border: 0.1px solid #c7cfd4;
     border-radius: 10px;
     border-collapse: separate; 
@@ -61,6 +60,8 @@ main{
     background-color:transparent;
     position: relative;
     padding-bottom: 15px;
+    display: flex;
+    flex-direction: row;
 }
 
 #main-avatar img{
@@ -325,4 +326,142 @@ aside > div{
 #about__location h3{
     margin: 10px;
 }
+
+
+/*MAIN-------------------------------------------------------*/
+.main{
+    position: relative;
+    width: 100%;
+    height: max-content;
+    min-height: 100%;
+    background-color: #F0F2EF;
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.news{
+    width: 750px;
+    min-width: 400px;
+    background-color: bisque rgb(201, 201, 201);
+    height: max-content;
+}
+
+.ads{
+    margin-top: 32px;
+    width: 250px;
+    background-color: brown rgb(201, 201, 201);
+}
+
+
+/*ADS----------------*/
+.ads{
+    display: none;
+    flex: 0 0 auto;
+    background-color: rgb(245, 245, 245) rgb(201, 201, 201);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.suggest, .quote{
+    width: 90%;
+    background-color: white;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+    border-radius: 10px;
+    border: 0.5px solid rgb(201, 201, 201);
+}
+
+.suggest{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: white;
+    align-items: center;
+}
+
+.suggest__link{
+    display: block;
+    background-color: white;
+    height: 50px;
+    width: 90%;
+    margin: 20px;
+    color: black;
+    text-decoration: none;
+}
+
+.suggest h3 {
+    margin-top: 10%;
+}
+
+.suggest__info{
+    display: flex;
+    align-items: center;
+}
+
+.suggest__info__avatar{
+    display: block;
+    height: 45px;
+    width: 45px;
+}
+
+.edit-company {
+    margin-left: 75%;
+    margin-top: 5%;
+    background-color: #6dd5ed;
+    border: 1px solid white;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    vertical-align: center;
+    cursor: pointer;
+}
+
+.edit-company i {
+    margin-top: 15px;
+    color: #0F2027;
+    font-size: 20px;
+}
+
+
+.suggest__info__name{
+    background-color: white;
+    height: 30px;
+    margin-left: 10px;
+    width: 90%;
+    text-align: left;
+    color: #5a5a5a;
+}
+
+.suggest__info__name:hover {
+    color: #265077;
+    text-decoration: underline;
+}
+
+.quote{
+    background-color: white;
+}
+
+.web__info {
+    border: none !important;
+    background-color: transparent !important;
+    text-align: center;
+}
+
+.web__info > a {
+    margin: 5px;
+    font-size: 12px;
+    text-decoration: none;
+    color: #5a5a5a;
+}
+
+.web__info a:hover {
+    text-decoration: underline;
+    color: #265077;
+}
+
 `; 

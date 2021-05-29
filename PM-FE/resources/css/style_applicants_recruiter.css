@@ -13,7 +13,7 @@ main{
 }
 
 #main__right{
-    background-color: blanchedalmond;
+    background-color: rgb(255, 255, 255);
     margin: 10px;
     width: 100%;
 }
@@ -33,7 +33,7 @@ main{
     display: flex;
     justify-content: space-between;
     padding: 5px 10px 5px 10px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(201, 201, 201);
 }
 
 #filter select{
@@ -44,12 +44,17 @@ main{
 }
 
 #applicants__amount{
-    background-color: white;
-    border: 1px solid black;
+    background: linear-gradient(
+135deg
+, rgba(30, 65, 87, 0.95) 0%, rgb(21, 151, 187) 100%);
+color: white;
+    font-weight: bold;
+    border: 1px solid rgb(201, 201, 201);
+    padding: 10px;
 }
 
 #applicants__brief__card{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(201, 201, 201);
 }
 
 #applicants__brief__card div{
@@ -62,7 +67,10 @@ main{
 
 #applicants__brief__card__header__name{
     flex: 1  1 auto;
-    background-color: teal;
+}
+
+#applicants__brief__card__header__name p{
+    font-size: 12px;
 }
 
 .applicants__brief__card__info{
@@ -86,4 +94,16 @@ main{
 .applicants__brief__card__info__detail span{
     font-style: italic;
     font-size: 13px;
+}
+
+#applicants__brief__card__header__button button{
+    padding: 7px;
+    background: linear-gradient(
+135deg
+, rgba(30, 65, 87, 0.95) 0%, rgb(21, 151, 187) 100%);
+color:white;
+font-weight: bold;
+border: none;
+margin: 10px;
+cursor: pointer;
 }

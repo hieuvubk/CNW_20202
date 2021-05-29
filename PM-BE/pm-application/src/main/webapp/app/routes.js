@@ -33,8 +33,22 @@ const routes = [
         resolve:()=> import('./pages/search-job/searchJob')
     },
     {
+        name:'applicant',
+        pattern:'applicant',
+        data:{},
+        component:'app-recruiter-applicant',
+        resolve:()=>import('./pages/recruiter-applicants/recruiter-applicants')
+    },
+    {
+        name:'network',
+        pattern:'network',
+        data:{},
+        component:'app-network',
+        resolve:()=> import('./pages/network/network')
+    },
+    {
         name: 'create-company',
-        pattern: 'create_company',
+        pattern: 'create-company',
         data: {},
         component: 'app-create-company',
         resolve:()=> import('./pages/create-company/createCompany')
@@ -85,6 +99,32 @@ const routes = [
         },
         component: 'app-edit-profile',
         resolve: () => import('./pages/edit-profile/EditProfile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'my-company',
+        pattern: 'my-company',
+        data: {
+            title: 'My company'
+        },
+        component: 'app-my-company',
+        resolve: () => import('./pages/my-company/MyCompany'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'my-company-id',
+        pattern: 'company-admin/:id',
+        data: {
+            title: 'My company by id'
+        },
+        component: 'app-my-company-id',
+        resolve: () => import('./pages/my-company/MyCompanyID'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

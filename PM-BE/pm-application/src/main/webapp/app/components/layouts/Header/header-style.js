@@ -14,7 +14,7 @@ export const headerStyle = css`
         height: 70px;
         border-bottom: 0.5px solid gray;
         z-index: 10;
-        background-color: hsl(203, 49%, 23%, 0.95);
+        background: linear-gradient(135deg,#1e4157f2 0%,#2193b0 100%);
     }
     
     .logo {
