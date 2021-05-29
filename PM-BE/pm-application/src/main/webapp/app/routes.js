@@ -29,6 +29,20 @@ const routes = [
         resolve:()=> import('./pages/search-job/searchJob')
     },
     {
+        name:'applicant',
+        pattern:'applicant',
+        data:{},
+        component:'app-recruiter-applicant',
+        resolve:()=>import('./pages/recruiter-applicants/recruiter-applicants')
+    },
+    {
+        name:'network',
+        pattern:'network',
+        data:{},
+        component:'app-network',
+        resolve:()=> import('./pages/network/network')
+    },
+    {
         name: 'create-company',
         pattern: 'create_company',
         data: {},

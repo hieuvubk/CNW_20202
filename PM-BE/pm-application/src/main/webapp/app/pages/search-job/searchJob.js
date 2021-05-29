@@ -50,8 +50,10 @@ class SearchJob extends MaleficComponent{
             <div>
         <div class="search__filter">
             <input type="text" name="keywords">
-            <div id="search__filter__jobtype" @click="${this.handleToggleShowPopupJobtype}">Job type <i class="fas fa-sort-down"></i></div>
-            <div id="search__filter__createdat" @click="${this.handleToggleShowPopupCreatedat}">Created at <i class="fas fa-sort-down"></i></div>
+            <!--div id="search__filter__jobtype" @click="${this.handleToggleShowPopupJobtype}">Job type <i class="fas fa-sort-down"></i></div-->
+            <!--div id="search__filter__createdat" @click="${this.handleToggleShowPopupCreatedat}">Created at <i class="fas fa-sort-down"></i></div-->
+            <input type="text" name="jobType" placeholder="Job type">
+            <input type="text" name="createAt" placeholder="Created at">
             <div>Search</div>
         </div>
  
