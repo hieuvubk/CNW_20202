@@ -1,6 +1,6 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { ExperienceCardStyle } from '../../Modal/ExperienceCard/ExperienceCard-style';
+import { ExperienceCardStyle } from './ ExperienceCard-style';
 
 import '../Modal';
 import { commonStyles } from '../../../shared/styles/common-styles';

@@ -73,7 +73,7 @@ class WorkCard extends MaleficComponent {
             <div class="news-card">
                 <div class="news-header">
                     <div class="poster">
-                        <i class="fas fa-briefcase brief"></i>
+                        <img class="iconImg" src="content/images/portfolio.png">
                         <div class="poster-info">
                             <div style="font-weight: bold; font-size: 18px;">${this.work.title}</div>
                             <p>${this.work.company}</p>

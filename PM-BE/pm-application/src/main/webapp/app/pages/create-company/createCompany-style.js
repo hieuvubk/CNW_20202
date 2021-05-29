@@ -1,6 +1,10 @@
 import { css } from '../../core/components/css-tag';
 
 export const CreatedCompanyStyle = css`
+:host {
+    font-size: 1rem;
+    color: #5a5a5a;
+}
 main{
     margin-top: 70px;
     background-color: whitesmoke;
@@ -8,7 +12,7 @@ main{
     justify-content: space-around;
 }
 
-#main__left{
+#main__left {
     width: 400px;
     flex: 0 0 400px;
     background-color: white;
@@ -33,48 +37,53 @@ main{
 
 #main__basic__info__form input{
     margin: 10px;
-    width: 360px;
+    width: 95%;
     height: 30px;
     font-size: 15px;
-    outline:none;
     text-indent: 5px;
+    border-radius: 5px;
+    color: #777;
+    border: 1px solid #ccd0d5;
+    outline: none;
+}
+
+#main__basic__info__form input:focus{
+    border: 1px solid #265077;
+}
+
+.input {
+    position: relative;
+
+  
+    line-height: 20px;
+    margin-bottom: 2%;
+    padding: 10px;
+    
 }
 
 #term{
     display: block !important;
     height: 20px !important;
-    width: 20px !important;
-    margin:0 10px 0 0 !important;
+    width: 15px !important;
+    margin:0 10px 0 10px !important;
 }
 
 #term__agree{
     display: flex;
 }
 
-#term__agree div{
-    font-size: 15px;
+#term__agree p {
+    font-size: 0.8rem;
 }
 
-#main__basic__info__form button{
-    float: right;
-    margin: 10px;
-    border: none;
-    font-weight: bold;
-    color: white;
-    background: linear-gradient(
-        135deg
-        , #1e4157f2 0%, #1597bb 100%);
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;    
-}
+
 /*=======================================*/
 .main-content-div{
-    width: 100%;
+    width: 96%;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
-    border:0.5px solid gray;
+    border: 0.1px solid #c7cfd4;
     border-radius: 10px;
     border-collapse: separate; 
     padding: 1px;
@@ -111,7 +120,7 @@ main{
 #main-avatar img{
     display: block;
     background-color: white;
-    border: 1px solid black;
+    border: 0.1px solid #c7cfd4;
     margin-left: 20px;
 }
 
@@ -136,13 +145,14 @@ main{
         135deg
         , #1e4157f2 0%, #1597bb 100%);
     width: max-content;
-    padding: 8px;
+    padding: 8px 15px;
     font-size: 18px;
     font-weight: bold;
     color:rgb(245, 245, 245);
     border-radius: 30px;
     margin: 10px;
     cursor: pointer;
+    margin-left: 20px;
 }
 
 #basic-info-follow i{
@@ -197,4 +207,109 @@ main{
     padding: 10px;
     border-radius: 8px;  
 }
+.btn-save,
+.btn-cancel {
+    border: none;
+    font-size: 16px;
+    letter-spacing: 1px;
+    padding: 7px;
+    width: 100px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+    margin-top: 3%;
+}
+.btn-save {
+    border-radius: 7px 0 0 7px;
+    background: linear-gradient(135deg, #1e4157f2 0%, #1597bb 100%);
+    font-weight: 500;
+    color: #fff;
+    margin-right: 0.5%;
+}
+.btn-cancel {
+    border-radius: 0 7px 7px 0;
+    margin-top: 3%;
+    background: #ccd0d5;
+    font-weight: 500;
+    color: #1e4258;
+}
+.btn-save:hover,
+.btn-save:active {
+    background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
+    transform: scale(1.1);
+}
+.btn-cancel:hover,
+.btn-cancel:active {
+    background: linear-gradient(135deg, #1597bb 0%, #1e4157f2 100%);
+    transform: scale(1.1);
+    color: #fff;
+}
+.update-button {
+    display: flex;
+    justify-content: center;
+}
+.selector {
+    background-position: right 5px center;
+    background-repeat: no-repeat;
+    background-size: 14px;
+    padding-right: 5%;
+    height: 30px;
+    width: 95%;
+    color: #777;
+    border: 1px solid #ccd0d5;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 10px;
+}
+.gender {
+    margin-bottom: 1%;
+}
+.select {
+    margin-top: 0px;
+    margin-right: 4px;
+    border-radius: 4px;
+    border-width: 1px;
+    display: inline-block;
+    line-height: 18px;
+    color: #777;
+    font-size: 15px;
+    padding: 0 10px 0 3px;
+}
+label {
+    margin-left: 2.5%;
+}
+.show-alert, .show-alert-fail {
+    display: none
+}
+
+.show-alert.active, .show-alert-fail.active {
+    display: block;
+}
+
+.custom-btn {
+    width: 95%;
+    height: 35px;
+    display: block;
+    background: #2193b0;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    cursor: pointer;
+    font-weight: 500;
+    color: #fff;
+    padding-top: 7px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 7px;
+}
+
+.custom-btn:hover,
+.custom-btn:active {
+    background: linear-gradient(135deg, #1597bb 0%, #265077 100%);
+}
+
+.upload-btn i {
+    margin-right: 5px;
+}
+
 `;
+

@@ -42,4 +42,10 @@ export const workCardStyle = css`
     .news-card.delete {
         display: none;
     }
+
+    .iconImg {
+        height: 100px;
+        width: 120px;
+        padding-right: 20px;
+    }
 `;

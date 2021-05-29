@@ -7,7 +7,7 @@ import '../../components/layouts/Header/Header';
 import '../../components/layouts/footer/SmallFooter';
 import '../../components/my-profile-info/PersonalInfo';
 import '../../components/my-profile-info/ChangePass';
-import '../../components/Modal/UploadAvatar/UploadAvatar';
+import '../../components/Modal/UploadAvatar/UploadBackground';
 import '../../components/Button/Button';
 import '../../components/my-profile-info/WorkExperience';
 import '../../components/my-profile-info/Education';

@@ -16,10 +16,14 @@ const routes = [
 
     {
         name: 'homepage',
-        pattern: 'home',
+        pattern: '',
         data: {},
         component: 'app-homepage',
-        resolve: () => import('./pages/homepage/Homepage')
+        resolve: () => import('./pages/homepage/Homepage'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
     },
     {
         name: 'search-job',
@@ -44,14 +48,21 @@ const routes = [
     },
     {
         name: 'create-company',
-        pattern: 'create_company',
+        pattern: 'create-company',
         data: {},
         component: 'app-create-company',
         resolve:()=> import('./pages/create-company/createCompany')
     },
     {
+        name: 'update-company',
+        pattern: 'update-company/:id',
+        data: {},
+        component: 'app-update-company',
+        resolve:()=> import('./pages/update-company/UpdateCompany')
+    },
+    {
         name: 'company-page',
-        pattern: 'company/:companyId',
+        pattern: 'company/:id',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),
@@ -67,14 +78,6 @@ const routes = [
             unauthenticated: notAuthenticated
         }
     },
-
-    {
-        name: 'intro',
-        pattern: '',
-        data: {},
-        component: 'app-intro',
-        resolve: () => import('./pages/intro/Intro')
-    },
     {
         name: 'profile',
         pattern: 'profile/:id',
@@ -83,10 +86,10 @@ const routes = [
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
-        /*authentication: {
+        authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }*/
+        }
     },
     {
         name: 'edit-profile',
@@ -96,6 +99,45 @@ const routes = [
         },
         component: 'app-edit-profile',
         resolve: () => import('./pages/edit-profile/EditProfile'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'my-company',
+        pattern: 'my-company',
+        data: {
+            title: 'My company'
+        },
+        component: 'app-my-company',
+        resolve: () => import('./pages/my-company/MyCompany'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'my-company-id',
+        pattern: 'company-admin/:id',
+        data: {
+            title: 'My company by id'
+        },
+        component: 'app-my-company-id',
+        resolve: () => import('./pages/my-company/MyCompanyID'),
+        authentication: {
+            authenticate: authenticated,
+            unauthenticated: notAuthenticated
+        }
+    },
+    {
+        name: 'chat',
+        pattern: 'chat/:conversationId',
+        data: {
+            title: 'Chat App'
+        },
+        component: 'app-chat',
+        resolve: () => import('./pages/chat/Chat'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

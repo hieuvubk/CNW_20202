@@ -71,7 +71,7 @@ class EducationCard extends MaleficComponent {
             <div class="news-card">
                 <div class="news-header">
                     <div class="poster">
-                        <i class="fas fa-graduation-cap brief"></i>
+                        <img class="iconImg" src="content/images/school.png">
                         <div class="poster-info">
                             <div style="font-weight: bold; font-size: 18px;">${this.education.school}</div>
                             <p>${this.education.degree}</p>
