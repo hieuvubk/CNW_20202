@@ -8,9 +8,9 @@ import store from '../../store/store';
 
 import '../../components/layouts/Header/Header';
 import { repeat } from '../../core/components/directives/repeat';
-import { until } from '../../core/components/directives/until';
+import { withRouter } from '../../core/router/malefic-router';
 
-class Chat extends MaleficComponent {
+class Chat extends withRouter(MaleficComponent) {
     static get properties() {
         return {
             messages: {type: Array},
@@ -28,14 +28,15 @@ class Chat extends MaleficComponent {
         this.auth = {};
         this.messages = [];
         this.textInput = '';
+        this.conversationId = '';
     }
     
     async connectedCallback() {
         super.connectedCallback();
         const state = await store.getState();
         this.auth = state.auth;
+        this.conversationId = this.params.conversationId;
         
-    
         this.client = new RSocketClient({
             serializers: {
                 data: JsonSerializer,
@@ -62,7 +63,7 @@ class Chat extends MaleficComponent {
                 this.rsocket
                     .requestStream({
                         data: null,
-                        metadata: this.sendTo('channels.11')
+                        metadata: this.sendTo(`channels.${this.conversationId}`)
                     })
                     .subscribe({
                         onComplete: (data) => {
@@ -118,7 +119,7 @@ class Chat extends MaleficComponent {
             };
             this.rsocket.fireAndForget({
                 data: newMessage,
-                metadata: this.sendTo('channels.11')
+                metadata: this.sendTo(`channels.${this.conversationId}`)
             });
             this.textInput = '';
         }
