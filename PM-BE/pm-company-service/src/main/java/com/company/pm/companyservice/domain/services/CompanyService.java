@@ -100,6 +100,9 @@ public class CompanyService {
                     if (update.getTagline() != null) {
                         company.setTagline(update.getTagline());
                     }
+                    if (update.getBgImageUrl() != null) {
+                        company.setBgImageUrl(update.getBgImageUrl());
+                    }
                     
                     return companyRepository.save(company)
                         .flatMap(saved -> companySearchRepository.save(new CompanySearch(saved.getId(), saved.getName()))
