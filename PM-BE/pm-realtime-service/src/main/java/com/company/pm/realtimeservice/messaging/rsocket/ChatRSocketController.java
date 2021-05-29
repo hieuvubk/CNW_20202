@@ -3,8 +3,6 @@ package com.company.pm.realtimeservice.messaging.rsocket;
 import com.company.pm.chatservice.domain.services.ConversationService;
 import com.company.pm.chatservice.domain.services.MessageService;
 import com.company.pm.chatservice.domain.services.ParticipantService;
-import com.company.pm.chatservice.domain.services.dto.ConversationDTO;
-import com.company.pm.domain.chatservice.Conversation;
 import com.company.pm.domain.chatservice.Message;
 import com.company.pm.realtimeservice.messaging.rsocket.handler.ChatRSocketHandler;
 import com.company.pm.realtimeservice.messaging.rsocket.payload.MessagePayload;

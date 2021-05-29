@@ -18,6 +18,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,4 +87,35 @@ public class ConversationService {
                 return conversationRepository.save(conversation);
             });
     }
+    
+    /*@Transactional
+    public Mono<Conversation> getOrCreateConversation(String userId, String participantId, ConversationDTO conversationDTO) {
+        return conversationRepository.findByUserOrParticipant(userId, participantId)
+            .collectList()
+            .flatMap(conversations -> {
+                if (conversations.size() == 0) {
+                    return createConversationByUser(userId, conversationDTO);
+                }
+                
+                List<Long> conversationsId = conversations.stream()
+                    .map(Conversation::getId)
+                    .collect(Collectors.toList());
+                
+                return Flux.fromIterable(conversationsId)
+                    .flatMap(participantRepository::findByConversation)
+                        .collectList()
+                        .flatMap(participants -> {
+                            List<String> participantsId = participants.stream()
+                                .map(Participant::getUserId)
+                                .collect(Collectors.toList());
+                            
+                            if (participantsId.containsAll(List.of(userId, participantId))) {
+                                if (participantsId.size() == 2) {
+                                
+                                }
+                            }
+                        });
+                    );
+            });
+    }*/
 }

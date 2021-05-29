@@ -15,7 +15,7 @@ export const profileStyle = css`
     
     #main-content {
         margin-top: 0;
-        width: 800px;
+        width: 845px;
         height: auto;
         display: flex;
         flex-direction: column;
@@ -172,10 +172,11 @@ export const profileStyle = css`
         width:100%;
         border-bottom: 0.1px solid #c7cfd4;
     }
-    .education {
+    .education__list, .interest__list {
         margin: 20px;
         background-color: white;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         align-items: center;
     }
     

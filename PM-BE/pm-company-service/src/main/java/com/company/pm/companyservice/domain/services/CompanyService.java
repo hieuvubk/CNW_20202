@@ -63,7 +63,9 @@ public class CompanyService {
                     company.setAdminId(user.getId());
     
                     return companyRepository.save(company)
-                        .flatMap(saved -> companySearchRepository.save(new CompanySearch(saved.getId(), saved.getName()))
+                        .flatMap(saved -> companySearchRepository.save(
+                            new CompanySearch(saved.getId(), saved.getName(), saved.getLogoUrl())
+                         )
                             .thenReturn(saved)
                         );
                 } catch (NumberFormatException e) {
@@ -100,9 +102,14 @@ public class CompanyService {
                     if (update.getTagline() != null) {
                         company.setTagline(update.getTagline());
                     }
+                    if (update.getBgImageUrl() != null) {
+                        company.setBgImageUrl(update.getBgImageUrl());
+                    }
                     
                     return companyRepository.save(company)
-                        .flatMap(saved -> companySearchRepository.save(new CompanySearch(saved.getId(), saved.getName()))
+                        .flatMap(saved -> companySearchRepository.save(
+                            new CompanySearch(saved.getId(), saved.getName(), saved.getLogoUrl())
+                         )
                             .thenReturn(saved)
                         );
                 } catch (NumberFormatException e) {
@@ -133,7 +140,7 @@ public class CompanyService {
         return companySearchRepository.deleteAll()
             .thenMany(companyRepository.findAll()
                 .flatMap(company -> companySearchRepository.save(
-                    new CompanySearch(company.getId(), company.getName()))
+                    new CompanySearch(company.getId(), company.getName(), company.getLogoUrl()))
                 )
             );
     }

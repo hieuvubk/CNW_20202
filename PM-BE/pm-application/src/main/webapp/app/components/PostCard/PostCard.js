@@ -5,6 +5,7 @@ import { commonStyles } from '../../shared/styles/common-styles';
 
 import '../Button/Button';
 import '../PostCard/commentCard';
+import getAttachment from '../../api/getAttachment';
 
 class PostCard extends MaleficComponent {
     static get styles() {
@@ -18,10 +19,11 @@ class PostCard extends MaleficComponent {
             numFollowers: {type: Int32Array},
             time: {type: Date},
             postText: {type: String},
-            postImg: {type: String},
+            postId: {type: Int16Array},
             showComment:{type:String},
             showEdit: {type: Boolean},
-            showDropdownEdit: {type: String}
+            showDropdownEdit: {type: String},
+            attachment: {type: Object}
         };
     }
 
@@ -52,17 +54,18 @@ class PostCard extends MaleficComponent {
         this.showPost="none";
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getAttachment(this.postId)
+        .then(res => this.attachment = res._embedded.attachmentList[0])
+        .catch( e => console.log(e));
+    }
+
     constructor() {
         super();
-        //this.accountImg = '';
-        //this.accountName = 'Vu Minh Hieu';
-        //this.numFollowers = 0;
-        //this.time = '2hr';
-        //this.postText = 'This is my first post';
-        //this.postImg = 'content/images/engineering2.jpeg';
         this.showDropdownEdit="none";
         this.showPost="block";
-        
+        this.attachment={};  
     }
 
     render() {
@@ -103,7 +106,7 @@ class PostCard extends MaleficComponent {
 
                 <div class="recruit-info">
                     <div>${this.postText}</div>
-                    <img src="${this.postImg}" alt="" style="display: ${this.postImg==undefined?'none':'block'}">
+                    <img src="${this.attachment.thumbUrl}" alt="" style="display: ${this.attachment.thumbUrl==undefined?'none':'block'}">
                 </div>
 
                 <div class="news-react">

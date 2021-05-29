@@ -12,6 +12,7 @@ export const postCardStyle = css`
         border-radius: 8px;
         padding: 10px 10px 0px 10px;
         background-color: white;
+        width: 730px;
     }
     
     .news-card>div{
@@ -24,7 +25,7 @@ export const postCardStyle = css`
     }
 
     .recruit-info img {
-        height: 400px;
+        height: 350px;
         width: 100%;
     }
 

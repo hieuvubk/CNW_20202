@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Service
@@ -70,7 +71,8 @@ public class JobService {
                     job.setPoster(user);
                     job.setPosterId(user.getId());
                     job.setActivated(true);
-                    job.setCreatedAt(new Date().toInstant());
+                    job.setCreatedAt(Instant.now());
+                    job.setClosedAt(Instant.EPOCH);
                     
                     return jobRepository.save(job)
                         .flatMap(saved -> saveJobSearch(saved).thenReturn(saved));
@@ -99,10 +101,10 @@ public class JobService {
                 if (update.getActivated() != null) {
                     if (!update.getActivated() && job.getActivated()) {
                         job.setActivated(false);
-                        job.setClosedAt(new Date().toInstant());
+                        job.setClosedAt(Instant.now());
                     } else if (update.getActivated() && !job.getActivated()) {
                         job.setActivated(true);
-                        job.setCreatedAt(new Date().toInstant());
+                        job.setCreatedAt(Instant.now());
                     } else {
                         return Mono.error(new BadRequestAlertException("Invalid action", ENTITY_NAME, "actioninvalid"));
                     }

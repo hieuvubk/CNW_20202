@@ -204,7 +204,7 @@ aside > div{
         135deg
         , #1e4157f2 0%, #1597bb 100%);
     width: max-content;
-    padding: 8px;
+    padding: 8px 15px;
     font-size: 18px;
     font-weight: bold;
     color:rgb(245, 245, 245);

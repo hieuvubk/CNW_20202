@@ -8,6 +8,7 @@ import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/
 import '../../components/Button/Button';
 import '../../components/PostCard/PostCard';
 import '../../components/Modal/UploadPost/UploadPost';
+import getProfile from '../../api/getProfile';
 
 class Homepage extends MaleficComponent {
     static get styles() {

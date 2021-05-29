@@ -1,4 +1,4 @@
 module.exports = {
     changeBgImage: null,
-    changeLogoImage: null
+    changeLogoImage: null,
 };

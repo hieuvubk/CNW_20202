@@ -21,7 +21,7 @@ public interface PostRepository extends R2dbcRepository<Post, Long>, PostReposit
     @Query("SELECT * FROM posts entity WHERE entity.author_id IS NULL")
     Flux<Post> findAllWhereAuthorIsNull();
     
-    @Query("SELECT * FROM posts entity WHERE entity.author_id = :id AND entity.author_id IS NULL")
+    @Query("SELECT * FROM posts entity WHERE entity.author_id = :id AND entity.company_id IS NULL")
     Flux<Post> findByAuthorAndCompanyIsNull(String id);
     
     @Query("SELECT * FROM posts entity WHERE entity.company_id = :id")
