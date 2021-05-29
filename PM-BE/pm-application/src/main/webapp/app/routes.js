@@ -40,8 +40,15 @@ const routes = [
         resolve:()=> import('./pages/create-company/createCompany')
     },
     {
+        name: 'update-company',
+        pattern: 'update-company/:id',
+        data: {},
+        component: 'app-update-company',
+        resolve:()=> import('./pages/update-company/UpdateCompany')
+    },
+    {
         name: 'company-page',
-        pattern: 'company/:companyId',
+        pattern: 'company/:id',
         data:{},
         component:'app-company-page',
         resolve: ()=> import('./pages/company-page/CompanyPage'),
@@ -65,10 +72,10 @@ const routes = [
         },
         component: 'app-profile',
         resolve: () => import('./pages/profile/Profile'),
-        /*authentication: {
+        authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }*/
+        }
     },
     {
         name: 'edit-profile',

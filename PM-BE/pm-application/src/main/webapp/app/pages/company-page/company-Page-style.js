@@ -3,6 +3,10 @@ import { css } from '../../core/components/css-tag';
 export const companyPageStyle = css`
     
 /*MAIN---------------------------*/
+:host {
+    font-size: 1rem;
+    color: #5a5a5a;
+}
 
 main{
     display: flex;
@@ -25,7 +29,7 @@ main{
 
 .main-content-div{
     width: 780px;
-    border:0.2px solid gray;
+    border: 0.1px solid #c7cfd4;
     border-radius: 10px;
     border-collapse: separate; 
     padding: 1px;
@@ -53,16 +57,18 @@ main{
 
 
 #main-avatar{
-    margin-top: -50px;
+    margin-top: -10%;;
     background-color:transparent;
     position: relative;
-    padding: 5px;
+    padding-bottom: 15px;
 }
 
 #main-avatar img{
     display: block;
     background-color: white;
     margin-left: 20px;
+    width: 100px;
+    height: 100px;
 }
 
 
@@ -204,6 +210,7 @@ aside > div{
     color:rgb(245, 245, 245);
     border-radius: 30px;
     margin: 10px;
+    margin-left: 20px;
     cursor: pointer;
 }
 
@@ -279,7 +286,7 @@ aside > div{
 }
 
 #about__detail__overview h3{
-    margin: 10px;
+    margin-bottom: 10px;
 }
 
 #about__detail__overview p{
@@ -301,6 +308,14 @@ aside > div{
 .about__detail__specified__content{
     padding: 5px;
     font-size: 15px;
+}
+
+.about__detail__specified__content a{
+    color: #265077;
+}
+
+.about__detail__specified__content a:hover{
+    color: #1597bb;
 }
 
 #about__location{
