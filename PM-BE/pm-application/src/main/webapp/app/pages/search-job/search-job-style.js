@@ -41,6 +41,7 @@ body{
   outline: none;
   font-size: 20px;
   padding: 10px;
+  margin-right: 20px;
 }
 
 .main{

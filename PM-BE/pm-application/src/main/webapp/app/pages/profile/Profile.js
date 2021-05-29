@@ -9,6 +9,8 @@ import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
 import '../../components/Modal/ContactInfo/ContactInfo';
 import '../../api/getPublicProfile';
+import '../../components/Modal/ExperienceCard/ExperienceCard';
+
 import getPublicProfile from '../../api/getPublicProfile';
 import getPublicWorkEx from '../../api/getPublicWorkEx';
 import getPublicEducation from '../../api/getPublicEducation';
@@ -24,9 +26,15 @@ class Profile extends withRouter(MaleficComponent) {
             profile: { type: Object },
             work: { type: Array },
             education: { type: Array },
+            showCertification: {type:String},
+            showSkill: {type: String},
+            showWorkExperience: {type: String},
+            showProject: {type:String},
+            showPublication: {type: String},
             showModalAvt: { type: Boolean },
             certification: { type: Array },
             skills: { type: Array},
+
         };
     }
 
@@ -40,6 +48,28 @@ class Profile extends withRouter(MaleficComponent) {
             window.scrollTo(0, 0);
         });
         this.profile = {};
+        this.showCertification = "none";
+        this.showProject = "none";
+        this.showPublication = "none";
+        this.showSkill = "none";
+        this.showWorkExperience= "none";
+    }
+
+    handleToggleCertification(){
+        this.showCertification = (this.showCertification=="grid")?"none":"grid";
+    }
+
+    handleToggleSkill(){
+        this.showSkill = (this.showSkill=="grid")?"none":"grid";
+    }
+
+    handleToggleWorkExperience(){
+        this.showWorkExperience = (this.showWorkExperience=="grid")?"none":"grid";
+    }
+
+    handleToggleProject(){
+        this.showProject = (this.showProject=="grid")?"none":"grid";
+
         this.showModalAvt = false;
         this.showModal = false;
         this.education = [];
@@ -47,9 +77,14 @@ class Profile extends withRouter(MaleficComponent) {
         this.work = [];
         this.certification = [];
         this.skills = [];
+
     }
 
-    connectedCallback() {
+    handleTogglePublication(){
+        this.showPublication = (this.showPublication=="grid")?"none":"grid";
+    }
+
+    /*connectedCallback() {
         super.connectedCallback();
         document.getElementsByTagName('title')[0].innerHTML = this.data.title;
 
@@ -105,6 +140,15 @@ class Profile extends withRouter(MaleficComponent) {
         });
     }
 
+*/
+
+       /* const startDate = new Date(this.education[0].startDate);
+        const endDate = new Date(this.education[0].endDate);  
+        const endYear = endDate.getFullYear();
+        const startYear = startDate.getFullYear();
+        const endText = endYear == 1970 ? 'Now' : endYear;*/
+
+
     scrollIntoWork(e) {
         e.preventDefault();
         this.shadowRoot.querySelector('#work-experience').scrollIntoView({
@@ -135,10 +179,10 @@ class Profile extends withRouter(MaleficComponent) {
             
                         <div id="info">
                             <div id="personal-info">
-                                <h1 id="personal-name">${this.profile.user.firstName} ${this.profile.user.lastName}</h1>
-                                <h3 class="light" id="personal-jobs">${this.profile.headline}</h3>
-                                <h4 class="light" id="personal-address">${this.profile.address}</h4>
-                                <h4 class="light" id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
+                                <h1 id="personal-name"></h1>
+                                <h3 class="light" id="personal-jobs"></h3>
+                                <h4 class="light" id="personal-address"></h4>
+                                <h4 class="light" id="contact-info" >Contact info</h4>
                             </div>
                 
                             <div id="workplace">
@@ -154,11 +198,11 @@ class Profile extends withRouter(MaleficComponent) {
         
                     <app-contact-info id=${this.params.id} email=${this.profile.user.email} .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
 
+
                     <div class="main-content-div" id="experience">
                         <h2>About</h2>
-                        <p class="profile-text">${this.profile.about}</p>
+                        <p class="profile-text"></p>
                     </div>
-        
         
                     <div class="main-content-div" id="work-experience">
                         <h2>Work Experience</h2>
@@ -190,6 +234,7 @@ class Profile extends withRouter(MaleficComponent) {
                     <div class="main-content-div" id="education">
                         <h2>Education</h2>
                         <div class="education__list">
+
                         ${this.education.map((e) => {
                             const startDate = new Date(e.startDate);
                             const endDate = new Date(e.endDate);
@@ -223,6 +268,7 @@ class Profile extends withRouter(MaleficComponent) {
                         const startYear = start.getFullYear();
                         const endYear = end.getFullYear();
                         return html`
+
                         <div class="education">
                             <img class="education__logo" src="content/images/certificate.png">
                             <div class="education__info">
