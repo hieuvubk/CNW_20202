@@ -5,6 +5,7 @@ const editor = grapesjs.init({
   blockManager: {
     appendTo: "#blocks"
   },
+  allowScripts: 1,
   styleManager: {
     appendTo: "#styles-container",
     sectors: [

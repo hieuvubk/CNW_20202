@@ -34,7 +34,6 @@ class CompanyMenu extends MaleficComponent {
                 <ul>
                     <li><i class="fas fa-pager"></i><a href='create-company'>Create Company Page</a></li>
                     <li><i class="fas fa-eye"></i><a href="my-company">My Companies</a></li>
-                    <li><i class="fas fa-briefcase"></i><a href="">Post A Job</a></li>
                 </ul>
             </div>
         `;
