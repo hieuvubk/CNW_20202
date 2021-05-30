@@ -69,7 +69,7 @@ class UploadPost extends MaleficComponent {
         formData.append("image", uploadFile.files[0]);
         formData.append('postDTO', new Blob([JSON.stringify({
             "content": this.shadowRoot.getElementById("content").value,
-            "visionable": "FRIENDS",
+            "visionable": "PUBLIC",
         })], {
                 type: "application/json"
             }));
