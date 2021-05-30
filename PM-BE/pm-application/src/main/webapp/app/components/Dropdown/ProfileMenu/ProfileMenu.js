@@ -14,7 +14,7 @@ class ProfileMenu extends MaleficComponent {
             title: {type: String},
             avtImg: {type: String},
             id: {type: String},
-            logoutUrl: {type: String}
+            logout: {type: String}
         };
     }
     
@@ -35,12 +35,17 @@ class ProfileMenu extends MaleficComponent {
         super.connectedCallback();
     }
     
-    async logout() {
+    async signOut() {
         await store.dispatch(logout());
         const state = await store.getState();
-        this.logoutUrl = state.auth.logout;
-        if (this.logoutUrl) {
-            window.location.href = this.logoutUrl + '?redirect_uri=' + window.location.origin;
+        this.logout = state.auth.logout;
+        const logoutUrl = this.logout.logoutUrl;
+        const idToken = this.logout.idToken;
+        if (logoutUrl) {
+            // if Keycloak, logoutUrl has protocol/openid-connect in it
+            window.location.href = logoutUrl.includes('/protocol')
+                ? logoutUrl + '?redirect_uri=' + window.location.origin
+                : logoutUrl + '?id_token_hint=' + idToken + '&post_logout_redirect_uri=' + window.location.origin;
         }
     }
     
@@ -54,6 +59,7 @@ class ProfileMenu extends MaleficComponent {
             </div>
             <div class="setting-list">
                 <ul>
+
                     <li>
                         <i class="fas fa-user-circle"></i>
                         <app-link href="profile/${this.id}"><div class="app-link">View Profile</div></app-link>
@@ -76,6 +82,7 @@ class ProfileMenu extends MaleficComponent {
                         <i class="fas fa-sign-out-alt"></i>
                         <a @click="${this.logout}">Sign Out</a>
                     </li>
+
                 </ul>
             </div>
         `;
