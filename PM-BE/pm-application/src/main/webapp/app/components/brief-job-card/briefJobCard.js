@@ -52,15 +52,12 @@ class BriefCard extends MaleficComponent{
             ${commonStyles}
             <div id="brief__info">
                 <div id="brief__info__avatar">
-                    <img id="brief__info__avatar__img" height="60px" width="60px" src=${this.company.logo_url}>
                 </div>
             
                 <div id="brief__info__content">
                     <h3><a href="#">${this.job.name}</a></h3>
-                    <p style="font-size:12px">${this.company.name}</p>
                     <p style="font-size:12px">${this.job.location}</p>
                     <span style="font-size:12px">${this.job.created_at}</span>
-                    <span style="font-size:12px; color: rgb(54, 87, 185); font-weight: bold; margin-left: 5px;">${this.applicants}</span>
                 </div>
             </div>
             `;

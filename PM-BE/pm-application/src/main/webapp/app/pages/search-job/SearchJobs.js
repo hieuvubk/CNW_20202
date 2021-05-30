@@ -60,38 +60,47 @@ class SearchJobs extends withRouter(MaleficComponent){
                 console.log(data._embedded.jobList)
                 console.log(this.query)
             })
-    }
-
-    submitForm() {
-        let filter = this.shadowRoot.getElementsByClassName("search__filter");
-        filter.addEventListener("submit", (e) => e.preventDefault());
-        this.formData = new FormData(filter);
-
-        // Convert formData to a query string
-        const data = [...this.formData.entries()];
-        const asString = data
-            .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
-            .join('&');
-
-        const url = new URL("/api/v1/_search/jobs")
-
-        const jobType = this.shadowRoot.getElementsByName("jobType").innerHTML;
-        if(jobType != null) {
-            url.searchParams.append("job_type", jobType)
-        }
-
-        const keyWord = this.shadowRoot.getElementsByName("keywords").innerHTML;
-        if(keyWord != null) {
-            url.searchParams.append("keyword", keyWord)
-        }
-        fetch(url)
+        searchJobs()
             .then(data => {
+                console.log(data)
                 this.jobsList = data._embedded.jobList
             })
-            .catch((e) => {
-                console.log(e)
-            })
     }
+
+    // submitForm() {
+    //     let filter = this.shadowRoot.getElementsByClassName("search__filter");
+    //     filter.addEventListener("submit", (e) => e.preventDefault());
+    //     this.formData = new FormData(filter);
+    //
+    //     // Convert formData to a query string
+    //     const data = [...this.formData.entries()];
+    //     const asString = data
+    //         .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+    //         .join('&');
+    //
+    //     const url = new URL("http://localhost:9002/api/v1/_search/jobs")
+    //
+    //     const jobType = this.shadowRoot.getElementsByName("jobType").innerHTML;
+    //     if(jobType != null) {
+    //         url.searchParams.append("job_type", "FULL_TIME")
+    //         console.log(jobType)
+    //     }
+    //
+    //     const keyWord = this.shadowRoot.getElementsByName("keywords").innerHTML;
+    //     if(keyWord != null) {
+    //         url.searchParams.append("keyword", keyWord)
+    //         console.log(keyWord)
+    //     }
+    //     fetch(url)
+    //         .then(data => {
+    //             this.jobsList = data._embedded.jobList
+    //
+    //
+    //         })
+    //         .catch((e) => {
+    //             console.log(e)
+    //         })
+    // }
 
     render() {
         return html`
@@ -125,9 +134,9 @@ class SearchJobs extends withRouter(MaleficComponent){
                                             jobName="${job.name}"
                                             address="${job.location}"
                                             time="${job.created-at}"
-                                            applicants="8 applicants">
                                     </brief-job-card>
                                     <div @click="${html`<job-detail id=${job.id}></job-detail>`}"></div>`
+                                `<job-detail id=${job.id}></job-detail>`
                                 
                         )}
                     </div>

@@ -18,11 +18,11 @@ const routes = [
         pattern: '',
         data: {},
         component: 'app-homepage',
-        resolve: () => import('./pages/homepage/Homepage')/*,
+        resolve: () => import('./pages/homepage/Homepage'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }*/
+        }
     },
     {
         name: 'general-search',
