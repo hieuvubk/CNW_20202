@@ -88,34 +88,28 @@ public class ConversationService {
             });
     }
     
-    /*@Transactional
-    public Mono<Conversation> getOrCreateConversation(String userId, String participantId, ConversationDTO conversationDTO) {
-        return conversationRepository.findByUserOrParticipant(userId, participantId)
-            .collectList()
-            .flatMap(conversations -> {
-                if (conversations.size() == 0) {
-                    return createConversationByUser(userId, conversationDTO);
-                }
-                
-                List<Long> conversationsId = conversations.stream()
-                    .map(Conversation::getId)
-                    .collect(Collectors.toList());
-                
-                return Flux.fromIterable(conversationsId)
-                    .flatMap(participantRepository::findByConversation)
-                        .collectList()
-                        .flatMap(participants -> {
-                            List<String> participantsId = participants.stream()
-                                .map(Participant::getUserId)
-                                .collect(Collectors.toList());
-                            
-                            if (participantsId.containsAll(List.of(userId, participantId))) {
-                                if (participantsId.size() == 2) {
-                                
-                                }
-                            }
-                        });
-                    );
-            });
-    }*/
+    @Transactional
+    public Mono<Conversation> getOrCreateOneToOneConversation(String userId, String participantId) {
+        String id1, id2;
+        if (userId.compareTo(participantId) > 0) {
+            id1 = userId;
+            id2 = participantId;
+        } else {
+            id1 = participantId;
+            id2 = userId;
+        }
+        
+        return conversationRepository.findOneToOneChat(id1, id2)
+            .switchIfEmpty(createConversationByUser(userId, new ConversationDTO(id1 + "-" + id2))
+                .flatMap(conversation -> {
+                    if (userId.compareTo(participantId) > 0) {
+                       conversation.setCreatorId(userId + "-" + participantId);
+                    } else {
+                       conversation.setCreatorId(participantId + "-" + userId);
+                    }
+                    
+                    return conversationRepository.save(conversation);
+                })
+            );
+    }
 }

@@ -27,8 +27,9 @@ public interface JobRepository extends R2dbcRepository<Job, Long>, JobRepository
     @Query("SELECT * FROM jobs entity WHERE entity.poster_id IS NULL")
     Flux<Job> findAllWherePosterIsNull();
     
-    @Query("SELECT * FROM jobs entity WHERE entity.poster_id = :posterId AND entity.id = :jobId")
-    Mono<Job> findByPosterAndId(String posterId, Long jobId);
+    default Mono<Job> findByPosterAndId(String posterId, Long jobId) {
+        return findOneBy(Criteria.where("poster_id").is(posterId).and("id").is(jobId));
+    }
 
     // just to avoid having unambigous methods
     @Override
@@ -50,4 +51,5 @@ interface JobRepositoryInternal {
     Mono<Job> findById(Long id);
     Flux<Job> findAllBy(Pageable pageable);
     Flux<Job> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<Job> findOneBy(Criteria criteria);
 }
