@@ -172,4 +172,7 @@ export const jobCardStyle = css`
         border-left: 0.1px solid #c7cfd4;
         border-top: 0.1px solid #c7cfd4;
     }
+    .news-card.delete {
+        display: none;
+    }
 `;

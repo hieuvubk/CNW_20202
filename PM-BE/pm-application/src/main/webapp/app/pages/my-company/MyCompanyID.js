@@ -14,6 +14,7 @@ import getMyCompanies from '../../api/getMyCompanies';
 import '../../components/Modal/UploadJob/UploadJob';
 import '../../components/JobCard/JobCard';
 import getJobAdmin from '../../api/getJobAdmin';
+import global from '../../components/global';
 
 class MyCompanyID extends withRouter(MaleficComponent) {
     static get properties() {
@@ -52,6 +53,7 @@ class MyCompanyID extends withRouter(MaleficComponent) {
         this.showIcon = "plus";
         this.showAlert = false;
         this.company = {};
+        global.updateJobList = this.updateJobList.bind(this);
     }
 
 
@@ -82,12 +84,18 @@ class MyCompanyID extends withRouter(MaleficComponent) {
         else this.showIcon = "plus";
     }
 
+    updateJobList(job) {
+        this.companyJobList.push(job);
+        const addJobBtn = this.shadowRoot.querySelector('.add-job');
+        addJobBtn.click();
+    }
+
     render() {
         return html`
             ${commonStyles}
             
             <app-header></app-header>
-            <app-upload-job .show="${this.showModal}" @close-modal="${this.closeModal}"></app-upload-job>
+            <app-upload-job .show="${this.showModal}" @close-modal="${this.closeModal}" company="${this.company.name}"></app-upload-job>
             <main class="main">
             <main>
             <div id="main-content">
@@ -112,7 +120,7 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                     </div>
                 </div>
             
-                <div id="basic-info-follow" @click="${this.handleToggleModal}">
+                <div id="basic-info-follow" @click="${this.handleToggleModal}" class="add-job">
                     <i class="fas fa-${this.showIcon}" ></i>Post A Job
                 </div>
             
@@ -181,8 +189,10 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                 title="${e.title}"
                 company="${this.company.name}"
                 location="${e.location}"
-                postText="${e.description}"
-                postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
+                jobType="${e.jobType}"
+                description="${e.description}"
+                contact="${e.contactEmail}"
+                id="${e.id}">    
            </job-card>
                 `})}
               
