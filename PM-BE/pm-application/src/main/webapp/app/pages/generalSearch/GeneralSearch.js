@@ -37,11 +37,11 @@ class GeneralSearch extends withRouter(MaleficComponent){
         super.connectedCallback();
         searchCompany(this.params.query)
             .then(data => {
-                console.log(data._embedded)
+                console.log(data._embedded.companyList)
             })
         searchPeople(this.params.query)
             .then(data => {
-                console.log(data._embedded)
+                console.log(data._embedded.userList)
             })
     }
 
@@ -84,23 +84,6 @@ class GeneralSearch extends withRouter(MaleficComponent){
                                         industry="${company.industry}">
                                 </app-company-card>`
                     )}
-                    <app-people-card
-                            Name="abc"
-                            job="abc"
-                            email="abc@gmail.com">
-                    </app-people-card>
-
-                    <app-people-card
-                            Name="abc"
-                            job="abc"
-                            email="abc@gmail.com">
-                    </app-people-card>
-
-                    <app-company-card
-                            Name="abc"
-                            location="hanoi"
-                            follower="1000 followers">
-                    </app-company-card>
                 </div>
 
             </main>
