@@ -31,7 +31,7 @@ class SearchBar extends MaleficComponent {
         keyWords.addEventListener("keyup", function(event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                location.replace("http://localhost:9002/general-search/" + keyWords.textContent)
+                location.replace("http://localhost:9002/general-search/" + keyWords.innerHTML)
             }
         });
     }
@@ -45,7 +45,7 @@ class SearchBar extends MaleficComponent {
                 <div class="modal-header">
                     <form name="search">
                         <button class="close-button" @click="${this.handleCloseModal}"><i class="fas fa-long-arrow-alt-left"></i></button>
-                        <input onkeydown="${this.search}" class="search-input" type="text" placeholder="Search">
+                        <input class="search-input" type="text" placeholder="Search">
                         <i class="fas fa-search"></i>
                     </form>
                 </div>
