@@ -50,7 +50,7 @@ export const companyMenuStyle = css`
         margin-right: 5%;
     }
     
-    ul li a {
+    .app-link {
         color: #265077;
         text-decoration: none;
         display: inline-block;
@@ -58,7 +58,7 @@ export const companyMenuStyle = css`
         transition: 0.5s;
     }
     
-    ul li a:hover {
+    .app-link:hover {
         text-decoration: underline;
         color: #2d6187;
     }

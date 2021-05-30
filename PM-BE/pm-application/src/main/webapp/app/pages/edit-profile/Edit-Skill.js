@@ -50,26 +50,47 @@ class EditSkill extends MaleficComponent {
                 <div class="row">
                     <div class="col span-1-of-5 sidemenu">
                         <nav>
-                            <a href="/edit-profile/personal">
-                                <i class="fas fa-user"></i>
-                                <span class="setting-title">Personal Info</span>
-                            </a>
-                            <a href="/edit-profile/experience">
-                                <i class="fas fa-briefcase"></i>
-                                <span class="setting-title">Work Experience</span>
-                            </a>
-                            <a href="/edit-profile/education"">
-                                <i class="fas fa-graduation-cap"></i>
-                                <span class="setting-title">Education</span>
-                            </a>
-                            <a href="/edit-profile/certification">
-                                <i class="fas fa-certificate"></i>
-                                <span class="setting-title">Certification</span>
-                            </a>
-                            <a href="/edit-profile/skill" id="tab-active">
-                                <i class="fas fa-american-sign-language-interpreting"></i>
-                                <span class="setting-title">Skill</span>
-                            </a>
+                          
+                        <div>
+                        <i class="fas fa-user"></i>
+                        <app-link href="/edit-profile/personal">
+                            <div class="app-link" class="setting-title">Personal Info</div>
+                        </app-link>
+                        </div>
+                       
+    
+                    <div>
+                    <i class="fas fa-briefcase"></i>
+                        <app-link href="/edit-profile/experience">
+                            
+                            <div class="app-link" class="setting-title">Work Experience</div>
+                        </app-link>
+                    </div>
+                        
+    
+                        <div> 
+                        <i class="fas fa-graduation-cap"></i>
+                        <app-link href="/edit-profile/education"">
+                            <span class="app-link" class="setting-title">Education</span>
+                        </app-link>
+                        </div>
+                        
+    
+                        <div>
+                        <i class="fas fa-certificate"></i>
+                        <app-link href="/edit-profile/certification">
+                            <span class="app-link" class="setting-title">Certification</span>
+                        </app-link>
+                        </div>
+                        
+    
+                        <div id="tab-active">
+                        <i class="fas fa-american-sign-language-interpreting"></i>
+                        <app-link href="/edit-profile/skill" >
+                            <span class="app-link" class="setting-title">Skill</span>
+                        </app-link>
+                        </div>
+
                         </nav>
                     </div>
 
