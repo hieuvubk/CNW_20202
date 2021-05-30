@@ -7,6 +7,7 @@ import { PeopleCardStyle } from './peopleCard-style';
 class PeopleCard extends MaleficComponent {
     static get properties() {
         return {
+            id: {type: Int16Array},
             image: {type:String},
             Name:  {type:String},
             email:  {type:String},
@@ -34,7 +35,6 @@ class PeopleCard extends MaleficComponent {
                 <div class="people__card__info">
                     <h3>${this.Name}</h3>
                     <p>${this.email}</p>
-                    <p>${this.job}</p>
                 </div>
 
             </div>

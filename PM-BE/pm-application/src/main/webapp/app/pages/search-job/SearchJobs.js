@@ -118,7 +118,15 @@ class SearchJobs extends withRouter(MaleficComponent){
 
                         ${this.jobsList.map((job) =>
                                 html`
-                                    <brief-job-card id=${job.id}></brief-job-card>
+                                    <brief-job-card 
+                                            id=${job.id}
+                                            companyAvatar="${job.logo_url}"
+                                            companyName="${job.name}"
+                                            jobName="${job.name}"
+                                            address="${job.location}"
+                                            time="${job.created-at}"
+                                            applicants="8 applicants">
+                                    </brief-job-card>
                                     <div @click="${html`<job-detail id=${job.id}></job-detail>`}"></div>`
                                 
                         )}

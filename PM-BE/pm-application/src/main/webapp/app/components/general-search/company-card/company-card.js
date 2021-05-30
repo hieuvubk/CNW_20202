@@ -34,7 +34,7 @@ class CompanyCard extends MaleficComponent {
             <div class="company__card__info">
                 <h3>${this.Name}</h3>
                 <p>${this.location}</p>
-                <p>${this.follower}</p>
+                <p>${this.industry}</p>
             </div>
         </div>
         `;

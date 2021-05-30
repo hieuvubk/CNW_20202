@@ -45,57 +45,67 @@ class GeneralSearch extends withRouter(MaleficComponent){
             })
     }
 
-    render(){
+    render() {
         return html`
             ${commonStyles}
 
             <app-header></app-header>
 
             <main>
-        <div class="search__filter">
-            <form id="search__form">
-                <input type="text" name="keywords">
-                <select name="search__filter">
-                    <option value="people">People</option>
-                    <option value="company">Company</option>
-                </select>
-                <!--div id="search__filter__jobtype">Job type <i class="fas fa-sort-down"></i></div>
-                <div id="search__filter__createdat">Created at <i class="fas fa-sort-down"></i></div-->
-                <button type="submit">Search</button>
-            </form>            
-        </div>
-            
+                <div class="search__filter">
+                    <form id="search__form">
+                        <input type="text" name="keywords">
+                        <select name="search__filter">
+                            <option value="people">People</option>
+                            <option value="company">Company</option>
+                        </select>
+                        <!--div id="search__filter__jobtype">Job type <i class="fas fa-sort-down"></i></div>
+                        <div id="search__filter__createdat">Created at <i class="fas fa-sort-down"></i></div-->
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
 
-        <div class="main">
-            ${this.userList.map((user) =>
-                    html`
-                                    <app-people-card id=${user.id}></app-people-card>`
-            )}
-            ${this.companyList.map((company) =>
-                        html`
-                                    <app-company-card id=${company.id}></app-company-card>`
+
+                <div class="main">
+                    ${this.userList.map((user) =>
+                            html`
+                                <app-people-card
+                                        id=${user.id}
+                                        Name="${user.first_name} ${user.last_name}"
+                                        email="${user.email}">
+                                </app-people-card>`
                     )}
-            <app-people-card
-                Name="abc"
-                job="abc"
-                email="abc@gmail.com">
-            </app-people-card>
+                    ${this.companyList.map((company) =>
+                            html`
+                                <app-company-card
+                                        id=${company.id}
+                                        Name="${company.name}"
+                                        location="${company.location}"
+                                        industry="${company.industry}">
+                                </app-company-card>`
+                    )}
+                    <app-people-card
+                            Name="abc"
+                            job="abc"
+                            email="abc@gmail.com">
+                    </app-people-card>
 
-            <app-people-card
-            Name="abc"
-            job="abc"
-            email="abc@gmail.com">
-        </app-people-card>
+                    <app-people-card
+                            Name="abc"
+                            job="abc"
+                            email="abc@gmail.com">
+                    </app-people-card>
 
-            <app-company-card
-                Name="abc"
-                location="hanoi"
-                follower="1000 followers">
-            </app-company-card>
-        </div>
+                    <app-company-card
+                            Name="abc"
+                            location="hanoi"
+                            follower="1000 followers">
+                    </app-company-card>
+                </div>
 
-    </main>
-        `;}
+            </main>
+        `;
+    }
 }
 
 customElements.define('app-general-search', GeneralSearch);
