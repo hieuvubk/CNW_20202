@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const RecruiterApplicantsStyle = css`
+export const ApplicantBriefCardStyle = css`
 main{
     margin-top: 80px;
     display: flex;

@@ -103,8 +103,6 @@ public class ChatRSocketController {
     ) {
         log.debug("Conversation: {}", conversationId);
         
-        return sink.asFlux().concatWith(
-            messageService.getChatHistory(userId, conversationId)
-        ).share();
+        return sink.asFlux().share();
     }
 }
