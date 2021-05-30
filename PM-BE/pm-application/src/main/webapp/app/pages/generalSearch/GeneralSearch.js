@@ -67,6 +67,14 @@ class GeneralSearch extends withRouter(MaleficComponent){
             
 
         <div class="main">
+            ${this.userList.map((user) =>
+                    html`
+                                    <app-people-card id=${user.id}></app-people-card>`
+            )}
+            ${this.companyList.map((company) =>
+                        html`
+                                    <app-company-card id=${company.id}></app-company-card>`
+                    )}
             <app-people-card
                 Name="abc"
                 job="abc"
@@ -87,8 +95,7 @@ class GeneralSearch extends withRouter(MaleficComponent){
         </div>
 
     </main>
-        `;
-    }
+        `;}
 }
 
 customElements.define('app-general-search', GeneralSearch);
