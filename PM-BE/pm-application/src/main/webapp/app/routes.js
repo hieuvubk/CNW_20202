@@ -25,11 +25,11 @@ const routes = [
         pattern: 'home',
         data: {},
         component: 'app-homepage',
-        resolve: () => import('./pages/homepage/Homepage'),
+        resolve: () => import('./pages/homepage/Homepage')/*,
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
-        }
+        }*/
     },
     {
         name: 'search-job',
