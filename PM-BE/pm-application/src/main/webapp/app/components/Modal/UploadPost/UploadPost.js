@@ -62,18 +62,6 @@ class UploadPost extends MaleficComponent {
     }
 
     saveImage() {
-        // // loading profile image 
-        // const spinner = this.shadowRoot.querySelector('.sk-chase');
-        // const avtWrapper = this.shadowRoot.querySelector('.wrapper');
-        // spinner.classList.add('showSpinner');
-        // avtWrapper.classList.add('loading');
-
-        // // When finish loading
-        // setTimeout(function () {
-        //     spinner.classList.remove('showSpinner');
-        //     avtWrapper.classList.remove('loading');
-        // }, 2000);
-
         const uploadForm = this.shadowRoot.querySelector("#post-form");
         uploadForm.addEventListener("submit", (e) => e.preventDefault());
         const uploadFile = this.shadowRoot.querySelector(".uploadFile");

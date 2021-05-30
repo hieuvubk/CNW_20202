@@ -8,12 +8,14 @@ import '../../Modal/SearchBar/SearchBar';
 import '../../Dropdown/ProfileMenu/ProfileMenu';
 import getProfile from '../../../api/getProfile';
 import '../../Dropdown/CompanyMenu/CompanyMenu';
+import global from '../../global';
 
 class Header extends MaleficComponent {
     static get properties() {
         return {
             showModal: {type: Boolean},
             profile: {type: Boolean},
+            imgAvt: {type: String}
         };
     }
     
@@ -39,12 +41,13 @@ class Header extends MaleficComponent {
         getProfile()
         .then(res => {
             this.profile = res;
+            this.imgAvt = res.user.imageUrl;
         })
         .catch(e => console.log(e));
+        console.log(global.avatarImage)
     }
 
     render() {
-
         return html`
             ${commonStyles}
             <header id="header">
@@ -119,14 +122,14 @@ class Header extends MaleficComponent {
                         <app-dropdown>
                             <div class="menu-icons" slot="toggle">
                                 <div class="profile">
-                                    <img src="${this.profile.user.imageUrl}" alt="Avatar">
+                                    <img src="${this.imgAvt}" alt="Avatar">
                                 </div>
                                 <div>
                                     <h6>Me <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
                             <app-profile-menu
-                                avtImg="${this.profile.user.imageUrl}"
+                                avtImg="${this.imgAvt}"
                                 firstName="${this.profile.user.firstName}"
                                 lastName="${this.profile.user.lastName}"
                                 title="${this.profile.headline}"

@@ -34,6 +34,15 @@ class PersonalInfo extends MaleficComponent {
     constructor() {
         super();
         this.showAlert = false;
+        this.about = '';
+        this.address = '';
+        this.bgImageUrl = '';
+        this.birthday = '';
+        this.country = '';
+        this.headline = '';
+        this.industry = '';
+        this.location = '';
+        this.phoneNumber = '';
     }
     connectedCallback() {
         super.connectedCallback()

@@ -1,3 +1,4 @@
+
 import { css } from '../../core/components/css-tag';
 
 export const profileStyle = css`
@@ -15,7 +16,7 @@ export const profileStyle = css`
     
     #main-content {
         margin-top: 0;
-        width: 800px;
+        width: 840px;
         height: auto;
         display: flex;
         flex-direction: column;
@@ -172,11 +173,10 @@ export const profileStyle = css`
         width:100%;
         border-bottom: 0.1px solid #c7cfd4;
     }
-    .education__list, .interest__list {
+    .education {
         margin: 20px;
         background-color: white;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
         align-items: center;
     }
     

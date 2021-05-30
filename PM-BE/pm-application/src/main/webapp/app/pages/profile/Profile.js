@@ -9,8 +9,6 @@ import '../../components/Sidebar/PeopleSidebar';
 import '../../components/layouts/Footer/Footer';
 import '../../components/Modal/ContactInfo/ContactInfo';
 import '../../api/getPublicProfile';
-import '../../components/Modal/ExperienceCard/ExperienceCard';
-
 import getPublicProfile from '../../api/getPublicProfile';
 import getPublicWorkEx from '../../api/getPublicWorkEx';
 import getPublicEducation from '../../api/getPublicEducation';
@@ -18,6 +16,9 @@ import '../../components/Modal/UploadAvatar/UploadBackground';
 import '../../components/Modal/ExperienceCard/ExperienceCard';
 import getPublicCert from '../../api/getPublicCert';
 import getPublicSkill from '../../api/getPublicSkill';
+import '../../components/PostCard/PostCard';
+import getUserPosts from '../../api/getUserPosts';
+import getAttachment from '../../api/getAttachment';
 
 class Profile extends withRouter(MaleficComponent) {
     static get properties() {
@@ -26,15 +27,11 @@ class Profile extends withRouter(MaleficComponent) {
             profile: { type: Object },
             work: { type: Array },
             education: { type: Array },
-            showCertification: {type:String},
-            showSkill: {type: String},
-            showWorkExperience: {type: String},
-            showProject: {type:String},
-            showPublication: {type: String},
             showModalAvt: { type: Boolean },
             certification: { type: Array },
-            skills: { type: Array},
-
+            skills: { type: Array },
+            postList: { type: Array },
+            attachment: { type: Object },
         };
     }
 
@@ -48,28 +45,6 @@ class Profile extends withRouter(MaleficComponent) {
             window.scrollTo(0, 0);
         });
         this.profile = {};
-        this.showCertification = "none";
-        this.showProject = "none";
-        this.showPublication = "none";
-        this.showSkill = "none";
-        this.showWorkExperience= "none";
-    }
-
-    handleToggleCertification(){
-        this.showCertification = (this.showCertification=="grid")?"none":"grid";
-    }
-
-    handleToggleSkill(){
-        this.showSkill = (this.showSkill=="grid")?"none":"grid";
-    }
-
-    handleToggleWorkExperience(){
-        this.showWorkExperience = (this.showWorkExperience=="grid")?"none":"grid";
-    }
-
-    handleToggleProject(){
-        this.showProject = (this.showProject=="grid")?"none":"grid";
-
         this.showModalAvt = false;
         this.showModal = false;
         this.education = [];
@@ -77,14 +52,11 @@ class Profile extends withRouter(MaleficComponent) {
         this.work = [];
         this.certification = [];
         this.skills = [];
-
+        this.postList = [];
+        
     }
 
-    handleTogglePublication(){
-        this.showPublication = (this.showPublication=="grid")?"none":"grid";
-    }
-
-    /*connectedCallback() {
+    connectedCallback() {
         super.connectedCallback();
         document.getElementsByTagName('title')[0].innerHTML = this.data.title;
 
@@ -105,16 +77,20 @@ class Profile extends withRouter(MaleficComponent) {
             .catch(e => console.log(e));
 
         getPublicCert(this.params.id)
-        .then(res => {
-            this.certification = res._embedded.certificationList;
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                this.certification = res._embedded.certificationList;
+            })
+            .catch(e => console.log(e));
 
         getPublicSkill(this.params.id)
-        .then(res => {
-            this.skills = res._embedded.skillList;
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                this.skills = res._embedded.skillList;
+            })
+            .catch(e => console.log(e));
+
+        getUserPosts()
+            .then(res => this.postList = res._embedded.postList)
+            .catch(e => console.log(e));
     }
 
     handleOpenContactModal() {
@@ -139,15 +115,6 @@ class Profile extends withRouter(MaleficComponent) {
             block: 'center'
         });
     }
-
-*/
-
-       /* const startDate = new Date(this.education[0].startDate);
-        const endDate = new Date(this.education[0].endDate);  
-        const endYear = endDate.getFullYear();
-        const startYear = startDate.getFullYear();
-        const endText = endYear == 1970 ? 'Now' : endYear;*/
-
 
     scrollIntoWork(e) {
         e.preventDefault();
@@ -179,10 +146,10 @@ class Profile extends withRouter(MaleficComponent) {
             
                         <div id="info">
                             <div id="personal-info">
-                                <h1 id="personal-name"></h1>
-                                <h3 class="light" id="personal-jobs"></h3>
-                                <h4 class="light" id="personal-address"></h4>
-                                <h4 class="light" id="contact-info" >Contact info</h4>
+                                <h1 id="personal-name">${this.profile.user.firstName} ${this.profile.user.lastName}</h1>
+                                <h3 class="light" id="personal-jobs">${this.profile.headline}</h3>
+                                <h4 class="light" id="personal-address">${this.profile.address}</h4>
+                                <h4 class="light" id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
                             </div>
                 
                             <div id="workplace">
@@ -198,24 +165,24 @@ class Profile extends withRouter(MaleficComponent) {
         
                     <app-contact-info id=${this.params.id} email=${this.profile.user.email} .show="${this.showModal}" @close-modal="${this.handleCloseContactModal}"></app-contact-info>
 
-
                     <div class="main-content-div" id="experience">
                         <h2>About</h2>
-                        <p class="profile-text"></p>
+                        <p class="profile-text">${this.profile.about}</p>
                     </div>
+        
         
                     <div class="main-content-div" id="work-experience">
                         <h2>Work Experience</h2>
                         <div class="education__list">
                             ${this.work.map((e) => {
-                                const start = new Date(e.startDate);
-                                const end = new Date(e.endDate);
-                                const startMonth = start.getMonth() + 1;
-                                const endMonth = end.getMonth() + 1;
-                                const startYear = start.getFullYear();
-                                const endYear = end.getFullYear();
-                                const endText = endYear == 1970 ? 'Now' : `${endMonth}/${endYear}`;
-                            return html`
+            const start = new Date(e.startDate);
+            const end = new Date(e.endDate);
+            const startMonth = start.getMonth() + 1;
+            const endMonth = end.getMonth() + 1;
+            const startYear = start.getFullYear();
+            const endYear = end.getFullYear();
+            const endText = endYear == 1970 ? 'Now' : `${endMonth}/${endYear}`;
+            return html`
                             <div class="education">
                             <img class="education__logo" src="content/images/suitcase.png">
                                 <div class="education__info">
@@ -234,14 +201,13 @@ class Profile extends withRouter(MaleficComponent) {
                     <div class="main-content-div" id="education">
                         <h2>Education</h2>
                         <div class="education__list">
-
                         ${this.education.map((e) => {
-                            const startDate = new Date(e.startDate);
-                            const endDate = new Date(e.endDate);
-                            const endYear = endDate.getFullYear();
-                            const startYear = startDate.getFullYear();
-                            const endText = (this.endYear == 1970) ? 'Now' : endYear;
-                            return html`
+                const startDate = new Date(e.startDate);
+                const endDate = new Date(e.endDate);
+                const endYear = endDate.getFullYear();
+                const startYear = startDate.getFullYear();
+                const endText = (this.endYear == 1970) ? 'Now' : endYear;
+                return html`
                             <div class="education">
                                 <img class="education__logo" src="content/images/graduation-hat.png">
                                 <div class="education__info">
@@ -261,14 +227,13 @@ class Profile extends withRouter(MaleficComponent) {
                     <h2>Certification</h2>
                     <div class="education__list">
                     ${this.certification.map((e) => {
-                        const start = new Date(e.issDate);
-                        const end = new Date(e.expDate);
-                        const startMonth = start.getMonth() + 1;
-                        const endMonth = end.getMonth() + 1;
-                        const startYear = start.getFullYear();
-                        const endYear = end.getFullYear();
-                        return html`
-
+                    const start = new Date(e.issDate);
+                    const end = new Date(e.expDate);
+                    const startMonth = start.getMonth() + 1;
+                    const endMonth = end.getMonth() + 1;
+                    const startYear = start.getFullYear();
+                    const endYear = end.getFullYear();
+                    return html`
                         <div class="education">
                             <img class="education__logo" src="content/images/certificate.png">
                             <div class="education__info">
@@ -296,7 +261,25 @@ class Profile extends withRouter(MaleficComponent) {
                         </div>
                         `})}
                     </div>
-                    
+                </div>
+
+                <div class="main-content-div" id="work-experience">
+                    <h2>Posts</h2>
+                    <div class="education__list">
+                    ${this.postList.slice(0).reverse().map((e) => {
+                        return html`
+                        <div class="education">
+                        <post-card
+                        accountName="${this.profile.user.firstName} ${this.profile.user.lastName}"
+                        accountImg="${this.profile.user.imageUrl}"
+                        numFollowers=10
+                        time="5w"
+                        postText="${e.content}"
+                        postId="${e.id}">    
+                        </post-card>
+                        </div>
+                        `})}
+                    </div>
                 </div>
                      
                     </div>

@@ -1,23 +1,23 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
-import { postCardStyle } from './post-card-style';
+import { jobCardStyle } from './job-card-style';
 import { commonStyles } from '../../shared/styles/common-styles';
 
 import '../Button/Button';
 import '../PostCard/commentCard';
 import getAttachment from '../../api/getAttachment';
 
-class PostCard extends MaleficComponent {
+class JobCard extends MaleficComponent {
     static get styles() {
-        return [postCardStyle];
+        return [jobCardStyle];
     }
 
     static get properties() {
         return {
             accountImg: {type: String},
-            accountName: {type: String},
-            numFollowers: {type: Int32Array},
-            time: {type: Date},
+            title: {type: String},
+            company: {type: String},
+            location: {type: String},
             postText: {type: String},
             postId: {type: Int16Array},
             showComment:{type:String},
@@ -78,9 +78,9 @@ class PostCard extends MaleficComponent {
                     <div class="poster">
                         <img src="${this.accountImg}" alt="">
                         <div class="poster-info">
-                            <div style="font-weight: bold; font-size: 18px;">${this.accountName}</div>
-                            <div style="font-size: 12px;">${this.numFollowers} followers</div>
-                            <div style="font-size: 12px;">${this.time}</div>
+                            <div style="font-weight: bold; font-size: 18px;">${this.title}</div>
+                            <div style="font-size: 12px;">${this.company}</div>
+                            <div style="font-size: 12px;">${this.location}</div>
                         </div>
                     </div>
 
@@ -108,24 +108,10 @@ class PostCard extends MaleficComponent {
                     <div>${this.postText}</div>
                     <img src="${this.attachment.thumbUrl}" alt="" style="display: ${this.attachment.thumbUrl==undefined?'none':'block'}">
                 </div>
-
-                <div class="news-react">
-                    <div class="react">
-                        <button class="react-icon"><i class="fas fa-thumbs-up"></i>Like</button>
-                        <button class="react-icon" @click="${this.handleToggleShowComment}"><i class="fas fa-comment-dots"></i>Comment</button>
-                    </div>
-                </div>
-
-                <div class="comment" id="comment" style="display:${this.showComment};">
-                    <comment-card></comment-card>
-                    <form>
-                        <input type="text">
-                    </form>
-                </div>
             </div>
         </div>
         `;
     }
 }
 
-customElements.define('post-card', PostCard);
+customElements.define('job-card', JobCard);

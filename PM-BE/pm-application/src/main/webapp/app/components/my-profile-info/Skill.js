@@ -51,11 +51,6 @@ class Skill extends MaleficComponent {
             .catch(e => console.log(e));
     }
 
-    // attributeChangedCallback(name, oldVal, newVal) {
-    //     console.log('attribute change: ', name, newVal);
-    //     super.attributeChangedCallback(name, oldVal, newVal);
-    // }
-
     deleteSkill(id) {
         if (confirm("Are you sure you want to delete")) {
             deleteSkill(id)
@@ -88,7 +83,7 @@ class Skill extends MaleficComponent {
         postSkill(asString)
             .then(data => {
                 console.log(data);
-                if (data == 500) {
+                if (data == 201) {
                     getSkill()
                         .then(res => {
                             this.skillList = res._embedded.skillList;

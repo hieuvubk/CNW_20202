@@ -1,6 +1,6 @@
 import { css } from '../../core/components/css-tag';
 
-export const postCardStyle = css`
+export const jobCardStyle = css`
     :host {
         font-size: 1rem;
     }
