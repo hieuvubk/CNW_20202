@@ -14,15 +14,8 @@ const notAuthorized = {
 
 const routes = [
     {
-        name: 'intro',
-        pattern: '',
-        data: {},
-        component: 'app-intro',
-        resolve:()=> import('./pages/intro/Intro')
-    },
-    {
         name: 'homepage',
-        pattern: 'home',
+        pattern: '',
         data: {},
         component: 'app-homepage',
         resolve: () => import('./pages/homepage/Homepage'),
@@ -202,7 +195,7 @@ const routes = [
     },
     {
         name: 'chat',
-        pattern: 'chat/:conversationId',
+        pattern: 'chat',
         data: {
             title: 'Chat App'
         },

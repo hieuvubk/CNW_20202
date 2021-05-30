@@ -9,6 +9,7 @@ import '../../Dropdown/ProfileMenu/ProfileMenu';
 import getProfile from '../../../api/getProfile';
 import '../../Dropdown/CompanyMenu/CompanyMenu';
 import global from '../../global';
+import { transformImage } from '../../../shared/utils/url-utils';
 
 class Header extends MaleficComponent {
     static get properties() {
@@ -72,7 +73,7 @@ class Header extends MaleficComponent {
                             </div>
                             <h6>Home</h6>
                         </a>
-                            
+                        
                         </div>
                         <div class="menu-icons">
                             <div class="material-icons md-24">
@@ -110,7 +111,7 @@ class Header extends MaleficComponent {
                                 </div>
                             </div>
                             <app-company-menu
-                                avtImg="${this.profile.user.imageUrl}"
+                                avtImg="${transformImage(this.profile.user.imageUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}"
                                 firstName="${this.profile.user.firstName}"
                                 lastName="${this.profile.user.lastName}"
                                 title="${this.profile.headline}"
@@ -122,14 +123,14 @@ class Header extends MaleficComponent {
                         <app-dropdown>
                             <div class="menu-icons" slot="toggle">
                                 <div class="profile">
-                                    <img src="${this.imgAvt}" alt="Avatar">
+                                    <img src="${transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}" alt="Avatar">
                                 </div>
                                 <div>
                                     <h6>Me <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
                             <app-profile-menu
-                                avtImg="${this.imgAvt}"
+                                avtImg="${transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}"
                                 firstName="${this.profile.user.firstName}"
                                 lastName="${this.profile.user.lastName}"
                                 title="${this.profile.headline}"
