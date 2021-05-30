@@ -11,6 +11,10 @@ import '../../components/PostCard/PostCard';
 import getPublicCompany from '../../api/getPublicCompany';
 import {withRouter} from "../../core/router/malefic-router";
 import getMyCompanies from '../../api/getMyCompanies';
+import '../../components/Modal/UploadJob/UploadJob';
+import '../../components/JobCard/JobCard';
+import getJobAdmin from '../../api/getJobAdmin';
+import global from '../../components/global';
 
 class MyCompany extends withRouter(MaleficComponent) {
     static get properties() {
@@ -22,6 +26,8 @@ class MyCompany extends withRouter(MaleficComponent) {
             company : {type: JSON},
             showAlert: { type: Boolean },
             companyList: {type: Array},
+            showModal: { type: Boolean },
+            companyJobList: { type: Array }
         };
     }
     
@@ -39,6 +45,17 @@ class MyCompany extends withRouter(MaleficComponent) {
         this.showIcon = "plus";
         this.showAlert = false;
         this.company = {};
+        this.companyJobList = [];
+        this.showModal = false;
+        global.updateJobList = this.updateJobList.bind(this);
+    }
+
+    handleToggleModal() {
+        this.showModal = !this.showModal;
+    }
+
+    closeModal() {
+        this.showModal = false;
     }
 
 
@@ -48,19 +65,35 @@ class MyCompany extends withRouter(MaleficComponent) {
         .then(res => {
             this.company = res._embedded.companyList[0];
             this.companyList = res._embedded.companyList;
+
+            getJobAdmin()
+            .then(result => {
+            console.log(result._embedded.jobList);
+            this.companyJobList = result._embedded.jobList.filter(e =>
+                e.companyId == res._embedded.companyList[0].id);
         })
-        .catch(e => console.log(e))
+        .catch(e => console.log(e));
+        })
+        .catch(e => console.log(e));
+
+        
     }
     handleToggleFollow(){
         if(this.showIcon=="plus") this.showIcon = "check";
         else this.showIcon = "plus";
     }
 
+    updateJobList(job) {
+        this.companyJobList.push(job);
+        const addJobBtn = this.shadowRoot.querySelector('.add-job');
+        addJobBtn.click();
+    }
+
     render() {
-        console.log(this.params.id)
+        console.log(this.companyJobList)
         return html`
             ${commonStyles}
-            
+            <app-upload-job .show="${this.showModal}" @close-modal="${this.closeModal}" company="${this.company.name}"></app-upload-job>
             <app-header></app-header>
             <main class="main">
             <main>
@@ -86,8 +119,8 @@ class MyCompany extends withRouter(MaleficComponent) {
                     </div>
                 </div>
             
-                <div id="basic-info-follow" @click="${this.handleToggleFollow}">
-                    <i class="fas fa-${this.showIcon}" ></i>Follow
+                <div id="basic-info-follow" @click="${this.handleToggleModal}" class="add-job">
+                    <i class="fas fa-${this.showIcon}" ></i>Post A Job
                 </div>
             
                 <div id="basic-info-nav">
@@ -145,18 +178,31 @@ class MyCompany extends withRouter(MaleficComponent) {
                 </div>
             
             </div>
-            
+
+
             <div class="main-content-div" id="post">
-                <h2>Page posts</h2>
-                <div id="page-post">
-                   <post-card
-                        accountImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
-                        numFollowers=10
-                        time="5w"
-                        postText="This a test"
-                        postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
-                   </post-card>
-                </div>
+            <h2>Jobs</h2>
+            <div id="page-post">
+            ${this.companyJobList.slice(0).reverse().map((e) => {
+                return html`
+               
+                <job-card
+                accountImg="${this.company.logoUrl}"
+                title="${e.title}"
+                company="${this.company.name}"
+                location="${e.location}"
+                jobType="${e.jobType}"
+                description="${e.description}"
+                contact="${e.contactEmail}"
+                id="${e.id}">    
+           </job-card>
+                `})}
+              
+            </div>
+        </div>
+
+            
+
             </aside>
             </main>
 
@@ -202,3 +248,14 @@ class MyCompany extends withRouter(MaleficComponent) {
 
 customElements.define('app-my-company', MyCompany);
 
+// <div class="main-content-div" id="post">
+// <h2>Page posts</h2>
+// <div id="page-post">
+//    <post-card
+//         accountImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
+//         numFollowers=10
+//         time="5w"
+//         postText="This a test"
+//         postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
+//    </post-card>
+// </div>
