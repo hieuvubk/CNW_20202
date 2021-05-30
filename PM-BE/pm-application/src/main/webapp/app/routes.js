@@ -26,10 +26,10 @@ const routes = [
     },
     {
         name: 'general-search',
-        pattern: 'general-search',
+        pattern: 'general-search/:query',
         data:{},
         component: 'app-general-search',
-        resolve: ()=> import('./pages/generalSearch/generalSearch')
+        resolve: ()=> import('./pages/generalSearch/GeneralSearch')
     },
     {
         name: 'search-job',

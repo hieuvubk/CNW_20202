@@ -40,11 +40,6 @@ class BriefCard extends MaleficComponent{
                 this.job = res;
                 console.log(res);
             })
-        getCompany(this.job.company_id)
-            .then(res => {
-                this.company = res;
-                console.log(res)
-            })
     }
 
     render(){
