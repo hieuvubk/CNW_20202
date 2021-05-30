@@ -9,36 +9,51 @@ import '../../components/layouts/Footer/Footer';
 import '../../components/PostCard/PostCard';
 
 import getCompanyById from '../../api/getCompanyById';
-import {withRouter} from "../../core/router/malefic-router";
+import { withRouter } from "../../core/router/malefic-router";
 import getMyCompanies from '../../api/getMyCompanies';
+import '../../components/Modal/UploadJob/UploadJob';
+import '../../components/JobCard/JobCard';
+import getJobAdmin from '../../api/getJobAdmin';
+import global from '../../components/global';
 
 class MyCompanyID extends withRouter(MaleficComponent) {
     static get properties() {
         return {
-            background: {type:String},
-            avatar: {type:String},
-            showIcon: {type: String},
-            id: {type: Int16Array},
-            company : {type: JSON},
+            background: { type: String },
+            avatar: { type: String },
+            showIcon: { type: String },
+            id: { type: Int16Array },
+            company: { type: JSON },
             showAlert: { type: Boolean },
-            companyList: {type: Array},
+            companyList: { type: Array },
+            showModal: { type: Boolean },
+            companyJobList: { type: Array }
         };
     }
-    
+
     static get styles() {
         return [myCompanyStyle];
     }
-    
+
+    handleToggleModal() {
+        this.showModal = !this.showModal;
+    }
+
+    closeModal() {
+        this.showModal = false;
+    }
+
     constructor() {
         super();
         window.addEventListener('beforeunload', () => {
             window.scrollTo(0, 0);
         });
         this.background = "content/images/4853433.jpg";
-        this.avatar ="content/images/avatar.png";
+        this.avatar = "content/images/avatar.png";
         this.showIcon = "plus";
         this.showAlert = false;
         this.company = {};
+        global.updateJobList = this.updateJobList.bind(this);
     }
 
 
@@ -50,23 +65,37 @@ class MyCompanyID extends withRouter(MaleficComponent) {
             .catch(e => console.log(e));
 
         getMyCompanies()
-        .then(res => {
-            this.companyList = res._embedded.companyList;
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                this.companyList = res._embedded.companyList;
+            })
+            .catch(e => console.log(e));
+
+        getJobAdmin()
+            .then(res => {
+                console.log(res);
+                this.companyJobList = res._embedded.jobList.filter(e =>
+                    e.companyId == this.params.id);
+            })
+            .catch(e => console.log(e));
 
     }
-    handleToggleFollow(){
-        if(this.showIcon=="plus") this.showIcon = "check";
+    handleToggleFollow() {
+        if (this.showIcon == "plus") this.showIcon = "check";
         else this.showIcon = "plus";
     }
 
+    updateJobList(job) {
+        this.companyJobList.push(job);
+        const addJobBtn = this.shadowRoot.querySelector('.add-job');
+        addJobBtn.click();
+    }
+
     render() {
-        console.log(this.params.id)
         return html`
             ${commonStyles}
             
             <app-header></app-header>
+            <app-upload-job .show="${this.showModal}" @close-modal="${this.closeModal}" company="${this.company.name}"></app-upload-job>
             <main class="main">
             <main>
             <div id="main-content">
@@ -91,14 +120,14 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                     </div>
                 </div>
             
-                <div id="basic-info-follow" @click="${this.handleToggleFollow}">
-                    <i class="fas fa-${this.showIcon}" ></i>Follow
+                <div id="basic-info-follow" @click="${this.handleToggleModal}" class="add-job">
+                    <i class="fas fa-${this.showIcon}" ></i>Post A Job
                 </div>
             
                 <div id="basic-info-nav">
-                    <div><a href="#">Home</a></div>
-                    <div><a href="#about">About</a></div>
-                    <div><a href="#post">Posts</a></div>
+                    <div><a href="#">About</a></div>
+                    <div><a href="#post">Jobs</a></div>
+                    <div><a href="#about">Posts</a></div>   
                 </div>
             </div>
             
@@ -145,11 +174,30 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                         <div class="about__detail__specified__content">
                             ${this.company["companyType"]}
                         </div>
-            
                     </div>
                 </div>
-            
             </div>
+
+        <div class="main-content-div" id="post">
+            <h2>Jobs</h2>
+            <div id="page-post">
+            ${this.companyJobList.slice(0).reverse().map((e) => {
+                return html`
+               
+                <job-card
+                accountImg="${this.company.logoUrl}"
+                title="${e.title}"
+                company="${this.company.name}"
+                location="${e.location}"
+                jobType="${e.jobType}"
+                description="${e.description}"
+                contact="${e.contactEmail}"
+                id="${e.id}">    
+           </job-card>
+                `})}
+              
+            </div>
+        </div>
             
             <div class="main-content-div" id="post">
                 <h2>Page posts</h2>
@@ -162,6 +210,7 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                         postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
                    </post-card>
                 </div>
+            </div>
             </aside>
             </main>
 
@@ -174,15 +223,15 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                         <h3 class="suggest__title">My Companies</h3>
 
                         ${this.companyList.map((company) =>
-                            html`
-                            <a class="suggest__link" href="#">
+            html`
+                            <a class="suggest__link" href="company-admin/${company.id}">
                             <div class="suggest__info">
                                 <img class="suggest__info__avatar" src="${company.logoUrl}">
                                 <h4 class="suggest__info__name">${company.name}</h4>
                             </div>
                         </a>
                             `
-                        )}
+        )}
 
                     </div>
         
@@ -196,10 +245,7 @@ class MyCompanyID extends withRouter(MaleficComponent) {
                         <a href="#">Advertising</a>
                     </div>
                 </div>
-            </main>  
-
-
-           
+            </main>   
     <app-footer></app-footer>
         `;
     }

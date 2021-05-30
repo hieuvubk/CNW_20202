@@ -50,4 +50,5 @@ interface JobRepositoryInternal {
     Mono<Job> findById(Long id);
     Flux<Job> findAllBy(Pageable pageable);
     Flux<Job> findAllBy(Pageable pageable, Criteria criteria);
+    Mono<Job> findOneBy(Criteria criteria);
 }

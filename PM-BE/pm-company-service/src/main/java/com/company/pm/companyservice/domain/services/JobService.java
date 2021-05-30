@@ -111,7 +111,14 @@ public class JobService {
                 }
                 
                 return jobRepository.save(job)
-                    .flatMap(saved -> saveJobSearch(saved).thenReturn(saved));
+                    .flatMap(saved -> companyRepository.findByAdminAndId(userId, saved.getCompanyId())
+                        .flatMap(company -> {
+                            saved.setCompany(company);
+                            
+                            return jobSearchRepository.save(jobToJobSearch(saved))
+                                .thenReturn(saved);
+                        })
+                    );
             });
     }
     

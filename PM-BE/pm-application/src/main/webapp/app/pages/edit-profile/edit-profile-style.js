@@ -3,6 +3,7 @@ import { css } from '../../core/components/css-tag';
 export const editProfileStyle = css`
     :host {
         font-size: 1rem;
+        color: #5a5a5a;
     }
 
     .container {
@@ -180,5 +181,9 @@ export const editProfileStyle = css`
     .btn-upload:active {
         background: linear-gradient(135deg, #1597bb 0%, #203949f2 100%);
         transform: scale(1.2);
+    }
+
+    nav a {
+        text-decoration: none
     }
 `;

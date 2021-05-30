@@ -24,9 +24,8 @@ public interface ConversationRepository extends R2dbcRepository<Conversation, Lo
     @Query("SELECT * FROM conversations entity WHERE entity.id = :conversationId AND entity.creator_id = :creatorId")
     Mono<Conversation> findByIdAndCreator(Long conversationId, String creatorId);
     
-    @Query("SELECT * FROM conversations entity WHERE entity.creator_id = :userId " +
-        "OR entity.creator_id = :participantId")
-    Flux<Conversation> findByUserOrParticipant(String userId, String participantId);
+    @Query("SELECT * FROM conversations entity WHERE entity.creator_id = :id1 + '-' + :id2")
+    Mono<Conversation> findOneToOneChat(String id1, String id2);
 
     // just to avoid having unambigous methods
     @Override

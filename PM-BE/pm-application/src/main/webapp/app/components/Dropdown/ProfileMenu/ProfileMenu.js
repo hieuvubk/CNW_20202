@@ -38,9 +38,9 @@ class ProfileMenu extends MaleficComponent {
             <div class="setting-list">
                 <ul>
                     <li ><i class="fas fa-user-circle"></i><a href='profile/${this.id}'>View Profile</a></li>
-                    <li><i class="fas fa-edit"></i><a href="edit-profile">Edit Profile</a></li>
+                    <li><i class="fas fa-edit"></i><a href="edit-profile/personal">Edit Profile</a></li>
                     <li><i class="fas fa-users-cog"></i><a href="account">Account Settings</a></li>
-                    <li><i class="fas fa-address-card"></i><a href="account">My CV</a></li>
+                    <li><i class="fas fa-address-card"></i><a href="my-cv">My CV</a></li>
                     <li><i class="fas fa-sign-out-alt"></i><a href="#">Sign Out</a></li>
                 </ul>
             </div>

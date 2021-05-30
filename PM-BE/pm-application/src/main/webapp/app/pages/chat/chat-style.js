@@ -192,7 +192,6 @@ export const chatStyle = css`
         border-radius: 15px;
         top: 30px;
         right: 15px;
-        display: none;
     }
     .action_menu ul{
         list-style: none;
