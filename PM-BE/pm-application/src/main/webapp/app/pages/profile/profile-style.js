@@ -35,6 +35,26 @@ export const profileStyle = css`
         margin-bottom: 20px;
         background-color: white;
     }
+
+    #basic-info-follow{
+        background: linear-gradient(
+            135deg
+            , #1e4157f2 0%, #1597bb 100%);
+        width: max-content;
+        padding: 8px 15px;
+        font-size: 18px;
+        font-weight: bold;
+        color:rgb(245, 245, 245);
+        border-radius: 30px;
+        margin: 10px;
+        margin-left: 20px;
+        cursor: pointer;
+    }
+    
+    #basic-info-follow i{
+        margin-right: 5px;
+        font-size: 15px;
+    }
     
     #background-avatar {
         position: relative;
