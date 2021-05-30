@@ -50,12 +50,4 @@ main{
     margin: 10px;
 }
 
-
-@media (min-width: 768px) {
-    .main{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 5px;
-    }
-}
 `;

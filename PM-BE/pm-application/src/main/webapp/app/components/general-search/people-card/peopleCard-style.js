@@ -10,6 +10,7 @@ export const PeopleCardStyle = css`
     cursor: pointer;
     border-radius: 8px;
     margin: 5px;
+    line-height: 20px;
 }
 
 .people__card__avatar{
