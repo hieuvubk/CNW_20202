@@ -1,24 +1,23 @@
 import MaleficComponent from '../../../core/components/MaleficComponent';
 import { html } from '../../../core/components/malefic-html';
-import { uploadJobStyle } from './upload-job-style';
+import { editJobStyle } from './edit-job-style';
 import { commonStyles } from '../../../shared/styles/common-styles';
 
 import '../Modal';
 import '../../Button/Button';
-import postJob from '../../../api/postJob';
+import patchJob from '../../../api/patchJob';
 import global from '../../../components/global';
 
-class UploadJob extends MaleficComponent {
+class EditJob extends MaleficComponent {
     static get properties() {
         return {
             show: { type: Boolean },
-            company: { type: String},
-            location: {type: String}
+            id: { type: Int16Array},
         };
     }
 
     static get styles() {
-        return [uploadJobStyle];
+        return [editJobStyle];
     }
 
     handleCloseModal() {
@@ -43,10 +42,14 @@ class UploadJob extends MaleficComponent {
             .join('&');
         console.log(asString);
 
-        postJob(asString)
+        patchJob(this.id, asString)
             .then(data => {
-                global.updateJobList(data);
-                this.show = false;
+                // if(data == 201) {
+                //     location.reload();
+                    
+                // }
+                console.log(data);
+                // global.updateJobList(data);
             })
             .catch(e => {
                 console.log(e);
@@ -60,23 +63,23 @@ class UploadJob extends MaleficComponent {
             <app-modal .show="${this.show}">
                 <div class="avt-modal" id="avt-modal">
                     <div class="post__edit__header">
-                        <h3>Post A Job</h3>
+                        <h3>Edit Job</h3>
                         <div class="post__edit__close" @click=${this.handleCloseModal}><i class="fas fa-times"></i></div>
                     </div>
                     <form id="job-form">
                     <div class="row">
                     <div class="col span-1-of-4 title">
                     <h5>Job Title *</h5>
-                    <h5>Company *</h5>
+                    <h5>Company</h5>
                     <h5>Location *</h5>
                     <h5>Employment Type</h5>
                     <h5>Contact Email</h5>
-                    <h5>Description *</h5>
+                    <h5>Description</h5>
                 </div>
                 <div class="col span-3-of-4 info">
-                    <input type="text" class="input" id="title" name="title" required>
-                    <input type="text" class="input" id="company" name="company" value="${this.company}" readonly>
-                    <input type="text" class="input" id="location" name="location" required>
+                    <input type="text" class="input" id="title" name="title"required>
+                    <input type="text" class="input" id="company" name="company" required>
+                    <input type="text" class="input" id="location" name="location">
                     <div class="dob" data-="selectors">
                     <select class="selector" aria-label="Employment Type" id="jobType" name="jobType">
                         <option value="FULL_TIME">Full-time</option>
@@ -87,7 +90,7 @@ class UploadJob extends MaleficComponent {
                     </div>
                     <input type="text" class="input" id="contactEmail" name="contactEmail">
                     <div class="post__edit__text">
-                        <textarea name="description" id="description" placeholder="Job Detail" required></textarea>
+                        <textarea name="description" id="description" placeholder="Job Detail"></textarea>
                     </div>
                     <div class="update-btn">
                         <button type="submit" class="btn-save" @click="${this.submitForm}">Save</button>
@@ -102,6 +105,6 @@ class UploadJob extends MaleficComponent {
     }
 }
 
-customElements.define('app-upload-job', UploadJob);
+customElements.define('app-edit-job', EditJob);
 
 
