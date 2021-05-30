@@ -80,7 +80,7 @@ class ProfileMenu extends MaleficComponent {
                     </li>
                     <li>
                         <i class="fas fa-sign-out-alt"></i>
-                        <a @click="${this.logout}">Sign Out</a>
+                        <a style="cursor: pointer" @click="${this.signOut}">Sign Out</a>
                     </li>
 
                 </ul>

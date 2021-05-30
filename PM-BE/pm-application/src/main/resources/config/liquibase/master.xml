@@ -61,4 +61,5 @@
     <include file="config/liquibase/changelog/20210510203215_added_entity_columns_Skill.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210510214620_added_entity_columns_WorkExperience.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210526183130_added_entity_columns_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210531012830_removed_entity_constraint_Participant.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
