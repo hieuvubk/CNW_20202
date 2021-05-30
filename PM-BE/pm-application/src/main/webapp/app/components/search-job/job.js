@@ -70,4 +70,4 @@ class JobDetail extends MaleficComponent{
     }
 }
 
-customElements.define('app-job', JobDetail);
+customElements.define('job-detail', JobDetail);

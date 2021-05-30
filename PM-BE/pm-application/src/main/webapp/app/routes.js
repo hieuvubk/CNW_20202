@@ -32,13 +32,6 @@ const routes = [
         }
     },
     {
-        name: 'search-job',
-        pattern:'search',
-        data:{},
-        component:'app-search-job',
-        resolve:()=> import('./pages/search-job/searchJob')
-    },
-    {
         name:'applicant',
         pattern:'applicant',
         data:{},
@@ -84,6 +77,13 @@ const routes = [
             authenticate: authenticated,
             unauthenticated: notAuthenticated
         }
+    },
+    {
+        name: 'search-job',
+        pattern: 'search-job',
+        data: {},
+        component: 'app-search-job',
+        resolve:()=> import('./pages/search-job/SearchJobs')
     },
     {
         name: 'account-setting',

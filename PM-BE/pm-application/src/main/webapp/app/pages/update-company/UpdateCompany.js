@@ -1,43 +1,67 @@
 import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
-import { CreatedCompanyStyle } from '../../pages/create-company/createCompany-style';
+import { updateCompanyStyle } from './update-company-style';
 
 import '../../components/layouts/Header/Header';
 import '../../components/Sidebar/PeopleSidebar';
-import patchPersonalProfile from "../../api/patchPersonalProfile";
-import getCompany from "../../api/getCompany";
+import getCompany from "../../api/getPublicCompany";
 import {withRouter} from "../../core/router/malefic-router";
 import patchCompany from "../../api/patchCompany";
-import uploadLogo from "../../api/uploadLogo";
+import '../../components/Alert/AlertSuccess';
+import '../../components/Alert/AlertFail';
+import '../../components/Modal/UploadCompanyBackground/UploadCompanyBackground';
+import global from '../../components/global';
+import '../../components/Modal/UploadLogo/UploadLogo';
 
 class UpdateCompany extends withRouter(MaleficComponent){
 
     static get properties(){
         return{
             tabShow: { type: Int16Array },
-            showModal: { type: Boolean },
+            showLogoModal: { type: Boolean },
             formData: { type: FormData},
-            company: {type: JSON}
+            company: {type: JSON},
+            showModalAvt: { type: Boolean },
+            bgImage: { type: String},
+            logoImage: {type: String},
         }
     }
 
     static get styles(){
-        return [CreatedCompanyStyle];
+        return [updateCompanyStyle];
+    }
+
+    constructor(){
+        super();
+        this.showModalAvt = false;
+        global.changeBgImage = this.changeBgImage.bind(this);
+        global.changeLogoImage = this.changeLogoImage.bind(this);
+    }
+
+    handleToggleModal() {
+        this.showModalAvt = !this.showModalAvt;
+    }
+
+    closeModal() {
+        this.showModalAvt = false;
+        this.showLogoModal = false;
+    }
+
+    handleToggleLogoModal() {
+        this.showLogoModal = !this.showLogoModal;
     }
 
     handleReviewName(){
         console.log("test");
         let reviewName = this.shadowRoot.querySelector("#company-info h1");
         let name = this.shadowRoot.getElementById("name");
-
         reviewName.innerHTML=name.value;
     }
 
     handleReviewSize(){
         let reviewSize = this.shadowRoot.querySelector("#company-info a");
         let size = this.shadowRoot.getElementById("companySize");
-
         reviewSize.innerHTML = size.value + " Employees";
     }
 
@@ -57,16 +81,20 @@ class UpdateCompany extends withRouter(MaleficComponent){
         reviewBackground.src = URL.createObjectURL(img);
     }
 
-    constructor(){
-        super();
+    changeBgImage = (image) => {
+        this.bgImage = image;
+    }
+
+    changeLogoImage = (image) => {
+        this.logoImage = image;
     }
 
     connectedCallback() {
         super.connectedCallback();
         getCompany(this.params.id).then(res => {
             this.company = res;
-            console.log(this.company);
-            console.log(this.params);
+            this.logoImage = res.logoUrl;
+            this.bgImage = res.bgImageUrl;
         })
             .catch(e => console.log(e));
     }
@@ -74,17 +102,9 @@ class UpdateCompany extends withRouter(MaleficComponent){
     submitForm() {
         let companyForm = this.shadowRoot.getElementById("main__basic__info__form");
         companyForm.addEventListener("submit", (e) => e.preventDefault());
-        this.formData = new FormData(companyForm)
-
-        var logo = new FormData();
-        logo.append("logo", this.shadowRoot.getElementById("logo").files[0]);
-        uploadLogo(this.params.id, logo)
-            .then(data => {
-                console.log(data)
-            })
-        var bg = new FormData();
-
-
+        this.formData = new FormData(companyForm);
+        this.formData.append("bgImageUrl", this.bgImage);
+        this.formData.append("logoUrl", this.logoImage);
 
         // Convert formData to a query string
         const data = [...this.formData.entries()];
@@ -95,32 +115,30 @@ class UpdateCompany extends withRouter(MaleficComponent){
         patchCompany(this.params.id, asString)
             .then(data => {
                 if(data) {
-                    // const alertBox = this.shadowRoot.querySelector('.show-alert');
-                    // alertBox.classList.add('active');
                     console.log(data)
-                    setTimeout(function(){
-                        // alertBox.classList.remove('active')
+                    const alertBox = this.shadowRoot.querySelector('.show-alert');
+                    alertBox.classList.add('active');
+                    setTimeout(function () {
+                        alertBox.classList.remove('active')
                     }, 2000);
                 }
             })
             .catch(() => {
-                console.log("Hello")
-                // const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
-                // alertBox.classList.add('active');
-                setTimeout(function(){
-                    // alertBox.classList.remove('active')
+                const alertBox = this.shadowRoot.querySelector('.show-alert-fail');
+                alertBox.classList.add('active');
+                setTimeout(function () {
+                    alertBox.classList.remove('active')
                 }, 2000);
             });
     }
 
-
     render(){
         return html`
-
             ${commonStyles}
 
             <app-header></app-header>
-
+            <app-upload-company-background .show="${this.showModalAvt}" @close-modal="${this.closeModal}" id=${this.company.id}></app-upload-company-background>
+            <app-upload-logo .show="${this.showLogoModal}" @close-modal="${this.closeModal}" id=${this.company.id}></app-upload-logo>
             <main>
                 <div id="main__left">
                     <div id="main__basic__info">
@@ -130,33 +148,45 @@ class UpdateCompany extends withRouter(MaleficComponent){
                             <input type="text" id="name" name="name" value="${this.company["name"]}"
                                 @keyup=${this.handleReviewName} required></br>
                             
-                            <label for="website">Website *</label></br>
-                            <input type="url" id="website" name="website"  required value="${this.company["website"]}"></br>
+                            <label for="website">Website</label></br>
+                            <input type="url" id="website" name="website" value="${this.company["website"]}"></br>
                             
-                            <label for="companySize">Company size *</label></br>
+                            <label for="companySize">Company size</label></br>
                             <input type="text" id="companySize" name="companySize" value="${this.company["companySize"]}"
-                                @keyup=${this.handleReviewSize} required></br>
+                                @keyup=${this.handleReviewSize}></br>
                             
                             <label for="companyType">Company type *</label></br>
-                            <input type="text" id="companyType" name="companyType" required value="${this.company["companyType"]}"
-                            ></br>
+                            <div class="dob" data-="selectors">
+                                <select class="selector" aria-label="Company Type" value="${this.company["companyType"]}" id="companyType" name="companyType" required>
+                                    <option value="GOVERNMENT_AGENCY">Government agency</option>
+                                    <option value="PUBLIC_COMPANY">Public company</option>
+                                    <option value="SELF_EMPLOYED">Self-employed</option>
+                                    <option value="PARTNERSHIP">Partnership</option>
+                                    <option value="PRIVATE_HELD">Privately held</option>
+                                </select>
+                            </div>
+ 
+                            <label for="industry">Industry</label></br>
+                            <input type="text" id="industry" name="industry" value="${this.company["industry"]}"></br>
                             
-                            <label for="industry">Industry *</label></br>
-                            <input type="text" id="industry" name="industry" required value="${this.company["industry"]}"></br>
+                            <label for="tagLine">Tag line </label></br>
+                            <input type="text" id="tagline" name="tagline" value="${this.company.tagline}"></br> 
+                            <div class="upload-btn">
+                                <div class="custom-btn" @click="${this.handleToggleLogoModal}"><i class="fas fa-cloud-upload-alt"></i>Upload Logo</div>
+                                <div class="custom-btn" @click="${this.handleToggleModal}"><i class="fas fa-cloud-upload-alt"></i>Upload Cover Photo</div>
+                            </div>
                             
-                            <label for="tagLine">Tag line *</label></br>
-                            <input type="text" id="tagLine" name="tagLine"  required value="${this.company["tagLine"]}"></br>
-                            
-                            <label for="logo">Logo *</label></br>
-                            <input type="file" id="logo" name="logo" accept="image/*" 
-                                @change=${this.handleReviewLogo} required></br>
-                            
-                            <label for="background">Background *</label></br>
-                            <input type="file" id="background" name="background" accept="image/*" 
-                                @change=${this.handleReviewBackground} required></br>    
-                            
-                            <button type="submit" @click="${this.submitForm}">Update company</button>
+                            <div class="update-button">
+                            <button class="btn-save" @click="${this.submitForm}">Update</button>
+                            <button type="reset" class="btn-cancel">Cancel</button>
+                            </div>          
                         </form>
+                        <div class="show-alert">
+                        <app-alert-success></app-alert-success>
+                    </div>
+                    <div class="show-alert-fail">
+                        <app-alert-fail></app-alert-fail>
+                    </div>
                         <div id="filter__jobtitle">
                         </div>
                     </div>
@@ -166,11 +196,11 @@ class UpdateCompany extends withRouter(MaleficComponent){
                     <div id="review">Review</div>
                     <div class="main-content-div" id="basic-info-div">
                         <div id="background-avatar">
-                            <img src="./content/images/4853433.jpg" style="height: 200px;width: 100%;">
+                            <img src="${this.bgImage? this.bgImage: './content/images/4853433.jpg'}" style="height: 200px;width: 100%;">
                         </div>
 
                         <div id="main-avatar">
-                            <img src="./content/images/user.svg" style="height: 90px;width: 90px;">
+                            <img src="${this.logoImage? this.logoImage: './content/images/4853433.jpg'}" style="height: 90px;width: 90px;">
                         </div>
 
                         <div id="info">
@@ -179,7 +209,7 @@ class UpdateCompany extends withRouter(MaleficComponent){
                                 <p>Slogan</p>
                                 <span>Address</span>
                                 <span>Followers</span>
-                                <a href="#">Employees</a>
+                                <span>Employees</span>
                             </div>
                         </div>
 
@@ -188,9 +218,9 @@ class UpdateCompany extends withRouter(MaleficComponent){
                         </div>
 
                         <div id="basic-info-nav">
-                            <div><a href="#">Home</a></div>
-                            <div><a href="#about">About</a></div>
-                            <div><a href="#post">Posts</a></div>
+                            <div><a>Home</a></div>
+                            <div><a>About</a></div>
+                            <div><a>Posts</a></div>
                         </div>
                     </div>
                 </div>
