@@ -114,7 +114,7 @@ class Header extends MaleficComponent {
                                     <h6>Company <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
-                            ${this.profile && this.profile.user ?
+                            ${this.profile ?
                                 html`<app-company-menu
                                     avtImg="${this.imgAvt ? transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}"
                                     firstName="${this.profile.user.firstName}"
@@ -139,7 +139,7 @@ class Header extends MaleficComponent {
                                     <h6>Me <i class="fas fa-caret-down"></i></h6>
                                 </div>
                             </div>
-                            ${this.profile && this.profile.user ?
+                            ${this.profile ?
                                 html`
                                     <app-profile-menu
                                         avtImg="${this.imgAvt ? transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}"
