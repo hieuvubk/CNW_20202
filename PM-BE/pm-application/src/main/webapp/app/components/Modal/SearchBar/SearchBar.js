@@ -31,7 +31,6 @@ class SearchBar extends MaleficComponent {
         keyWords.addEventListener("keyup", function(event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                document.getElementById("myBtn").click();
                 location.replace("http://localhost:9002/general-search/" + keyWords.textContent)
             }
         });
