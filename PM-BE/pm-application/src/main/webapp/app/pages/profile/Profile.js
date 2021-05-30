@@ -19,6 +19,9 @@ import getPublicSkill from '../../api/getPublicSkill';
 import '../../components/PostCard/PostCard';
 import getUserPosts from '../../api/getUserPosts';
 import getAttachment from '../../api/getAttachment';
+import getFollowings from '../../api/getFollowings';
+import deleteFollow from '../../api/deleteFollow';
+import postFollow from '../../api/postFollow';
 
 class Profile extends withRouter(MaleficComponent) {
     static get properties() {
@@ -32,7 +35,49 @@ class Profile extends withRouter(MaleficComponent) {
             skills: { type: Array },
             postList: { type: Array },
             attachment: { type: Object },
+            showIcon: { type: String },
+            isFollowing: { type: Boolean },
         };
+    }
+
+    handleToggleFollow() {
+        // if(this.showIcon=="plus") this.showIcon = "check";
+        // else this.showIcon = "plus";
+        if (this.isFollowing) {
+
+            deleteFollow(this.params.id)
+                .then(data => {
+                    if (data == 204) {
+                        console.log(data);
+                        this.isFollowing = false;
+                        this.showIcon = "plus";
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                })
+        } else {
+            const formData = new FormData();
+            formData.append('followedId', this.params.id);
+            // Convert formData to a query string
+            const data = [...formData.entries()];
+            const asString = data
+                .map(x => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
+                .join('&');
+            console.log(asString);
+
+            postFollow(asString)
+                .then(data => {
+                    if(data) {
+                        this.isFollowing = true;
+                        this.showIcon = "check";
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                    alert("Fail to post a job!");
+                })
+        }
     }
 
     static get styles() {
@@ -53,7 +98,8 @@ class Profile extends withRouter(MaleficComponent) {
         this.certification = [];
         this.skills = [];
         this.postList = [];
-        
+        this.isFollowing = false;
+        this.showIcon = this.isFollowing ? "check" : "plus";
     }
 
     connectedCallback() {
@@ -91,6 +137,17 @@ class Profile extends withRouter(MaleficComponent) {
         getUserPosts()
             .then(res => this.postList = res._embedded.postList)
             .catch(e => console.log(e));
+
+        getFollowings()
+            .then(res => {
+                if (res._embedded) {
+                    if ((res._embedded.users.filter(e =>
+                        this.params.id == e.id))) {
+                        this.isFollowing = true;
+                        this.showIcon = "check";
+                    }
+                }
+            })
     }
 
     handleOpenContactModal() {
@@ -124,6 +181,7 @@ class Profile extends withRouter(MaleficComponent) {
     }
 
     render() {
+        console.log(this.isFollowing)
         return html`
             ${commonStyles}
             <app-header></app-header>
@@ -150,6 +208,9 @@ class Profile extends withRouter(MaleficComponent) {
                                 <h3 class="light" id="personal-jobs">${this.profile.headline}</h3>
                                 <h4 class="light" id="personal-address">${this.profile.address}</h4>
                                 <h4 class="light" id="contact-info" @click="${this.handleOpenContactModal}">Contact info</h4>
+                                <div id="basic-info-follow" @click="${this.handleToggleFollow}">
+                                    <i class="fas fa-${this.showIcon}" ></i>Follow
+                                </div>
                             </div>
                 
                             <div id="workplace">
@@ -267,7 +328,7 @@ class Profile extends withRouter(MaleficComponent) {
                     <h2>Posts</h2>
                     <div class="education__list">
                     ${this.postList.slice(0).reverse().map((e) => {
-                        return html`
+                            return html`
                         <div class="education">
                         <post-card
                         accountName="${this.profile.user.firstName} ${this.profile.user.lastName}"

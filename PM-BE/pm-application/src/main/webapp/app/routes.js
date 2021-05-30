@@ -26,11 +26,12 @@ const routes = [
     },
     {
         name: 'search-job',
-        pattern:'search',
-        data:{},
-        component:'app-search-job',
-        resolve:()=> import('./pages/search-job/searchJob')
+        pattern: 'search-job',
+        data: {},
+        component: 'app-search-job',
+        resolve:()=> import('./pages/search-job/SearchJobs')
     },
+
     {
         name:'applicant',
         pattern:'applicant',

@@ -173,12 +173,9 @@ class MyCompany extends withRouter(MaleficComponent) {
                         <div class="about__detail__specified__content">
                             ${this.company["companyType"]}
                         </div>
-            
                     </div>
                 </div>
-            
             </div>
-
 
             <div class="main-content-div" id="post">
             <h2>Jobs</h2>
