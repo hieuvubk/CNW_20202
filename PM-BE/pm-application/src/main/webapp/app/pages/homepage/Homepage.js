@@ -10,6 +10,7 @@ import '../../components/PostCard/PostCard';
 import '../../components/Modal/UploadPost/UploadPost';
 import getProfile from '../../api/getProfile';
 import { transformImage } from '../../shared/utils/url-utils';
+import getNewsFeed from '../../api/getNewsFeed';
 
 class Homepage extends MaleficComponent {
     static get styles() {
@@ -18,12 +19,13 @@ class Homepage extends MaleficComponent {
 
     static get properties() {
         return {
-            showModal: {type: Boolean},
-            profile: {type: Object},
-            imgAvt: {type: String}
+            showModal: { type: Boolean },
+            profile: { type: Object },
+            imgAvt: { type: String },
+            postList: {type: Array}
         };
     }
-    
+
     constructor() {
         super();
         window.addEventListener('beforeunload', () => {
@@ -35,7 +37,7 @@ class Homepage extends MaleficComponent {
     handleToggleModal() {
         this.showModal = !this.showModal;
     }
-    
+
     closeModal() {
         this.showModal = false;
     }
@@ -43,14 +45,20 @@ class Homepage extends MaleficComponent {
     async connectedCallback() {
         super.connectedCallback()
         getProfile()
-        .then(res => {
-            this.profile = res;
-            this.imgAvt = res.user.imageUrl;
-        })
-        .catch(e => console.log(e));
+            .then(res => {
+                this.profile = res;
+                this.imgAvt = res.user.imageUrl;
+            })
+            .catch(e => console.log(e));
+
+        getNewsFeed()
+            .then(res => {
+                this.postList = res._embedded.postList;
+            })
+            .catch(e => console.log(e));
     }
-    
-    
+
+
     render() {
         console.log(this.imgAvt)
         return html`
@@ -102,21 +110,17 @@ class Homepage extends MaleficComponent {
                     </div>
         
                     <div class="news__content">
+                        ${this.postList.slice(0).reverse().map((e) => {
+                            return html`
                         <post-card
-                            accountImg="${this.imgAvt ? transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}"
-                            accountName="Vu Minh Hieu";
-                            numFollowers = 10000
-                            time = '3hr'
-                            postText = 'This is my first post'
-                            postImg = 'content/images/engineering2.jpeg'
-                        ></post-card>
-                        <post-card
-                            accountImg="content/images/avatar.png"
-                            accountName="Vu Minh Hieu";
-                            numFollowers = 900
-                            time = '5w'
-                            postText = 'This is my second post'
-                        ></post-card>
+                        accountName="${e.author.firstName} ${e.author.lastName}"
+                        accountImg="${e.author.imageUrl ? transformImage(e.author.imageUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}"
+                        numFollowers=10
+                        time="5w"
+                        postText="${e.content}"
+                        postId="${e.id}">    
+                        </post-card>
+                        `})}
                     </div>
                 </div>
         
