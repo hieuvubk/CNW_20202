@@ -32,6 +32,13 @@ const routes = [
         }*/
     },
     {
+        name: 'general-search',
+        pattern: 'general-search',
+        data:{},
+        component: 'app-general-search',
+        resolve: ()=> import('./pages/generalSearch/generalSearch')
+    },
+    {
         name: 'search-job',
         pattern:'search',
         data:{},

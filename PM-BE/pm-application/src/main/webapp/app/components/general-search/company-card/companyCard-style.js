@@ -1,3 +1,7 @@
+import { css } from '../../../core/components/css-tag';
+
+export const CompanyCardStyle = css`
+
 main{
     margin-top: 70px;
 }
@@ -75,3 +79,4 @@ main{
         gap: 5px;
     }
 }
+`;

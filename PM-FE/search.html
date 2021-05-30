@@ -100,6 +100,10 @@
         <div class="search__filter">
             <form id="search__form">
                 <input type="text" name="keywords">
+                <select name="search__filter">
+                    <option value="people">People</option>
+                    <option value="company">Company</option>
+                </select>
                 <!--div id="search__filter__jobtype">Job type <i class="fas fa-sort-down"></i></div>
                 <div id="search__filter__createdat">Created at <i class="fas fa-sort-down"></i></div-->
                 <button type="submit">Search</button>
@@ -154,6 +158,15 @@
             </div>
 
             <div class="people__card">
+                <div class="people__card__avatar">
+                    <img src="resources/images/agenda.svg" height="40px" width="40px">
+                </div>
+
+                <div class="people__card__info">
+                    <h3>Name</h3>
+                    <p>Email</p>
+                    <p>Current job</p>
+                </div>
 
             </div>
         </div>

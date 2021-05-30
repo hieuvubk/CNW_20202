@@ -1,3 +1,7 @@
+import { css } from '../../core/components/css-tag';
+
+export const GeneralSearchStyle = css`
+
 main{
     margin-top: 70px;
 }
@@ -46,27 +50,6 @@ main{
     margin: 10px;
 }
 
-.company__card, .people__card{
-    background-color: white;
-    border: 0.2px solid rgb(172, 172, 172);
-    display: flex;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 8px;
-    margin: 5px;
-}
-
-.company__card__logo, .people__card__avatar{
-    margin-right: 10px;
-}
-
-.company__card__info p{
-    font-size: 12px;
-}
-
-.people__card__info p{
-    font-size: 12px;
-}
 
 @media (min-width: 768px) {
     .main{
@@ -75,3 +58,4 @@ main{
         gap: 5px;
     }
 }
+`;

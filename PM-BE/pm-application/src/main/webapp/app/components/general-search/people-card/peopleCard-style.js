@@ -1,0 +1,24 @@
+import { css } from '../../../core/components/css-tag';
+
+export const PeopleCardStyle = css`
+
+.people__card{
+    background-color: white;
+    border: 0.2px solid rgb(172, 172, 172);
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 5px;
+}
+
+.people__card__avatar{
+    margin-right: 10px;
+}
+
+
+.people__card__info p{
+    font-size: 12px;
+}
+
+`;
