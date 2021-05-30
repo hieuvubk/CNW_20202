@@ -183,7 +183,30 @@ export const editProfileStyle = css`
         transform: scale(1.2);
     }
 
-    nav a {
-        text-decoration: none
+    .app-link {
+        color: #265077;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: 0.5s;
+        font-size: 20px;
+        padding-bottom: 20px;
+        width: 150px;
+        padding-left: 10px;
     }
+    
+    .app-link:hover {
+        color: #2d6187;
+        background-color: #d8e3e7;
+    }
+
+    i {
+        color: #265077;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: 0.5s;
+    }
+
+    
 `;
