@@ -29,7 +29,7 @@ const routes = [
         pattern: 'general-search',
         data:{},
         component: 'app-general-search',
-        resolve: ()=> import('./pages/generalSearch/generalSearch')
+        resolve: ()=> import('./pages/generalSearch/GeneralSearch')
     },
     {
         name:'applicant',
@@ -46,11 +46,18 @@ const routes = [
         resolve:()=> import('./pages/network/network')
     },
     {
+        name:'general-search',
+        pattern: 'general-search/:query',
+        data:{},
+        component: 'app-general-search',
+        resolve:() => import('./pages/generalSearch/GeneralSearch')
+    },
+    {
         name: 'create-company',
         pattern: 'create-company',
         data: {},
         component: 'app-create-company',
-        resolve:()=> import('./pages/create-company/createCompany'),
+        resolve:()=> import('./pages/create-company/CreateCompanyPage'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated

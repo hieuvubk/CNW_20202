@@ -9,12 +9,15 @@ import '../../components/Sidebar/PeopleSidebar';
 import '../../components/nameCard_Contact/nameCard_Contact';
 import '../../components/general-search/company-card/company-card';
 import '../../components/general-search/people-card/peopleCard';
+import searchCompany from "../../api/searchCompany";
+import {withRouter} from "../../core/router/malefic-router";
 
 
-class GeneralSearch extends MaleficComponent{
+class GeneralSearch extends withRouter(MaleficComponent){
     static get properties(){
         return{
-            
+            resultList: {type: Array},
+
         }
     }
 
@@ -25,6 +28,15 @@ class GeneralSearch extends MaleficComponent{
     
     constructor(){
         super();
+        this.resultList = []
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        searchCompany(this.params.query)
+            .then(data => {
+
+            })
     }
 
     render(){

@@ -75,12 +75,12 @@ class SearchJobs extends withRouter(MaleficComponent){
 
         const url = new URL("/api/v1/_search/jobs")
 
-        const jobType = this.shadowRoot.getElementsByName("jobType");
+        const jobType = this.shadowRoot.getElementsByName("jobType").value;
         if(jobType != null) {
             url.searchParams.append("job_type", jobType)
         }
 
-        const keyWord = this.shadowRoot.getElementsByName("keywords")
+        const keyWord = this.shadowRoot.getElementsByName("keywords").value;
         if(keyWord != null) {
             url.searchParams.append("keyword", keyWord)
         }
@@ -123,7 +123,7 @@ class SearchJobs extends withRouter(MaleficComponent){
                                 
                         )}
                     </div>
-                    <job-detail id=${jobList[0].id}></job-detail>
+                    
 
                 </div>
         `;

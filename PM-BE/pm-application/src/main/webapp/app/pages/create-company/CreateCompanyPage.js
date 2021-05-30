@@ -166,7 +166,7 @@ class CreateCompanyPage extends withRouter(MaleficComponent){
                                 The organization and I agree to the additional terms for Pages.</p>
                             </div>
                             <div class="update-button">
-                            <button class="btn-save" @click="${this.submitForm}">Update</button>
+                            <button class="btn-save" @click="${this.submitForm}">Create</button>
                             <button type="reset" class="btn-cancel">Cancel</button>
                             </div>          
                         </form>

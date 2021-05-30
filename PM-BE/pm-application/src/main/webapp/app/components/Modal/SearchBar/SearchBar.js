@@ -25,6 +25,18 @@ class SearchBar extends MaleficComponent {
         });
         this.dispatchEvent(event);
     }
+
+    search() {
+        const keyWords = this.shadowRoot.querySelector("search-input")
+        keyWords.addEventListener("keyup", function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("myBtn").click();
+                location.replace("http://localhost:9002/general-search/" + keyWords.textContent)
+            }
+        });
+    }
+
     
     render() {
         return html`
@@ -32,9 +44,11 @@ class SearchBar extends MaleficComponent {
             
             <app-modal .show="${this.show}">
                 <div class="modal-header">
-                    <button class="close-button" @click="${this.handleCloseModal}"><i class="fas fa-long-arrow-alt-left"></i></button>
-                    <input class="search-input" type="text" placeholder="Search">
-                    <i class="fas fa-search"></i>
+                    <form name="search">
+                        <button class="close-button" @click="${this.handleCloseModal}"><i class="fas fa-long-arrow-alt-left"></i></button>
+                        <input onkeydown="${this.search}" class="search-input" type="text" placeholder="Search">
+                        <i class="fas fa-search"></i>
+                    </form>
                 </div>
             </app-modal>
         `;
