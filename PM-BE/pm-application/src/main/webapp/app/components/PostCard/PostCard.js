@@ -57,7 +57,11 @@ class PostCard extends MaleficComponent {
     connectedCallback() {
         super.connectedCallback();
         getAttachment(this.postId)
-        .then(res => this.attachment = res._embedded.attachmentList[0])
+        .then(res => {
+            if(res._embedded) {
+                this.attachment = res._embedded.attachmentList[0]
+            }
+        })
         .catch( e => console.log(e));
     }
 

@@ -15,6 +15,7 @@ import '../../components/Modal/UploadJob/UploadJob';
 import '../../components/JobCard/JobCard';
 import getJobAdmin from '../../api/getJobAdmin';
 import global from '../../components/global';
+import '../../routes/Link';
 
 class MyCompanyID extends withRouter(MaleficComponent) {
     static get properties() {
@@ -214,12 +215,12 @@ class MyCompanyID extends withRouter(MaleficComponent) {
 
                         ${this.companyList.map((company) =>
             html`
-                            <a class="suggest__link" href="company-admin/${company.id}">
-                            <div class="suggest__info">
-                                <img class="suggest__info__avatar" src="${company.logoUrl}">
-                                <h4 class="suggest__info__name">${company.name}</h4>
-                            </div>
-                        </a>
+                            <a class="suggest__link" href="/company-admin/${company.id}">
+                                <div class="suggest__info">
+                                    <img class="suggest__info__avatar" src="${company.logoUrl}">
+                                    <h4 class="suggest__info__name">${company.name}</h4>
+                                </div>
+                            </a>
                             `
         )}
 

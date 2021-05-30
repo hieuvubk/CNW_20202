@@ -2,14 +2,15 @@ import MaleficComponent from '../../core/components/MaleficComponent';
 import { html } from '../../core/components/malefic-html';
 import { commonStyles } from '../../shared/styles/common-styles';
 import { searchJobStyle} from './search-job-style';
-
-import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/Header/Header.js';
-import '../../components/Sidebar/PeopleSidebar';
-import '/home/hieuvu/Desktop/Web/pmApp/PM-BE/pm-application/src/main/webapp/app/components/layouts/footer/Footer.js';
 import '../../components/brief-job-card/briefJobCard';
 import '../../components/recruit-detail-card/recruitDetailCard';
 import '../../components/recruit-detail-card/poupJobtype';
 import '../../components/recruit-detail-card/popupCreatedat';
+import '../../components/layouts/Header/Header';
+import '../../components/Sidebar/PeopleSidebar';
+import '../../components/layouts/Footer/Footer';
+
+
 import getJob from "../../api/getJob";
 import getCompany from "../../api/getCompany";
 

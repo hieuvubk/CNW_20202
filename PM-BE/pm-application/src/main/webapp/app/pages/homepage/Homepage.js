@@ -9,10 +9,19 @@ import '../../components/Button/Button';
 import '../../components/PostCard/PostCard';
 import '../../components/Modal/UploadPost/UploadPost';
 import getProfile from '../../api/getProfile';
+import { transformImage } from '../../shared/utils/url-utils';
 
 class Homepage extends MaleficComponent {
     static get styles() {
         return [homepageStyle];
+    }
+
+    static get properties() {
+        return {
+            showModal: {type: Boolean},
+            profile: {type: Object},
+            imgAvt: {type: String}
+        };
     }
     
     constructor() {
@@ -23,12 +32,6 @@ class Homepage extends MaleficComponent {
         this.showModal = false;
     }
 
-    static get properties() {
-        return {
-            showModal: {type: Boolean}
-        };
-    }
-
     handleToggleModal() {
         this.showModal = !this.showModal;
     }
@@ -36,21 +39,35 @@ class Homepage extends MaleficComponent {
     closeModal() {
         this.showModal = false;
     }
+
+    async connectedCallback() {
+        super.connectedCallback()
+        getProfile()
+        .then(res => {
+            this.profile = res;
+            this.imgAvt = res.user.imageUrl;
+        })
+        .catch(e => console.log(e));
+    }
+    
     
     render() {
+        console.log(this.imgAvt)
         return html`
             ${commonStyles}
             <app-header></app-header>
             <app-upload-post .show="${this.showModal}" @close-modal="${this.closeModal}" 
                 placeHolder="Type something" 
                 typePost="Upload your post"
-                placeHolderImage="./content/images/avatar.png"></app-upload-post>
+                placeHolderImage="./content/images/avatar.png">
+                
+                </app-upload-post>
             <main class="main">
                 <div class="main__content news">
                     <div class="status">
                         <div class="status__post">
                             <div class="post__avatar">
-                                <img src="content/images/engineering2.jpeg">
+                                <img src="${this.imgAvt ? transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}">
                             </div>
                             <div class="post__text" @click="${this.handleToggleModal}">
                                 <div>Start A Post</div>
@@ -86,7 +103,7 @@ class Homepage extends MaleficComponent {
         
                     <div class="news__content">
                         <post-card
-                            accountImg="content/images/engineering2.jpeg"
+                            accountImg="${this.imgAvt ? transformImage(this.imgAvt, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35') : 'content/images/avatar.png'}"
                             accountName="Vu Minh Hieu";
                             numFollowers = 10000
                             time = '3hr'

@@ -15,6 +15,7 @@ import '../../components/Modal/UploadJob/UploadJob';
 import '../../components/JobCard/JobCard';
 import getJobAdmin from '../../api/getJobAdmin';
 import global from '../../components/global';
+import '../../routes/Link';
 
 class MyCompany extends withRouter(MaleficComponent) {
     static get properties() {
@@ -105,7 +106,8 @@ class MyCompany extends withRouter(MaleficComponent) {
                 
                 <div id="main-avatar">
                     <img src="${this.company.logoUrl}">
-                    <a class="edit-company" href="update-company/${this.company.id}"><i class="fas fa-pencil-alt"></i></a>
+              
+                    <app-link class="edit-company" href="update-company/${this.company.id}"><i class="fas fa-pencil-alt"></i></app-link>
                 </div>
                
             
@@ -173,12 +175,9 @@ class MyCompany extends withRouter(MaleficComponent) {
                         <div class="about__detail__specified__content">
                             ${this.company["companyType"]}
                         </div>
-            
                     </div>
                 </div>
-            
             </div>
-
 
             <div class="main-content-div" id="post">
             <h2>Jobs</h2>

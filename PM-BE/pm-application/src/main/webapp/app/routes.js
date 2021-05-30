@@ -29,8 +29,16 @@ const routes = [
         pattern: 'general-search',
         data:{},
         component: 'app-general-search',
-        resolve: ()=> import('./pages/generalSearch/GeneralSearch')
+        resolve: ()=> import('./pages/generalSearch/generalSearch')
     },
+    {
+        name: 'search-job',
+        pattern: 'search-job',
+        data: {},
+        component: 'app-search-job',
+        resolve:()=> import('./pages/search-job/SearchJobs')
+    },
+
     {
         name:'applicant',
         pattern:'applicant',
@@ -46,18 +54,11 @@ const routes = [
         resolve:()=> import('./pages/network/network')
     },
     {
-        name:'general-search',
-        pattern: 'general-search/:query',
-        data:{},
-        component: 'app-general-search',
-        resolve:() => import('./pages/generalSearch/GeneralSearch')
-    },
-    {
         name: 'create-company',
         pattern: 'create-company',
         data: {},
         component: 'app-create-company',
-        resolve:()=> import('./pages/create-company/CreateCompanyPage'),
+        resolve:()=> import('./pages/create-company/createCompany'),
         authentication: {
             authenticate: authenticated,
             unauthenticated: notAuthenticated
@@ -84,13 +85,6 @@ const routes = [
             authenticate: authenticated,
             unauthenticated: notAuthenticated
         }
-    },
-    {
-        name: 'search-job',
-        pattern: 'search-job',
-        data: {},
-        component: 'app-search-job',
-        resolve:()=> import('./pages/search-job/SearchJobs')
     },
     {
         name: 'account-setting',
