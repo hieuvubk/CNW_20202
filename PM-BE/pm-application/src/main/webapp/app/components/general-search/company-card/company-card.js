@@ -7,6 +7,7 @@ import { CompanyCardStyle } from './companyCard-style';
 class CompanyCard extends MaleficComponent {
     static get properties() {
         return {
+            id: {type: Int16Array},
             image: {type:String},
             Name: {type: String},
             location: {type: String},

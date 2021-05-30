@@ -37,13 +37,13 @@ class GeneralSearch extends withRouter(MaleficComponent){
         super.connectedCallback();
         searchCompany(this.params.query)
             .then(data => {
-                this.companyList = data._embedded.companyList
-                console.log(data._embedded)
+                this.companyList = data._embedded.companySearchList
+                console.log(this.companyList)
             })
         searchPeople(this.params.query)
             .then(data => {
-                this.userList = data._embedded.userList
-                console.log(data._embedded)
+                this.userList = data._embedded.userSearchList
+                console.log(this.userList)
             })
     }
 
@@ -72,18 +72,20 @@ class GeneralSearch extends withRouter(MaleficComponent){
                     ${this.userList.map((user) =>
                             html`
                                 <app-people-card
-                                        id=${user.id}
                                         Name="${user.first_name} ${user.last_name}"
-                                        email="${user.email}">
+                                        job = ""
+                                        email=""
+                                        id=${user.id}>
                                 </app-people-card>`
                     )}
                     ${this.companyList.map((company) =>
                             html`
                                 <app-company-card
-                                        id=${company.id}
+                                        
                                         Name="${company.name}"
-                                        location="${company.location}"
-                                        industry="${company.industry}">
+                                        location=""
+                                        industry=""
+                                        id=${company.id}>
                                 </app-company-card>`
                     )}
                 </div>
