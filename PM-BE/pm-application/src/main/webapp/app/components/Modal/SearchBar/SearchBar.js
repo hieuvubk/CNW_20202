@@ -36,7 +36,12 @@ class SearchBar extends MaleficComponent {
         });
     }
 
-    
+    connectedCallback() {
+        super.connectedCallback();
+        this.search();
+    }
+
+
     render() {
         return html`
             ${commonStyles}
