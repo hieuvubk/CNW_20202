@@ -68,7 +68,7 @@ public interface PostRepository extends R2dbcRepository<Post, Long>, PostReposit
     default Flux<Post> findPublicPostsOfUserOrCompany(String id) {
         return findAllBy(null, Criteria.where("visionable").is("PUBLIC")
             .and(Criteria.where("author_id").is(id)
-                    .or("company_id").is(Long.parseLong(id))
+                    .or("company_id").is(id)
             )
         );
     }

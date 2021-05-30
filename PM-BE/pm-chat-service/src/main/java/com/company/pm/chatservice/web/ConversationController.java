@@ -107,8 +107,7 @@ public class ConversationController {
     }
     
     @GetMapping(
-        path = "/{participantId}/receipts",
-        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE
+        path = "/{participantId}/receipts"
     )
     public Mono<EntityModel<Conversation>> getOrCreateConversation(
         @PathVariable("participantId") String participantId,

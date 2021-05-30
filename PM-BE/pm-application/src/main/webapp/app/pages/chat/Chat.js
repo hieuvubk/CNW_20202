@@ -108,11 +108,14 @@ class Chat extends MaleficComponent {
         this.conversationId = conversationId;
         this.activeUser = activeUser;
         const msgList = await getMessageHistoryData(conversationId);
-        this.messages = [
-            ...this.messages,
-            ...msgList._embedded.messageList
-        ];
-    
+        if (msgList._embedded) {
+            this.messages = [
+                ...this.messages,
+                ...msgList._embedded.messageList
+            ];
+        }
+        
+        
         this.client = new RSocketClient({
             serializers: {
                 data: JsonSerializer,
@@ -132,7 +135,7 @@ class Chat extends MaleficComponent {
                 url: 'ws://localhost:8000/rsocket'
             }),
         });
-    
+        
         this.client.connect().subscribe({
             onComplete: (socket) => {
                 this.rsocket = socket;
@@ -199,8 +202,9 @@ class Chat extends MaleficComponent {
                                                 <div class="d-flex bd-highlight">
                                                     <div class="img_cont">
                                                         ${p.user.avatarUrl ?
-                                                            html`<img src=${transformImage(p.user.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}
-                                                                      class="rounded-circle user_img">`
+                                                            html`<img
+                                                                src=${transformImage(p.user.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}
+                                                                class="rounded-circle user_img">`
                                                             : html`<img src="content/images/avatar.png"
                                                                         class="rounded-circle user_img"/>`
                                                         }
@@ -208,7 +212,7 @@ class Chat extends MaleficComponent {
                                                     <div class="user_info">
                                                         ${p.user.firstName || p.user.lastName ?
                                                             html`
-                                                                <span>${p.user.firstName + " " + p.user.lastName}</span>
+                                                                <span>${p.user.firstName + ' ' + p.user.lastName}</span>
                                                             ` : null
                                                         }
                                                     </div>
@@ -230,14 +234,16 @@ class Chat extends MaleficComponent {
                                             <div class="img_cont">
                                                 ${this.activeUser.avatarUrl ?
                                                     html`
-                                                        <img src=${transformImage(this.activeUser.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}
-                                                             class="rounded-circle user_img">
-                                                    ` : html`<img src="content/images/avatar.png" class="rounded-circle user_img" alt=""/>`
+                                                        <img
+                                                            src=${transformImage(this.activeUser.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}
+                                                            class="rounded-circle user_img">
+                                                    ` : html`<img src="content/images/avatar.png"
+                                                                  class="rounded-circle user_img" alt=""/>`
                                                 }
-                                                
+                                            
                                             </div>
                                             <div class="user_info">
-                                                <span>Chat with ${this.activeUser.firstName + " " + this.activeUser.lastName}</span>
+                                                <span>Chat with ${this.activeUser.firstName + ' ' + this.activeUser.lastName}</span>
                                             </div>
                                         </div>
                                         <span id="action_menu_btn" @click=${this.toggleActionMenu}><i
@@ -255,33 +261,41 @@ class Chat extends MaleficComponent {
                                         }
                                     </div>
                                     <div class="card-body msg_card_body">
-                                        ${repeat(this.messages, (m) => m.id, (m, index) => html`
-                                            ${!this.checkSenderIsMe(m.senderId) && this.activeUser ?
-                                                html`
-                                                    <div class="d-flex justify-content-start mb-4">
-                                                        <div class="img_cont_msg">
-                                                            ${this.activeUser.avatarUrl ?
-                                                                html`
-                                                                    <img src="${transformImage(this.activeUser.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}" class="rounded-circle user_img_msg">
-                                                                ` : html`<img src="content/images/avatar.png" alt="" class="rounded-circle user_img_msg">`
-                                                            }
-                                                        </div>
-                                                        <div class="msg_container">
-                                                            ${m.content}
-                                                            <span class="msg_time">8:40 AM, Today</span>
-                                                        </div>
-                                                    </div>
-                                                ` :
-                                                html`
-                                                    <div class="d-flex justify-content-end mb-4">
-                                                        <div class="msg_container_send">
-                                                            ${m.content}
-                                                            <span class="msg_time_send">8:55 AM, Today</span>
-                                                        </div>
-                                                    </div>
-                                                `
-                                            }
-                                        `)}
+                                        ${this.messages.length > 0 ?
+                                            html`
+                                                ${repeat(this.messages, (m) => m.id, (m, index) => html`
+                                                    ${!this.checkSenderIsMe(m.senderId) && this.activeUser ?
+                                                        html`
+                                                            <div class="d-flex justify-content-start mb-4">
+                                                                <div class="img_cont_msg">
+                                                                    ${this.activeUser.avatarUrl ?
+                                                                        html`
+                                                                            <img
+                                                                                src="${transformImage(this.activeUser.avatarUrl, 'w_200,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35')}"
+                                                                                class="rounded-circle user_img_msg">
+                                                                        ` : html`<img src="content/images/avatar.png"
+                                                                                      alt=""
+                                                                                      class="rounded-circle user_img_msg">`
+                                                                    }
+                                                                </div>
+                                                                <div class="msg_container">
+                                                                    ${m.content}
+                                                                    <span class="msg_time">8:40 AM, Today</span>
+                                                                </div>
+                                                            </div>
+                                                        ` :
+                                                        html`
+                                                            <div class="d-flex justify-content-end mb-4">
+                                                                <div class="msg_container_send">
+                                                                    ${m.content}
+                                                                    <span class="msg_time_send">8:55 AM, Today</span>
+                                                                </div>
+                                                            </div>
+                                                        `
+                                                    }
+                                                `)}
+                                            ` : null
+                                        }
                                     </div>
                                     <div class="card-footer">
                                         <div class="input-group">
