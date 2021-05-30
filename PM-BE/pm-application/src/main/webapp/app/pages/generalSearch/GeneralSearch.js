@@ -11,13 +11,14 @@ import '../../components/general-search/company-card/company-card';
 import '../../components/general-search/people-card/peopleCard';
 import searchCompany from "../../api/searchCompany";
 import {withRouter} from "../../core/router/malefic-router";
+import searchPeople from "../../api/searchPeople";
 
 
 class GeneralSearch extends withRouter(MaleficComponent){
     static get properties(){
         return{
-            resultList: {type: Array},
-
+            companyList: {type: Array},
+            userList: {type: Array},
         }
     }
 
@@ -28,14 +29,19 @@ class GeneralSearch extends withRouter(MaleficComponent){
     
     constructor(){
         super();
-        this.resultList = []
+        this.companyList = [];
+        this.userList = [];
     }
 
     connectedCallback() {
         super.connectedCallback();
         searchCompany(this.params.query)
             .then(data => {
-
+                console.log(data._embedded)
+            })
+        searchPeople(this.params.query)
+            .then(data => {
+                console.log(data._embedded)
             })
     }
 
