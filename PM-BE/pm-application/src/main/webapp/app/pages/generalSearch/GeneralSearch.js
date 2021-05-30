@@ -37,11 +37,13 @@ class GeneralSearch extends withRouter(MaleficComponent){
         super.connectedCallback();
         searchCompany(this.params.query)
             .then(data => {
-                console.log(data._embedded.companyList)
+                this.companyList = data._embedded.companyList
+                console.log(data._embedded)
             })
         searchPeople(this.params.query)
             .then(data => {
-                console.log(data._embedded.userList)
+                this.userList = data._embedded.userList
+                console.log(data._embedded)
             })
     }
 
