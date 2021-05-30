@@ -7,7 +7,9 @@ const initialState = {
         username: null,
         email: null,
         logout: null
-    }
+    },
+    conversations: {},
+    participants: {}
 };
 
 export default initialState;
