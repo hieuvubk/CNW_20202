@@ -5,10 +5,9 @@ import { commonStyles } from '../../shared/styles/common-styles';
 
 import '../Button/Button';
 import '../PostCard/commentCard';
-import getAttachment from '../../api/getAttachment';
 import deleteJob from '../../api/deleteJob';
 import '../Modal/EditJob/EditJob';
-
+import global from '../global'
 class JobCard extends MaleficComponent {
     static get styles() {
         return [jobCardStyle];
@@ -32,6 +31,15 @@ class JobCard extends MaleficComponent {
         };
     }
 
+    constructor() {
+        super();
+        this.showDropdownEdit="none";
+        this.showPost="block";
+        this.attachment={}; 
+        this.showModal = false; 
+       
+    }
+
     handleToggleShowComment(){
         this.showComment = (this.showComment=="block")?"none":"block";
     }
@@ -49,7 +57,7 @@ class JobCard extends MaleficComponent {
     closeEdit(){
         this.showEdit=false;
     }
-
+    
     handleDeletePost(){
         if (confirm("Are you sure you want to delete")) {
             deleteJob(this.id)
@@ -66,18 +74,9 @@ class JobCard extends MaleficComponent {
 
     connectedCallback() {
         super.connectedCallback();
-        getAttachment(this.postId)
-        .then(res => this.attachment = res._embedded.attachmentList[0])
-        .catch( e => console.log(e));
     }
 
-    constructor() {
-        super();
-        this.showDropdownEdit="none";
-        this.showPost="block";
-        this.attachment={}; 
-        this.showModal = false; 
-    }
+
 
     handleToggleModal() {
         this.showModal = !this.showModal;
@@ -90,7 +89,7 @@ class JobCard extends MaleficComponent {
     render() {
         return html`
             ${commonStyles}
-        <app-edit-job .show="${this.showModal}" @close-modal="${this.closeModal}" id=${this.id}></app-edit-job>
+        <app-edit-job .show="${this.showModal}" @close-modal="${this.closeModal}" id=${this.id} company="${this.company}" location="${this.location}" title="${this.title}" jobType="${this.jobType}" description="${this.description}" contact="${this.contact}"></app-edit-job>
         <div style="display:${this.showPost};">
             <div class="news-card">
                 <div class="news-header">
@@ -120,7 +119,7 @@ class JobCard extends MaleficComponent {
                     <div>Employment Type: ${this.jobType}</div>
                     <div>Job Description: ${this.description}</div>
                     <div>Contact Email: ${this.contact}</div>
-                    <img src="${this.attachment.thumbUrl}" alt="" style="display: ${this.attachment.thumbUrl==undefined?'none':'block'}">
+
                 </div>
             </div>
         </div>

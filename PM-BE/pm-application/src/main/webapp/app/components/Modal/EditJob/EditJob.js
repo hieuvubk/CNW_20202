@@ -6,13 +6,20 @@ import { commonStyles } from '../../../shared/styles/common-styles';
 import '../Modal';
 import '../../Button/Button';
 import patchJob from '../../../api/patchJob';
-import global from '../../../components/global';
+import global from '../../global';
+import getJobById from '../../../api/getJobById';
 
 class EditJob extends MaleficComponent {
     static get properties() {
         return {
             show: { type: Boolean },
-            id: { type: Int16Array},
+            id: { type: Int16Array },
+            title: {type: String},
+            company: {type: String},
+            location: {type: String},
+            jobType: {type: String},
+            description: {type: String},
+            contact: {type: String},
         };
     }
 
@@ -30,11 +37,17 @@ class EditJob extends MaleficComponent {
         this.dispatchEvent(event);
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        // getJobById(this.id)
+        //     .then(res => this.job = res)
+        //     .catch(e => console.log(e));
+    }
+
     submitForm() {
         const jobForm = this.shadowRoot.querySelector("#job-form");
         jobForm.addEventListener("submit", (e) => e.preventDefault());
         const formData = new FormData(jobForm);
-        formData.append('activated',"true");
         // Convert formData to a query string
         const data = [...formData.entries()];
         const asString = data
@@ -44,12 +57,7 @@ class EditJob extends MaleficComponent {
 
         patchJob(this.id, asString)
             .then(data => {
-                // if(data == 201) {
-                //     location.reload();
-                    
-                // }
-                console.log(data);
-                // global.updateJobList(data);
+              location.reload();
             })
             .catch(e => {
                 console.log(e);
@@ -77,9 +85,9 @@ class EditJob extends MaleficComponent {
                     <h5>Description</h5>
                 </div>
                 <div class="col span-3-of-4 info">
-                    <input type="text" class="input" id="title" name="title"required>
-                    <input type="text" class="input" id="company" name="company" required>
-                    <input type="text" class="input" id="location" name="location">
+                    <input type="text" class="input" id="title" name="title" value="${this.title}" required>
+                    <input type="text" class="input" id="company" name="company" value="${this.company}" required>
+                    <input type="text" class="input" id="location" name="location" value="${this.location}">
                     <div class="dob" data-="selectors">
                     <select class="selector" aria-label="Employment Type" id="jobType" name="jobType">
                         <option value="FULL_TIME">Full-time</option>
@@ -88,9 +96,9 @@ class EditJob extends MaleficComponent {
                         <option value="INTERNSHIP">Internship</option>
                     </select>
                     </div>
-                    <input type="text" class="input" id="contactEmail" name="contactEmail">
+                    <input type="text" class="input" id="contactEmail" name="contactEmail" value="${this.contact}">
                     <div class="post__edit__text">
-                        <textarea name="description" id="description" placeholder="Job Detail"></textarea>
+                        <textarea name="description" id="description" placeholder="Job Detail" value="${this.description}"></textarea>
                     </div>
                     <div class="update-btn">
                         <button type="submit" class="btn-save" @click="${this.submitForm}">Save</button>

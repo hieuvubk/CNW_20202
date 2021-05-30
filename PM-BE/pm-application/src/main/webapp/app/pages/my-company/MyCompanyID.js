@@ -51,9 +51,10 @@ class MyCompanyID extends withRouter(MaleficComponent) {
         this.background = "content/images/4853433.jpg";
         this.avatar = "content/images/avatar.png";
         this.showIcon = "plus";
-        this.showAlert = false;
         this.company = {};
         global.updateJobList = this.updateJobList.bind(this);
+        this.companyJobList = [];
+        this.companyList = [];
     }
 
 
@@ -199,18 +200,7 @@ class MyCompanyID extends withRouter(MaleficComponent) {
             </div>
         </div>
             
-            <div class="main-content-div" id="post">
-                <h2>Page posts</h2>
-                <div id="page-post">
-                   <post-card
-                        accountImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
-                        numFollowers=10
-                        time="5w"
-                        postText="This a test"
-                        postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
-                   </post-card>
-                </div>
-            </div>
+
             </aside>
             </main>
 
@@ -252,4 +242,18 @@ class MyCompanyID extends withRouter(MaleficComponent) {
 }
 
 customElements.define('app-my-company-id', MyCompanyID);
+
+
+{/* <div class="main-content-div" id="post">
+<h2>Page posts</h2>
+<div id="page-post">
+   <post-card
+        accountImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg"
+        numFollowers=10
+        time="5w"
+        postText="This a test"
+        postImg="https://cdn.theculturetrip.com/wp-content/uploads/2018/05/shutterstock_89159080.jpg">    
+   </post-card>
+</div>
+</div> */}
 
